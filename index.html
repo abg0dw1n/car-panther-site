@@ -49,11 +49,12 @@
     ul {
       line-height: 1.6;
     }
-    input, button {
-      padding: 0.5rem;
+    input, button, .btn-game {
+      padding: 0.5rem 1rem;
       margin-top: 0.5rem;
       border-radius: 4px;
       border: none;
+      font-weight: bold;
     }
     input[type="email"] {
       width: 60%;
@@ -62,10 +63,23 @@
     button {
       background-color: #0085CA;
       color: white;
-      font-weight: bold;
       cursor: pointer;
     }
     button:hover {
+      background-color: #006093;
+    }
+    .btn-game {
+      display: inline-block;
+      background-color: #0085CA;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 1.1rem;
+      padding: 0.75rem 1.25rem;
+      margin-top: 1rem;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    .btn-game:hover {
       background-color: #006093;
     }
     footer {
@@ -107,7 +121,14 @@
     </section>
 
     <section id="fan-zone" class="card">
-      <h2>Join the Fan Club</h2>
+      <h2>Fan Zone & Arcade</h2>
+      <p>Test your knowledge on Carolina Panthers history!</p>
+      
+      <!-- GAME BUTTON: Replace URL below with your actual my-first-game Vercel link -->
+      <a href="https://my-first-game-opal.vercel.app" target="_blank" class="btn-game">🏈 Play Panthers Trivia Challenge</a>
+
+      <hr style="border: 0; border-top: 1px solid #334155; margin: 1.5rem 0;">
+
       <p>Sign up to receive fan updates and game day alerts!</p>
       <form onsubmit="alert('Thanks for signing up! Keep Pounding!'); return false;">
         <label for="email">Email Address:</label><br>
