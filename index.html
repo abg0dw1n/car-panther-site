@@ -130,7 +130,7 @@
     .site-img {
       width: 100%;
       height: auto;
-      max-height: 350px;
+      max-height: 380px;
       object-fit: cover;
       border-radius: 6px;
       border: 1px solid var(--card-border);
@@ -138,24 +138,41 @@
       margin-bottom: 1rem;
     }
 
-    .video-container {
-      position: relative;
-      width: 100%;
-      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-      height: 0;
-      overflow: hidden;
-      border-radius: 6px;
+    .video-card {
+      background-color: #0f151d;
       border: 1px solid var(--card-border);
+      border-left: 4px solid #ff0000;
+      padding: 1.5rem;
+      border-radius: 6px;
+      text-align: center;
       margin-top: 1rem;
     }
 
-    .video-container iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
+    .video-card h3 {
+      font-family: 'Oswald', sans-serif;
+      margin-top: 0;
+      color: #ffffff;
+      font-size: 1.3rem;
+    }
+
+    .btn-yt {
+      font-family: 'Oswald', sans-serif;
+      display: inline-block;
+      background-color: #ff0000;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 0.75rem 1.5rem;
+      margin-top: 0.75rem;
+      border-radius: 6px;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn-yt:hover {
+      background-color: #cc0000;
+      transform: translateY(-2px);
     }
 
     ul.styled-list {
@@ -350,8 +367,8 @@
       <h2>About the Panthers</h2>
       <p>Founded in 1995 as the NFL's 29th franchise, the Carolina Panthers represent North and South Carolina. Playing at Bank of America Stadium in Charlotte, NC, the franchise is built on relentless defense, blue-collar pride, and the enduring "Keep Pounding" mantra.</p>
       
-      <!-- Example Image Placeholder (You can replace src with your own image link anytime) -->
-      <img src="https://images.unsplash.com/photo-1566958769312-82cef41cc63d?auto=format&fit=crop&w=1000&q=80" alt="Football Stadium Lights" class="site-img">
+      <!-- Reliable High-Res Stadium Image -->
+      <img src="https://images.pexels.com/photos/270085/pexels-photo-270085.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Bank of America Stadium Game Day" class="site-img">
     </section>
 
     <section id="history" class="card">
@@ -387,13 +404,14 @@
       </div>
     </section>
 
-    <!-- NEW SECTION: Embedded YouTube Highlights -->
+    <!-- FIXED SECTION: Direct YouTube Link Card (Bypasses NFL Embed Blocks) -->
     <section id="highlights" class="card">
       <h2>Latest Game Highlights</h2>
-      <p>Watch recent clutch plays and game recaps:</p>
-      <div class="video-container">
-        <!-- Embedded NFL Game Highlights Video (Week 6 vs. Eagles) -->
-        <iframe src="https://www.youtube.com/embed/7x-qq154bgs" title="Carolina Panthers Game Highlights" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <p>Due to NFL broadcast copyright rules, full official game recaps open directly on YouTube:</p>
+      <div class="video-card">
+        <h3>📺 Carolina Panthers vs. Philadelphia Eagles (Week 6 Highlights)</h3>
+        <p>Watch the full 10-minute game recap on NFL's Official YouTube Channel.</p>
+        <a href="https://www.youtube.com/watch?v=7x-qq154bgs" target="_blank" class="btn-yt">▶ Watch Highlights on YouTube</a>
       </div>
     </section>
 
