@@ -3,121 +3,262 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carolina Panthers Fan Site</title>
+  <title>Carolina Panthers Fan Central</title>
+
+  <!-- Google Fonts: Oswald (Athletic Headers) & Montserrat (Modern Body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+
   <style>
+    :root {
+      --panthers-blue: #0085CA;
+      --panthers-blue-hover: #006093;
+      --panthers-silver: #A5ACAF;
+      --panthers-black: #0B0E14;
+      --card-bg: #161D27;
+      --card-border: #263345;
+    }
+
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Montserrat', sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #101820;
+      background-color: var(--panthers-black);
       color: #ffffff;
+      line-height: 1.6;
     }
+
     header {
-      background-color: #0085CA;
+      background: linear-gradient(135deg, #000000 0%, #101820 50%, var(--panthers-blue) 100%);
       color: white;
-      padding: 2.5rem 1rem;
+      padding: 3.5rem 1rem 2.5rem 1rem;
       text-align: center;
+      border-bottom: 4px solid var(--panthers-blue);
+      box-shadow: 0 4px 20px rgba(0, 133, 202, 0.25);
     }
+
+    header h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 3rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin: 0 0 0.5rem 0;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+    }
+
+    header p {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--panthers-silver);
+      margin: 0;
+      letter-spacing: 1px;
+    }
+
+    header span.tag {
+      background-color: var(--panthers-blue);
+      color: #ffffff;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-family: 'Oswald', sans-serif;
+      letter-spacing: 1px;
+    }
+
     nav {
       background-color: #000000;
-      padding: 0.75rem;
+      padding: 0.85rem;
       text-align: center;
       position: sticky;
       top: 0;
       z-index: 100;
+      border-bottom: 1px solid var(--card-border);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
     }
+
     nav a {
-      color: #0085CA;
-      margin: 0 0.6rem;
+      font-family: 'Oswald', sans-serif;
+      color: var(--panthers-silver);
+      margin: 0 0.8rem;
       text-decoration: none;
-      font-weight: bold;
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.2s;
     }
+
     nav a:hover {
-      color: #ffffff;
+      color: var(--panthers-blue);
     }
+
     .container {
-      padding: 2rem 1rem;
-      max-width: 850px;
+      padding: 2.5rem 1rem;
+      max-width: 900px;
       margin: 0 auto;
     }
+
     .card {
-      background-color: #1e293b;
-      border-left: 5px solid #0085CA;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      border-radius: 6px;
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-top: 4px solid var(--panthers-blue);
+      padding: 1.8rem;
+      margin-bottom: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    ul {
-      line-height: 1.7;
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 133, 202, 0.2);
     }
+
+    h2 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.8rem;
+      text-transform: uppercase;
+      color: var(--panthers-blue);
+      margin-top: 0;
+      margin-bottom: 1rem;
+      letter-spacing: 1px;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 0.5rem;
+    }
+
+    ul.styled-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    ul.styled-list li {
+      position: relative;
+      padding-left: 1.5rem;
+      margin-bottom: 0.85rem;
+    }
+
+    ul.styled-list li::before {
+      content: "🏈";
+      position: absolute;
+      left: 0;
+      font-size: 0.9rem;
+    }
+
+    .badge {
+      background-color: #0d283d;
+      color: var(--panthers-blue);
+      border: 1px solid var(--panthers-blue);
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      font-family: 'Oswald', sans-serif;
+      text-transform: uppercase;
+    }
+
     .stats-table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 1rem;
     }
+
     .stats-table th, .stats-table td {
       text-align: left;
-      padding: 0.65rem;
-      border-bottom: 1px solid #334155;
+      padding: 0.8rem;
+      border-bottom: 1px solid var(--card-border);
     }
+
     .stats-table th {
-      color: #0085CA;
+      font-family: 'Oswald', sans-serif;
+      color: var(--panthers-silver);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 1.05rem;
     }
+
     .hall-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.25rem;
       margin-top: 1rem;
     }
+
     .hall-card {
-      background-color: #0f172a;
-      border: 1px solid #0085CA;
-      padding: 1rem;
+      background-color: #0f151d;
+      border: 1px solid var(--card-border);
+      border-left: 3px solid var(--panthers-silver);
+      padding: 1.2rem;
       border-radius: 6px;
     }
+
     .hall-card h3 {
+      font-family: 'Oswald', sans-serif;
       margin-top: 0;
-      color: #0085CA;
+      color: var(--panthers-blue);
+      font-size: 1.3rem;
+      letter-spacing: 0.5px;
     }
+
     input, button, .btn-game {
-      padding: 0.5rem 1rem;
+      font-family: 'Montserrat', sans-serif;
+      padding: 0.65rem 1.2rem;
       margin-top: 0.5rem;
-      border-radius: 4px;
+      border-radius: 6px;
       border: none;
-      font-weight: bold;
+      font-weight: 700;
     }
+
     input[type="email"] {
       width: 60%;
-      max-width: 300px;
+      max-width: 320px;
+      background-color: #0b0f17;
+      border: 1px solid var(--card-border);
+      color: #ffffff;
     }
+
+    input[type="email"]:focus {
+      outline: 2px solid var(--panthers-blue);
+    }
+
     button {
-      background-color: #0085CA;
+      background-color: var(--panthers-blue);
       color: white;
       cursor: pointer;
-    }
-    button:hover {
-      background-color: #006093;
-    }
-    .btn-game {
-      display: inline-block;
-      background-color: #0085CA;
-      color: #ffffff;
-      text-decoration: none;
-      font-size: 1.1rem;
-      padding: 0.75rem 1.25rem;
-      margin-top: 1rem;
-      border-radius: 6px;
       transition: background 0.2s;
     }
-    .btn-game:hover {
-      background-color: #006093;
+
+    button:hover {
+      background-color: var(--panthers-blue-hover);
     }
+
+    .btn-game {
+      font-family: 'Oswald', sans-serif;
+      display: inline-block;
+      background: linear-gradient(135deg, var(--panthers-blue), #00507a);
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 0.85rem 1.5rem;
+      margin-top: 1rem;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0, 133, 202, 0.3);
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .btn-game:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #0099e6, var(--panthers-blue));
+    }
+
     footer {
       text-align: center;
-      padding: 1.5rem;
+      padding: 2rem 1rem;
       background-color: #000000;
-      color: #888888;
-      font-size: 0.9rem;
+      color: var(--panthers-silver);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--card-border);
     }
   </style>
 </head>
@@ -125,7 +266,7 @@
 
   <header>
     <h1>Carolina Panthers Fan Central</h1>
-    <p><strong>Keep Pounding!</strong> | Unofficial Fan Hub</p>
+    <p><span class="tag">KEEP POUNDING</span> | Unofficial Fan Hub</p>
   </header>
 
   <nav>
@@ -133,7 +274,7 @@
     <a href="#history">Milestones</a>
     <a href="#hall">Hall of Honor</a>
     <a href="#records">Records</a>
-    <a href="#schedule">NFC South Hub</a>
+    <a href="#schedule">NFC South</a>
     <a href="#fan-zone">Fan Zone</a>
   </nav>
 
@@ -145,7 +286,7 @@
 
     <section id="history" class="card">
       <h2>Franchise Milestones & Legacy</h2>
-      <ul>
+      <ul class="styled-list">
         <li><strong>1995 Inaugural Season:</strong> Set the then-record for most wins by an expansion team (7–9) under Coach Dom Capers.</li>
         <li><strong>2003 "Cardiac Cats" (Super Bowl XXXVIII):</strong> Won the NFC Championship behind Jake Delhomme, Stephen Davis, and Steve Smith Sr., making their first Super Bowl appearance.</li>
         <li><strong>2015 NFC Champions (Super Bowl 50):</strong> Historic 15–1 regular season led by MVP Cam Newton, Luke Kuechly, and Coach Ron Rivera.</li>
@@ -190,22 +331,22 @@
           <tr>
             <td>Passing Yards</td>
             <td>Cam Newton</td>
-            <td>29,725 YDS</td>
+            <td><span class="badge">29,725 YDS</span></td>
           </tr>
           <tr>
             <td>Rushing Yards</td>
             <td>Jonathan Stewart</td>
-            <td>7,318 YDS</td>
+            <td><span class="badge">7,318 YDS</span></td>
           </tr>
           <tr>
             <td>Receiving Yards</td>
             <td>Steve Smith Sr.</td>
-            <td>12,197 YDS</td>
+            <td><span class="badge">12,197 YDS</span></td>
           </tr>
           <tr>
             <td>All-Time Tackles</td>
             <td>Luke Kuechly</td>
-            <td>1,092 Tackles</td>
+            <td><span class="badge">1,092 Tackles</span></td>
           </tr>
         </tbody>
       </table>
@@ -247,13 +388,13 @@
       <p>Test your knowledge on Carolina Panthers history!</p>
       
       <!-- Replace URL below with your actual my-first-game Vercel link -->
-      <a href="https://my-first-game-opal.vercel.app" target="_blank" class="btn-game">🏈 Play Panthers Trivia Challenge</a>
+      <a href="https://YOUR-TRIVIA-GAME.vercel.app" target="_blank" class="btn-game">🏈 Play Panthers Trivia Challenge</a>
 
-      <hr style="border: 0; border-top: 1px solid #334155; margin: 1.5rem 0;">
+      <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 1.5rem 0;">
 
       <p>Sign up to receive fan updates and game day alerts!</p>
       <form onsubmit="alert('Thanks for signing up! Keep Pounding!'); return false;">
-        <label for="email">Email Address:</label><br>
+        <label for="email" style="font-weight: 600;">Email Address:</label><br>
         <input type="email" id="email" placeholder="enter your email..." required>
         <button type="submit">Join Now</button>
       </form>
