@@ -28,7 +28,7 @@
     }
     nav a {
       color: #0085CA;
-      margin: 0 0.75rem;
+      margin: 0 0.6rem;
       text-decoration: none;
       font-weight: bold;
     }
@@ -57,10 +57,26 @@
     }
     .stats-table th, .stats-table td {
       text-align: left;
-      padding: 0.6rem;
+      padding: 0.65rem;
       border-bottom: 1px solid #334155;
     }
     .stats-table th {
+      color: #0085CA;
+    }
+    .hall-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .hall-card {
+      background-color: #0f172a;
+      border: 1px solid #0085CA;
+      padding: 1rem;
+      border-radius: 6px;
+    }
+    .hall-card h3 {
+      margin-top: 0;
       color: #0085CA;
     }
     input, button, .btn-game {
@@ -115,8 +131,9 @@
   <nav>
     <a href="#about">About</a>
     <a href="#history">Milestones</a>
+    <a href="#hall">Hall of Honor</a>
     <a href="#records">Records</a>
-    <a href="#players">Roster</a>
+    <a href="#schedule">NFC South Hub</a>
     <a href="#fan-zone">Fan Zone</a>
   </nav>
 
@@ -134,6 +151,29 @@
         <li><strong>2015 NFC Champions (Super Bowl 50):</strong> Historic 15–1 regular season led by MVP Cam Newton, Luke Kuechly, and Coach Ron Rivera.</li>
         <li><strong>The "Keep Pounding" Tradition:</strong> Inspired by late linebacker and coach Sam Mills during his battle with cancer in 2003; now symbolized by the giant Keep Pounding Drum banged before every home game.</li>
       </ul>
+    </section>
+
+    <section id="hall" class="card">
+      <h2>Hall of Honor Legends</h2>
+      <p>Honoring the bedrock figures who defined Carolina Football:</p>
+      <div class="hall-grid">
+        <div class="hall-card">
+          <h3>Sam Mills (#51)</h3>
+          <p>Linebacker / Coach. The heart and soul of the franchise and originator of "Keep Pounding." Pro Football Hall of Famer.</p>
+        </div>
+        <div class="hall-card">
+          <h3>Steve Smith Sr. (#89)</h3>
+          <p>Wide Receiver. Triple Crown winner (2005) and competitive fire behind the Panthers' greatest air attacks.</p>
+        </div>
+        <div class="hall-card">
+          <h3>Julius Peppers (#90)</h3>
+          <p>Defensive End. N.C. native, 2024 Pro Football Hall of Fame inductee, and one of the most dominant edge rushers in NFL history.</p>
+        </div>
+        <div class="hall-card">
+          <h3>Jake Delhomme (#17)</h3>
+          <p>Quarterback. Led the legendary 2003 "Cardiac Cats" run to Super Bowl XXXVIII with clutch postseason comebacks.</p>
+        </div>
+      </div>
     </section>
 
     <section id="records" class="card">
@@ -171,14 +211,35 @@
       </table>
     </section>
 
-    <section id="players" class="card">
-      <h2>Current Player Spotlight</h2>
-      <ul>
-        <li><strong>Bryce Young (#9)</strong> – Quarterback</li>
-        <li><strong>Derrick Brown (#95)</strong> – Defensive Tackle</li>
-        <li><strong>Chuba Hubbard (#30)</strong> – Running Back</li>
-        <li><strong>Jaycee Horn (#8)</strong> – Cornerback</li>
-      </ul>
+    <section id="schedule" class="card">
+      <h2>NFC South Rivalry Showcase</h2>
+      <p>Panthers football is defined by intense battles against division rivals:</p>
+      <table class="stats-table">
+        <thead>
+          <tr>
+            <th>Rival</th>
+            <th>Rivalry Name</th>
+            <th>Key Matchup Focus</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Atlanta Falcons</td>
+            <td>I-85 Rivalry</td>
+            <td>High-scoring regional battle for Carolina vs. Georgia bragging rights.</td>
+          </tr>
+          <tr>
+            <td>New Orleans Saints</td>
+            <td>NFC South Classic</td>
+            <td>Physical division duel featuring memorable offensive shootouts.</td>
+          </tr>
+          <tr>
+            <td>Tampa Bay Buccaneers</td>
+            <td>Bay vs. Bank</td>
+            <td>Hard-hitting defensive clashes for division supremacy.</td>
+          </tr>
+        </tbody>
+      </table>
     </section>
 
     <section id="fan-zone" class="card">
