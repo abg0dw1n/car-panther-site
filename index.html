@@ -81,9 +81,9 @@
     nav a {
       font-family: 'Oswald', sans-serif;
       color: var(--panthers-silver);
-      margin: 0 0.6rem;
+      margin: 0 0.5rem;
       text-decoration: none;
-      font-size: 1rem;
+      font-size: 0.95rem;
       letter-spacing: 1px;
       text-transform: uppercase;
       transition: color 0.2s;
@@ -125,6 +125,37 @@
       letter-spacing: 1px;
       border-bottom: 1px solid var(--card-border);
       padding-bottom: 0.5rem;
+    }
+
+    .site-img {
+      width: 100%;
+      height: auto;
+      max-height: 350px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid var(--card-border);
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+      height: 0;
+      overflow: hidden;
+      border-radius: 6px;
+      border: 1px solid var(--card-border);
+      margin-top: 1rem;
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
     }
 
     ul.styled-list {
@@ -305,10 +336,11 @@
   <nav>
     <a href="#about">About</a>
     <a href="#history">Milestones</a>
-    <a href="#hall">Hall of Honor</a>
+    <a href="#hall">Legends</a>
+    <a href="#highlights">Highlights</a>
     <a href="#roster">Roster</a>
-    <a href="#schedule">Schedule & Results</a>
-    <a href="#gameday">Game Day Guide</a>
+    <a href="#schedule">Schedule</a>
+    <a href="#gameday">Guide</a>
     <a href="#soundboard">Soundboard</a>
     <a href="#fan-zone">Fan Zone</a>
   </nav>
@@ -317,6 +349,9 @@
     <section id="about" class="card">
       <h2>About the Panthers</h2>
       <p>Founded in 1995 as the NFL's 29th franchise, the Carolina Panthers represent North and South Carolina. Playing at Bank of America Stadium in Charlotte, NC, the franchise is built on relentless defense, blue-collar pride, and the enduring "Keep Pounding" mantra.</p>
+      
+      <!-- Example Image Placeholder (You can replace src with your own image link anytime) -->
+      <img src="https://images.unsplash.com/photo-1566958769312-82cef41cc63d?auto=format&fit=crop&w=1000&q=80" alt="Football Stadium Lights" class="site-img">
     </section>
 
     <section id="history" class="card">
@@ -349,6 +384,16 @@
           <h3>Jake Delhomme (#17)</h3>
           <p>Quarterback. Led the legendary 2003 "Cardiac Cats" run to Super Bowl XXXVIII with clutch postseason comebacks.</p>
         </div>
+      </div>
+    </section>
+
+    <!-- NEW SECTION: Embedded YouTube Highlights -->
+    <section id="highlights" class="card">
+      <h2>Latest Game Highlights</h2>
+      <p>Watch recent clutch plays and game recaps:</p>
+      <div class="video-container">
+        <!-- Embedded NFL Game Highlights Video (Week 6 vs. Eagles) -->
+        <iframe src="https://www.youtube.com/embed/7x-qq154bgs" title="Carolina Panthers Game Highlights" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
     </section>
 
@@ -386,7 +431,7 @@
 
     <section id="schedule" class="card">
       <h2>2026 Season Schedule & Results</h2>
-      <p>Current 2026 Season (Record: 3-2):</p>
+      <p>Current 2026 Regular Season (Record: 3-2):</p>
       <div id="dynamic-schedule"></div>
     </section>
 
@@ -428,7 +473,7 @@
       <h2>Fan Zone & Arcade</h2>
       <p>Test your knowledge on Carolina Panthers history!</p>
       
-      <!-- Replace URL below with your actual my-first-game Vercel link -->
+      <!-- Connected to your my-first-game Vercel project -->
       <a href="https://my-first-game-opal.vercel.app" target="_blank" class="btn-game">🏈 Play Panthers Trivia Challenge</a>
 
       <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 1.5rem 0;">
@@ -456,26 +501,26 @@
       }, 200);
     }
 
-    // Official 2026 Carolina Panthers Schedule Data
+    // Official 2026 Carolina Panthers Schedule & Results Data
     const panthers2026Schedule = [
-      { week: "Wk 1", opp: "vs. Chicago Bears", date: "Sep 13", status: "L 37-59", type: "loss" },
-      { week: "Wk 2", opp: "@ Atlanta Falcons", date: "Sep 20", status: "W 34-3", type: "win" },
-      { week: "Wk 3", opp: "@ Cleveland Browns", date: "Sep 27", status: "L 18-21", type: "loss" },
-      { week: "Wk 4", opp: "vs. Detroit Lions", date: "Oct 4", status: "W 32-26", type: "win" },
-      { week: "Wk 5", opp: "BYE WEEK", date: "Oct 11", status: "BYE", type: "normal" },
-      { week: "Wk 6", opp: "@ Philadelphia Eagles", date: "Oct 18", status: "W 25-14", type: "win" },
-      { week: "Wk 7", opp: "vs. Tampa Bay Buccaneers", date: "Oct 25 (1:00 PM)", status: "Upcoming", type: "normal" },
-      { week: "Wk 8", opp: "@ Green Bay Packers", date: "Oct 29 (8:15 PM)", status: "Upcoming", type: "normal" },
-      { week: "Wk 9", opp: "vs. Denver Broncos", date: "Nov 8 (1:00 PM)", status: "Upcoming", type: "normal" },
-      { week: "Wk 10", opp: "@ New Orleans Saints", date: "Nov 15 (1:00 PM)", status: "Upcoming", type: "normal" },
-      { week: "Wk 11", opp: "vs. Baltimore Ravens", date: "Nov 22 (1:00 PM)", status: "Upcoming", type: "normal" },
-      { week: "Wk 12", opp: "@ Tampa Bay Buccaneers", date: "Nov 30 (8:15 PM)", status: "Upcoming", type: "normal" },
-      { week: "Wk 13", opp: "@ Minnesota Vikings", date: "Dec 6 (4:25 PM)", status: "Upcoming", type: "normal" },
-      { week: "Wk 14", opp: "vs. New Orleans Saints", date: "Dec 13 (1:00 PM)", status: "Upcoming", type: "normal" },
-      { week: "Wk 15", opp: "vs. Cincinnati Bengals", date: "Dec 20 (1:00 PM)", status: "Upcoming", type: "normal" },
-      { week: "Wk 16", opp: "@ Pittsburgh Steelers", date: "Dec 27 (TBD)", status: "Upcoming", type: "normal" },
-      { week: "Wk 17", opp: "vs. Seattle Seahawks", date: "Jan 3 (1:00 PM)", status: "Upcoming", type: "normal" },
-      { week: "Wk 18", opp: "vs. Atlanta Falcons", date: "Jan 10 (TBD)", status: "Upcoming", type: "normal" }
+      { week: "Wk 1", opp: "vs. Chicago Bears", date: "Sep 13, 2026", status: "L 37-59", type: "loss" },
+      { week: "Wk 2", opp: "@ Atlanta Falcons", date: "Sep 20, 2026", status: "W 34-3", type: "win" },
+      { week: "Wk 3", opp: "@ Cleveland Browns", date: "Sep 27, 2026", status: "L 18-21", type: "loss" },
+      { week: "Wk 4", opp: "vs. Detroit Lions", date: "Oct 4, 2026", status: "W 32-26", type: "win" },
+      { week: "Wk 5", opp: "BYE WEEK", date: "Oct 11, 2026", status: "BYE", type: "normal" },
+      { week: "Wk 6", opp: "@ Philadelphia Eagles", date: "Oct 18, 2026", status: "W 25-14", type: "win" },
+      { week: "Wk 7", opp: "vs. Tampa Bay Buccaneers", date: "Oct 25, 2026 (1:00 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 8", opp: "@ Green Bay Packers", date: "Oct 29, 2026 (8:15 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 9", opp: "vs. Denver Broncos", date: "Nov 8, 2026 (1:00 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 10", opp: "@ New Orleans Saints", date: "Nov 15, 2026 (1:00 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 11", opp: "vs. Baltimore Ravens", date: "Nov 22, 2026 (1:00 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 12", opp: "@ Tampa Bay Buccaneers", date: "Nov 30, 2026 (8:15 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 13", opp: "@ Minnesota Vikings", date: "Dec 6, 2026 (4:25 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 14", opp: "vs. New Orleans Saints", date: "Dec 13, 2026 (1:00 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 15", opp: "vs. Cincinnati Bengals", date: "Dec 20, 2026 (1:00 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 16", opp: "@ Pittsburgh Steelers", date: "Dec 27, 2026 (TBD)", status: "Upcoming", type: "normal" },
+      { week: "Wk 17", opp: "vs. Seattle Seahawks", date: "Jan 3, 2027 (1:00 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 18", opp: "vs. Atlanta Falcons", date: "Jan 10, 2027 (TBD)", status: "Upcoming", type: "normal" }
     ];
 
     function renderScheduleTable() {
