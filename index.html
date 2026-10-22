@@ -18,6 +18,7 @@
       --panthers-black: #0B0E14;
       --card-bg: #161D27;
       --card-border: #263345;
+      --win-color: #22c55e;
     }
 
     body {
@@ -40,7 +41,7 @@
 
     header h1 {
       font-family: 'Oswald', sans-serif;
-      font-size: 3rem;
+      font-size: 3.2rem;
       text-transform: uppercase;
       letter-spacing: 2px;
       margin: 0 0 0.5rem 0;
@@ -79,9 +80,9 @@
     nav a {
       font-family: 'Oswald', sans-serif;
       color: var(--panthers-silver);
-      margin: 0 0.8rem;
+      margin: 0 0.6rem;
       text-decoration: none;
-      font-size: 1.1rem;
+      font-size: 1rem;
       letter-spacing: 1px;
       text-transform: uppercase;
       transition: color 0.2s;
@@ -93,7 +94,7 @@
 
     .container {
       padding: 2.5rem 1rem;
-      max-width: 900px;
+      max-width: 950px;
       margin: 0 auto;
     }
 
@@ -156,6 +157,12 @@
       text-transform: uppercase;
     }
 
+    .badge.win {
+      background-color: #0d2e1b;
+      color: var(--win-color);
+      border-color: var(--win-color);
+    }
+
     .stats-table {
       width: 100%;
       border-collapse: collapse;
@@ -176,14 +183,14 @@
       font-size: 1.05rem;
     }
 
-    .hall-grid {
+    .hall-grid, .roster-grid, .cheer-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 1.25rem;
       margin-top: 1rem;
     }
 
-    .hall-card {
+    .hall-card, .roster-card, .guide-card {
       background-color: #0f151d;
       border: 1px solid var(--card-border);
       border-left: 3px solid var(--panthers-silver);
@@ -191,12 +198,31 @@
       border-radius: 6px;
     }
 
-    .hall-card h3 {
+    .hall-card h3, .roster-card h3, .guide-card h3 {
       font-family: 'Oswald', sans-serif;
       margin-top: 0;
       color: var(--panthers-blue);
       font-size: 1.3rem;
       letter-spacing: 0.5px;
+    }
+
+    .sound-btn {
+      font-family: 'Oswald', sans-serif;
+      background-color: #0d283d;
+      color: #ffffff;
+      border: 1px solid var(--panthers-blue);
+      padding: 1rem;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .sound-btn:hover {
+      background-color: var(--panthers-blue);
+      transform: scale(1.03);
     }
 
     input, button, .btn-game {
@@ -273,8 +299,10 @@
     <a href="#about">About</a>
     <a href="#history">Milestones</a>
     <a href="#hall">Hall of Honor</a>
-    <a href="#records">Records</a>
-    <a href="#schedule">NFC South</a>
+    <a href="#roster">Roster</a>
+    <a href="#schedule">Schedule</a>
+    <a href="#gameday">Game Day Guide</a>
+    <a href="#soundboard">Soundboard</a>
     <a href="#fan-zone">Fan Zone</a>
   </nav>
 
@@ -317,70 +345,107 @@
       </div>
     </section>
 
-    <section id="records" class="card">
-      <h2>All-Time Franchise Leaders</h2>
+    <section id="roster" class="card">
+      <h2>Current Roster Highlights</h2>
+      <div class="roster-grid">
+        <div class="roster-card">
+          <h3>Offense Key Players</h3>
+          <p><strong>Bryce Young (#9)</strong> – QB</p>
+          <p><strong>Chuba Hubbard (#30)</strong> – RB</p>
+          <p><strong>Xavier Legette (#17)</strong> – WR</p>
+          <p><strong>Adam Thielen (#19)</strong> – WR</p>
+          <p><strong>Robert Hunt (#50)</strong> – OG</p>
+        </div>
+        <div class="roster-card">
+          <h3>Defense Key Players</h3>
+          <p><strong>Derrick Brown (#95)</strong> – DT</p>
+          <p><strong>Jaycee Horn (#8)</strong> – CB</p>
+          <p><strong>Jadeveon Clowney (#7)</strong> – OLB</p>
+          <p><strong>Josey Jewell (#47)</strong> – ILB</p>
+          <p><strong>Xavier Woods (#25)</strong> – S</p>
+        </div>
+        <div class="roster-card">
+          <h3>Special Teams & Coaching</h3>
+          <p><strong>Eddy Piñeiro (#4)</strong> – K</p>
+          <p><strong>Johnny Hekker (#10)</strong> – P</p>
+          <p><strong>JJ Jansen (#44)</strong> – LS (Franchise leader in games played)</p>
+          <p><strong>Dave Canales</strong> – Head Coach</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="schedule" class="card">
+      <h2>Game Day Schedule & Division Battles</h2>
       <table class="stats-table">
         <thead>
           <tr>
-            <th>Category</th>
-            <th>Player</th>
-            <th>Stat Record</th>
+            <th>Matchup</th>
+            <th>Location</th>
+            <th>Broadcast / Focus</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Passing Yards</td>
-            <td>Cam Newton</td>
-            <td><span class="badge">29,725 YDS</span></td>
+            <td>vs. Atlanta Falcons</td>
+            <td>Bank of America Stadium</td>
+            <td>FOX | I-85 Rivalry Game</td>
+            <td><span class="badge win">Home Matchup</span></td>
           </tr>
           <tr>
-            <td>Rushing Yards</td>
-            <td>Jonathan Stewart</td>
-            <td><span class="badge">7,318 YDS</span></td>
+            <td>@ New Orleans Saints</td>
+            <td>Caesars Superdome</td>
+            <td>CBS | Division Battle</td>
+            <td><span class="badge">Away Matchup</span></td>
           </tr>
           <tr>
-            <td>Receiving Yards</td>
-            <td>Steve Smith Sr.</td>
-            <td><span class="badge">12,197 YDS</span></td>
+            <td>vs. Tampa Bay Buccaneers</td>
+            <td>Bank of America Stadium</td>
+            <td>FOX | NFC South Clash</td>
+            <td><span class="badge win">Home Matchup</span></td>
           </tr>
           <tr>
-            <td>All-Time Tackles</td>
-            <td>Luke Kuechly</td>
-            <td><span class="badge">1,092 Tackles</span></td>
+            <td>@ Atlanta Falcons</td>
+            <td>Mercedes-Benz Stadium</td>
+            <td>FOX | Division Rematch</td>
+            <td><span class="badge">Away Matchup</span></td>
           </tr>
         </tbody>
       </table>
     </section>
 
-    <section id="schedule" class="card">
-      <h2>NFC South Rivalry Showcase</h2>
-      <p>Panthers football is defined by intense battles against division rivals:</p>
-      <table class="stats-table">
-        <thead>
-          <tr>
-            <th>Rival</th>
-            <th>Rivalry Name</th>
-            <th>Key Matchup Focus</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Atlanta Falcons</td>
-            <td>I-85 Rivalry</td>
-            <td>High-scoring regional battle for Carolina vs. Georgia bragging rights.</td>
-          </tr>
-          <tr>
-            <td>New Orleans Saints</td>
-            <td>NFC South Classic</td>
-            <td>Physical division duel featuring memorable offensive shootouts.</td>
-          </tr>
-          <tr>
-            <td>Tampa Bay Buccaneers</td>
-            <td>Bay vs. Bank</td>
-            <td>Hard-hitting defensive clashes for division supremacy.</td>
-          </tr>
-        </tbody>
-      </table>
+    <section id="gameday" class="card">
+      <h2>Bank of America Stadium Game Day Guide</h2>
+      <div class="hall-grid">
+        <div class="guide-card">
+          <h3>🏟️ Stadium Location</h3>
+          <p>Located in Uptown Charlotte, NC. Address: 800 S Mint St, Charlotte, NC 28202.</p>
+        </div>
+        <div class="guide-card">
+          <h3>🥁 Pre-Game Traditions</h3>
+          <p>Don't miss the pounding of the 6-foot Keep Pounding Drum at North Gate 30 minutes prior to kickoff!</p>
+        </div>
+        <div class="guide-card">
+          <h3>🍔 Tailgating Hotspots</h3>
+          <p>Top fan tailgates happen along Mint Street, Morehead Street, and Graham Street parking lots.</p>
+        </div>
+        <div class="guide-card">
+          <h3>🎒 Bag Policy</h3>
+          <p>NFL Clear Bag Policy strictly enforced. Clear plastic bags up to 12" x 6" x 12" permitted.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="soundboard" class="card">
+      <h2>Fan Cheer Soundboard</h2>
+      <p>Click a cheer button to generate game day excitement!</p>
+      <div class="cheer-grid">
+        <button class="sound-btn" onclick="playCheer('KEEP POUNDING! 🥁 🏈')">🥁 Keep Pounding!</button>
+        <button class="sound-btn" onclick="playCheer('THIRD DOWN NOISE! 🔊 🏈')">🔊 3rd Down Defense!</button>
+        <button class="sound-btn" onclick="playCheer('TOUCHDOWN PANTHERS! 🪶 🙌')">🙌 Touchdown Panthers!</button>
+        <button class="sound-btn" onclick="playCheer('SWEET CAROLINE! 🎶 💙')">🎶 Sweet Caroline!</button>
+      </div>
+      <div id="cheer-display" style="margin-top: 1.5rem; font-family: 'Oswald', sans-serif; font-size: 1.5rem; color: var(--panthers-blue); text-align: center; min-height: 2rem;"></div>
     </section>
 
     <section id="fan-zone" class="card">
@@ -404,6 +469,17 @@
   <footer>
     <p>&copy; 2026 Carolina Panthers Fan Site. Designed by a Panthers Fan.</p>
   </footer>
+
+  <script>
+    function playCheer(msg) {
+      const display = document.getElementById("cheer-display");
+      display.textContent = msg;
+      display.style.transform = "scale(1.1)";
+      setTimeout(() => {
+        display.style.transform = "scale(1)";
+      }, 200);
+    }
+  </script>
 
 </body>
 </html>
