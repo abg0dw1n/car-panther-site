@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carolina Panthers Fan Central - Interactive Portal</title>
-
-  <!-- Google Fonts: Oswald (Athletic/Typography) & Montserrat (Modern Body) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>Carolina Panthers Fan Central</title>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Oswald & Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           colors: {
@@ -23,59 +23,20 @@
               blueHover: '#006093',
               silver: '#A5ACAF',
               black: '#0B0E14',
-              cardBg: '#161D27',
-              cardBorder: '#263345',
-              win: '#22c55e',
-              loss: '#ef4444',
-              accent: '#38bdf8'
+              cardBg: '#141B26',
+              cardBorder: '#202D3F',
             }
           },
           fontFamily: {
-            oswald: ['Oswald', 'sans-serif'],
-            montserrat: ['Montserrat', 'sans-serif'],
+            heading: ['Oswald', 'sans-serif'],
+            body: ['Montserrat', 'sans-serif']
           }
         }
       }
     }
   </script>
 
-  <!-- Web Audio API Synthesizer & Tone Effects for Stadium Cheers -->
   <style>
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background-color: #0B0E14;
-      color: #F3F4F6;
-    }
-
-    h1, h2, h3, h4, h5, .font-heading {
-      font-family: 'Oswald', sans-serif;
-    }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #0B0E14;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #263345;
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #0085CA;
-    }
-
-    /* Pulse Glow Animation */
-    @keyframes pulse-glow {
-      0%, 100% { box-shadow: 0 0 15px rgba(0, 133, 202, 0.4); }
-      50% { box-shadow: 0 0 30px rgba(0, 133, 202, 0.8); }
-    }
-    .glow-panthers {
-      animation: pulse-glow 3s infinite ease-in-out;
-    }
-
     /* Equalizer Wave Bar Animation */
     .eq-bar {
       transition: height 0.15s ease-out;
@@ -88,7 +49,7 @@
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-panthers-blue selection:text-white">
+<body class="min-h-screen flex flex-col bg-panthers-black text-white font-body selection:bg-panthers-blue selection:text-white">
 
   <!-- TOP HEADER BANNER -->
   <header class="bg-gradient-to-r from-black via-[#0d1622] to-panthers-blue border-b-4 border-panthers-blue text-white shadow-xl relative overflow-hidden">
@@ -97,12 +58,12 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 relative z-10 flex flex-col md:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-4 text-center md:text-left">
-        <div class="w-16 h-16 rounded-full bg-panthers-black border-2 border-panthers-blue flex items-center justify-center text-2xl font-bold shadow-lg shadow-panthers-blue/30 text-panthers-blue font-heading tracking-wider">
+        <div class="w-12 h-12 rounded-full bg-panthers-black border-2 border-panthers-blue flex items-center justify-center text-xl font-bold shadow-lg shadow-panthers-blue/30 text-panthers-blue font-heading tracking-wider">
           CAR
         </div>
         <div>
           <div class="flex items-center justify-center md:justify-start gap-2">
-            <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold uppercase tracking-wider text-white drop-shadow-md">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold uppercase tracking-wider text-white drop-shadow-md font-heading">
               Carolina Panthers
             </h1>
             <span class="bg-panthers-blue text-xs font-heading font-bold px-2.5 py-1 rounded tracking-widest uppercase hidden sm:inline-block border border-blue-400">
@@ -124,874 +85,596 @@
         <div class="h-8 w-[1px] bg-panthers-cardBorder"></div>
         <div class="flex flex-col">
           <span class="text-panthers-silver uppercase font-semibold text-[10px] tracking-widest">Next Game</span>
-          <span class="text-panthers-accent font-bold font-heading text-sm leading-none">vs. TB (Wk 7)</span>
+          <span class="text-panthers-blue font-bold font-heading text-sm leading-none">vs. TB (Wk 7)</span>
         </div>
       </div>
     </div>
   </header>
 
-  <!-- MAIN NAVIGATION TABS -->
-  <nav class="sticky top-0 z-50 bg-black/95 backdrop-blur border-b border-panthers-cardBorder shadow-2xl">
-    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between overflow-x-auto no-scrollbar py-2 gap-1 sm:gap-2">
-        <button onclick="switchTab('home')" id="tab-home" class="nav-tab px-3 py-2.5 sm:px-4 sm:py-3 rounded-lg text-xs sm:text-sm font-heading font-bold tracking-wider uppercase whitespace-nowrap transition-all duration-200 flex items-center gap-2 bg-panthers-blue text-white shadow-lg shadow-panthers-blue/30">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 10 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-          <span>Home & Hub</span>
-        </button>
-
-        <button onclick="switchTab('roster')" id="tab-roster" class="nav-tab px-3 py-2.5 sm:px-4 sm:py-3 rounded-lg text-xs sm:text-sm font-heading font-bold tracking-wider uppercase whitespace-nowrap transition-all duration-200 flex items-center gap-2 text-panthers-silver hover:text-white hover:bg-panthers-cardBg">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-          <span>Roster & Depth</span>
-        </button>
-
-        <button onclick="switchTab('stadium')" id="tab-stadium" class="nav-tab px-3 py-2.5 sm:px-4 sm:py-3 rounded-lg text-xs sm:text-sm font-heading font-bold tracking-wider uppercase whitespace-nowrap transition-all duration-200 flex items-center gap-2 text-panthers-silver hover:text-white hover:bg-panthers-cardBg">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-          <span>Stadium Tour</span>
-        </button>
-
-        <button onclick="switchTab('schedule')" id="tab-schedule" class="nav-tab px-3 py-2.5 sm:px-4 sm:py-3 rounded-lg text-xs sm:text-sm font-heading font-bold tracking-wider uppercase whitespace-nowrap transition-all duration-200 flex items-center gap-2 text-panthers-silver hover:text-white hover:bg-panthers-cardBg">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-          <span>2026 Schedule</span>
-        </button>
-
-        <button onclick="switchTab('soundboard')" id="tab-soundboard" class="nav-tab px-3 py-2.5 sm:px-4 sm:py-3 rounded-lg text-xs sm:text-sm font-heading font-bold tracking-wider uppercase whitespace-nowrap transition-all duration-200 flex items-center gap-2 text-panthers-silver hover:text-white hover:bg-panthers-cardBg">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
-          <span>Cheer Soundboard</span>
-        </button>
-
-        <button onclick="switchTab('arcade')" id="tab-arcade" class="nav-tab px-3 py-2.5 sm:px-4 sm:py-3 rounded-lg text-xs sm:text-sm font-heading font-bold tracking-wider uppercase whitespace-nowrap transition-all duration-200 flex items-center gap-2 text-panthers-silver hover:text-white hover:bg-panthers-cardBg">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          <span>Arcade & Trivia</span>
-        </button>
-      </div>
+  <!-- NAVIGATION TABS BAR -->
+  <nav class="bg-black/90 backdrop-blur-md sticky top-0 z-50 border-b border-panthers-cardBorder shadow-md">
+    <div class="max-w-7xl mx-auto px-2 flex justify-center overflow-x-auto no-scrollbar">
+      <button onclick="openTab(event, 'home-tab')" class="nav-tab active px-5 py-3.5 text-sm font-heading font-bold uppercase tracking-wider text-panthers-silver hover:text-white border-b-2 border-transparent hover:bg-panthers-blue/10 transition-all whitespace-nowrap flex items-center gap-1.5">
+        <span>⌂</span> HOME & HUB
+      </button>
+      <button onclick="openTab(event, 'roster-tab')" class="nav-tab px-5 py-3.5 text-sm font-heading font-bold uppercase tracking-wider text-panthers-silver hover:text-white border-b-2 border-transparent hover:bg-panthers-blue/10 transition-all whitespace-nowrap flex items-center gap-1.5">
+        <span>☖</span> ROSTER & DEPTH
+      </button>
+      <button onclick="openTab(event, 'stadium-tab')" class="nav-tab px-5 py-3.5 text-sm font-heading font-bold uppercase tracking-wider text-panthers-silver hover:text-white border-b-2 border-transparent hover:bg-panthers-blue/10 transition-all whitespace-nowrap flex items-center gap-1.5">
+        <span>🎯</span> STADIUM TOUR
+      </button>
+      <button onclick="openTab(event, 'schedule-tab')" class="nav-tab px-5 py-3.5 text-sm font-heading font-bold uppercase tracking-wider text-panthers-silver hover:text-white border-b-2 border-transparent hover:bg-panthers-blue/10 transition-all whitespace-nowrap flex items-center gap-1.5">
+        <span>📅</span> 2026 SCHEDULE
+      </button>
+      <button onclick="openTab(event, 'soundboard-tab')" class="nav-tab px-5 py-3.5 text-sm font-heading font-bold uppercase tracking-wider text-panthers-silver hover:text-white border-b-2 border-transparent hover:bg-panthers-blue/10 transition-all whitespace-nowrap flex items-center gap-1.5">
+        <span>🔊</span> CHEER SOUNDBOARD
+      </button>
+      <button onclick="openTab(event, 'arcade-tab')" class="nav-tab px-5 py-3.5 text-sm font-heading font-bold uppercase tracking-wider text-panthers-silver hover:text-white border-b-2 border-transparent hover:bg-panthers-blue/10 transition-all whitespace-nowrap flex items-center gap-1.5">
+        <span>🎮</span> ARCADE & TRIVIA
+      </button>
     </div>
   </nav>
 
-  <!-- MAIN DYNAMIC CONTENT CONTAINER -->
+  <!-- MAIN APP CONTAINER -->
   <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-    <!-- ========================================== -->
-    <!-- TAB 1: HOME & MILESTONES -->
-    <!-- ========================================== -->
-    <section id="page-home" class="space-y-8">
-      
-      <!-- HERO ANNOUNCEMENT BANNER -->
-      <div class="bg-gradient-to-r from-panthers-cardBg via-[#1c2636] to-panthers-cardBg border-t-4 border-panthers-blue p-6 sm:p-8 rounded-2xl shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
-        <div class="space-y-3 max-w-2xl">
-          <div class="inline-flex items-center gap-2 bg-panthers-blue/20 text-panthers-accent border border-panthers-blue/40 px-3 py-1 rounded-full text-xs font-heading font-bold tracking-wider uppercase">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            Keep Pounding Nation
-          </div>
-          <h2 class="text-3xl sm:text-4xl font-extrabold uppercase text-white tracking-wide">
-            Welcome to Panthers Fan Central
-          </h2>
-          <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
-            Your interactive headquarters for everything Carolina Football. Explore Bank of America Stadium, check live depth charts, launch fan cheer soundboard synthesizers, and test your knowledge in the Trivia Arcade.
-          </p>
-          <div class="pt-2 flex flex-wrap gap-3">
-            <button onclick="switchTab('stadium')" class="px-5 py-2.5 bg-panthers-blue hover:bg-panthers-blueHover text-white font-heading font-bold uppercase rounded-xl transition shadow-lg shadow-panthers-blue/30 text-sm tracking-wider">
-              Explore Stadium & Tailgate Map
-            </button>
-            <button onclick="switchTab('arcade')" class="px-5 py-2.5 bg-panthers-cardBorder hover:bg-gray-700 text-white font-heading font-bold uppercase rounded-xl transition text-sm tracking-wider border border-gray-600">
-              Launch Trivia Challenge 🏈
-            </button>
-          </div>
-        </div>
-
-        <!-- QUICK STATS WIDGET -->
-        <div class="w-full md:w-80 bg-black/60 border border-panthers-cardBorder rounded-xl p-5 backdrop-blur space-y-3">
-          <h3 class="text-xs uppercase font-heading font-bold tracking-widest text-panthers-silver border-b border-panthers-cardBorder pb-2">
-            Franchise Snapshot
-          </h3>
-          <div class="grid grid-cols-2 gap-3 text-center">
-            <div class="bg-panthers-cardBg/80 p-2.5 rounded-lg border border-panthers-cardBorder">
-              <div class="text-2xl font-bold font-heading text-panthers-blue">1995</div>
-              <div class="text-[10px] uppercase text-gray-400 font-semibold">Inaugural Year</div>
-            </div>
-            <div class="bg-panthers-cardBg/80 p-2.5 rounded-lg border border-panthers-cardBorder">
-              <div class="text-2xl font-bold font-heading text-emerald-400">2</div>
-              <div class="text-[10px] uppercase text-gray-400 font-semibold">NFC Championships</div>
-            </div>
-            <div class="bg-panthers-cardBg/80 p-2.5 rounded-lg border border-panthers-cardBorder">
-              <div class="text-2xl font-bold font-heading text-white">74,867</div>
-              <div class="text-[10px] uppercase text-gray-400 font-semibold">Stadium Capacity</div>
-            </div>
-            <div class="bg-panthers-cardBg/80 p-2.5 rounded-lg border border-panthers-cardBorder">
-              <div class="text-2xl font-bold font-heading text-panthers-silver">#51</div>
-              <div class="text-[10px] uppercase text-gray-400 font-semibold">Sam Mills Retired</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- FRANCHISE MILESTONES & LEGENDS -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- TAB 1: HOME & HUB -->
+    <div id="home-tab" class="tab-content block">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        <!-- Left 2 Cols: Timeline Milestones -->
-        <div class="lg:col-span-2 bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-6 shadow-xl space-y-6">
-          <div class="flex items-center justify-between border-b border-panthers-cardBorder pb-4">
-            <h2 class="text-2xl font-extrabold uppercase tracking-wider text-panthers-blue flex items-center gap-2">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              Historic Franchise Milestones
-            </h2>
-            <span class="text-xs font-semibold text-panthers-silver uppercase">1995 - Present</span>
-          </div>
-
-          <div class="space-y-6 relative before:absolute before:inset-0 before:left-3.5 before:w-0.5 before:bg-panthers-cardBorder">
-            
-            <div class="relative pl-8">
-              <div class="absolute left-0 top-1 w-7 h-7 rounded-full bg-panthers-blue border-2 border-black flex items-center justify-center text-xs font-bold text-white font-heading">
-                95
-              </div>
-              <h3 class="text-lg font-bold font-heading text-white">1995: Inaugural Season & Dominance</h3>
-              <p class="text-sm text-gray-300 mt-1">
-                Founded as the NFL's 29th franchise. Dom Capers led Carolina to a 7-9 inaugural record—the most wins by an expansion team in NFL history at the time.
-              </p>
-            </div>
-
-            <div class="relative pl-8">
-              <div class="absolute left-0 top-1 w-7 h-7 rounded-full bg-panthers-blue border-2 border-black flex items-center justify-center text-xs font-bold text-white font-heading">
-                03
-              </div>
-              <h3 class="text-lg font-bold font-heading text-white">2003: "Cardiac Cats" & Super Bowl XXXVIII</h3>
-              <p class="text-sm text-gray-300 mt-1">
-                Behind Jake Delhomme, Stephen Davis, and Steve Smith Sr., the Panthers executed thrilling comeback victories, capturing the NFC Championship and advancing to Super Bowl XXXVIII.
-              </p>
-            </div>
-
-            <div class="relative pl-8">
-              <div class="absolute left-0 top-1 w-7 h-7 rounded-full bg-panthers-blue border-2 border-black flex items-center justify-center text-xs font-bold text-white font-heading">
-                15
-              </div>
-              <h3 class="text-lg font-bold font-heading text-white">2015: 15-1 Season & MVP Cam Newton</h3>
-              <p class="text-sm text-gray-300 mt-1">
-                A historic 15-1 regular season culminating in MVP honors for Cam Newton, Defensive Player of the Year honors for Luke Kuechly, and an NFC Championship title (Super Bowl 50).
-              </p>
-            </div>
-
-            <div class="relative pl-8">
-              <div class="absolute left-0 top-1 w-7 h-7 rounded-full bg-panthers-blue border-2 border-black flex items-center justify-center text-xs font-bold text-white font-heading">
-                KP
-              </div>
-              <h3 class="text-lg font-bold font-heading text-white">The "Keep Pounding" Legacy</h3>
-              <p class="text-sm text-gray-300 mt-1">
-                Coined by Hall of Famer Sam Mills during his courageous fight against cancer in 2003. "Keep Pounding" remains the eternal rallying cry of the Carolinas.
-              </p>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- Right Col: Hall of Honor Legends Card -->
-        <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-6 shadow-xl space-y-4">
-          <h2 class="text-xl font-extrabold uppercase tracking-wider text-panthers-blue border-b border-panthers-cardBorder pb-3 flex items-center gap-2">
-            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            Hall of Honor Legends
-          </h2>
-
-          <div class="space-y-3">
-            <div class="p-3 bg-black/50 border border-panthers-cardBorder rounded-xl hover:border-panthers-blue transition">
-              <div class="flex justify-between items-start">
-                <h3 class="font-heading font-bold text-base text-white">Sam Mills</h3>
-                <span class="text-xs bg-panthers-blue/30 text-panthers-accent px-2 py-0.5 rounded font-heading">#51 LB</span>
-              </div>
-              <p class="text-xs text-gray-400 mt-1">Franchise cornerstone, Pro Football Hall of Famer, and founder of Keep Pounding.</p>
-            </div>
-
-            <div class="p-3 bg-black/50 border border-panthers-cardBorder rounded-xl hover:border-panthers-blue transition">
-              <div class="flex justify-between items-start">
-                <h3 class="font-heading font-bold text-base text-white">Steve Smith Sr.</h3>
-                <span class="text-xs bg-panthers-blue/30 text-panthers-accent px-2 py-0.5 rounded font-heading">#89 WR</span>
-              </div>
-              <p class="text-xs text-gray-400 mt-1">2005 NFL Receiver Triple Crown Winner and all-time Panthers receiving yards leader.</p>
-            </div>
-
-            <div class="p-3 bg-black/50 border border-panthers-cardBorder rounded-xl hover:border-panthers-blue transition">
-              <div class="flex justify-between items-start">
-                <h3 class="font-heading font-bold text-base text-white">Julius Peppers</h3>
-                <span class="text-xs bg-panthers-blue/30 text-panthers-accent px-2 py-0.5 rounded font-heading">#90 DE</span>
-              </div>
-              <p class="text-xs text-gray-400 mt-1">Pro Football Hall of Famer and one of the most dominant pass rushers in NFL history.</p>
-            </div>
-
-            <div class="p-3 bg-black/50 border border-panthers-cardBorder rounded-xl hover:border-panthers-blue transition">
-              <div class="flex justify-between items-start">
-                <h3 class="font-heading font-bold text-base text-white">Jake Delhomme</h3>
-                <span class="text-xs bg-panthers-blue/30 text-panthers-accent px-2 py-0.5 rounded font-heading">#17 QB</span>
-              </div>
-              <p class="text-xs text-gray-400 mt-1">Clutch quarter-back who orchestrated the iconic 2003 "Cardiac Cats" playoff stretch.</p>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- VIDEO HIGHLIGHT RECAP CARD -->
-      <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-6 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 border-l-8 border-l-red-600">
-        <div class="space-y-2">
-          <div class="flex items-center gap-2 text-red-500 font-heading font-bold text-sm tracking-wider uppercase">
-            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-            Official NFL Video Highlights
-          </div>
-          <h3 class="text-2xl font-bold font-heading text-white uppercase">Carolina Panthers Game Day Recaps</h3>
-          <p class="text-sm text-gray-300 max-w-2xl">
-            Watch official condensed game highlights, key touchdowns, and post-game press conferences directly on YouTube per NFL copyright guidelines.
-          </p>
-        </div>
-        <a href="https://www.youtube.com/watch?v=7x-qq154bgs" target="_blank" rel="noopener noreferrer" class="px-6 py-3.5 bg-red-600 hover:bg-red-700 text-white font-heading font-bold tracking-wider uppercase rounded-xl transition shadow-lg flex items-center gap-2 whitespace-nowrap">
-          <span>Watch Highlights on YouTube</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-        </a>
-      </div>
-
-    </section>
-
-    <!-- ========================================== -->
-    <!-- TAB 2: ROSTER & DEPTH CHART -->
-    <!-- ========================================== -->
-    <section id="page-roster" class="hidden space-y-6">
-      
-      <!-- HEADER & UNIT FILTER SWITCHER -->
-      <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-6 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4">
-        <div>
-          <h2 class="text-3xl font-extrabold uppercase tracking-wider text-panthers-blue">
-            Active Roster & Depth Chart
-          </h2>
-          <p class="text-sm text-gray-400 mt-0.5">Explore starter lineups, key contributors, and coaching staff.</p>
-        </div>
-
-        <div class="flex bg-black/60 p-1.5 rounded-xl border border-panthers-cardBorder">
-          <button onclick="filterRoster('all')" id="roster-btn-all" class="roster-filter-btn px-4 py-2 rounded-lg text-xs font-heading font-bold uppercase transition bg-panthers-blue text-white">All Units</button>
-          <button onclick="filterRoster('offense')" id="roster-btn-offense" class="roster-filter-btn px-4 py-2 rounded-lg text-xs font-heading font-bold uppercase transition text-panthers-silver hover:text-white">Offense</button>
-          <button onclick="filterRoster('defense')" id="roster-btn-defense" class="roster-filter-btn px-4 py-2 rounded-lg text-xs font-heading font-bold uppercase transition text-panthers-silver hover:text-white">Defense</button>
-          <button onclick="filterRoster('special')" id="roster-btn-special" class="roster-filter-btn px-4 py-2 rounded-lg text-xs font-heading font-bold uppercase transition text-panthers-silver hover:text-white">Special Teams & Staff</button>
-        </div>
-      </div>
-
-      <!-- ROSTER GRID DISPLAY -->
-      <div id="roster-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Roster Cards dynamically populated by JS -->
-      </div>
-
-    </section>
-
-    <!-- ========================================== -->
-    <!-- TAB 3: STADIUM TOUR & TAILGATE MAP -->
-    <!-- ========================================== -->
-    <section id="page-stadium" class="hidden space-y-6">
-      
-      <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-6 shadow-xl">
-        <h2 class="text-3xl font-extrabold uppercase tracking-wider text-panthers-blue">
-          Interactive Stadium Tour & Tailgate Map
-        </h2>
-        <p class="text-sm text-gray-400 mt-1">
-          Click any highlighted interactive hotspot on Bank of America Stadium or surrounding lots to inspect fan amenities, pre-game traditions, and gate entry guides.
-        </p>
-
-        <!-- INTERACTIVE SVG STADIUM MAP -->
-        <div class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Left Main Content Span 2 -->
+        <div class="lg:col-span-2 space-y-8">
           
-          <!-- SVG Map Graphic (Col 1 & 2) -->
-          <div class="lg:col-span-2 bg-slate-950 border border-panthers-cardBorder rounded-2xl p-4 flex flex-col items-center justify-center relative overflow-hidden min-h-[380px]">
-            <span class="absolute top-3 left-3 bg-black/80 text-panthers-accent border border-panthers-blue/30 px-3 py-1 rounded-full text-xs font-heading font-bold uppercase tracking-wider">
-              📍 Interactive Map - Click Hotspots
+          <!-- Hero Card -->
+          <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+            <div class="absolute -right-12 -bottom-12 w-64 h-64 bg-panthers-blue/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <span class="inline-block bg-panthers-blue/20 text-panthers-blue border border-panthers-blue px-3 py-1 rounded text-xs font-heading font-bold tracking-widest uppercase mb-4">
+              ◆ KEEP POUNDING NATION
+            </span>
+            
+            <h2 class="text-3xl sm:text-4xl font-heading font-bold uppercase tracking-wider text-white mb-3">
+              WELCOME TO PANTHERS FAN CENTRAL
+            </h2>
+            <p class="text-panthers-silver text-sm sm:text-base leading-relaxed mb-6">
+              Your interactive headquarters for everything Carolina Football. Explore Bank of America Stadium, check live depth charts, launch fan cheer soundboard synthesizers, and test your knowledge in the Trivia Arcade.
+            </p>
+
+            <div class="flex flex-wrap gap-4">
+              <button onclick="openTabByNav('stadium-tab')" class="bg-panthers-blue hover:bg-panthers-blueHover text-white font-heading font-bold px-6 py-3 rounded-lg uppercase tracking-wider shadow-lg shadow-panthers-blue/20 transition-all transform hover:-translate-y-0.5">
+                EXPLORE STADIUM & TAILGATE MAP
+              </button>
+              <a href="https://my-first-game-opal.vercel.app" target="_blank" class="bg-panthers-cardBorder hover:bg-slate-700 text-white font-heading font-bold px-6 py-3 rounded-lg uppercase tracking-wider transition-all border border-slate-600">
+                LAUNCH TRIVIA CHALLENGE 🔗
+              </a>
+            </div>
+          </div>
+
+          <!-- Milestones Card -->
+          <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-6 sm:p-8 shadow-xl">
+            <div class="flex items-center justify-between mb-6 pb-4 border-b border-panthers-cardBorder">
+              <h2 class="text-2xl font-heading font-bold uppercase tracking-wider text-white flex items-center gap-2">
+                <span>⏱</span> HISTORIC FRANCHISE MILESTONES
+              </h2>
+              <span class="text-xs font-heading text-panthers-silver uppercase tracking-widest">1995 - PRESENT</span>
+            </div>
+
+            <div class="space-y-4">
+              <div class="bg-panthers-black/50 border border-panthers-cardBorder p-4 rounded-xl border-l-4 border-l-panthers-blue">
+                <h3 class="font-heading font-bold text-lg text-white mb-1 flex items-center gap-2">
+                  <span class="bg-panthers-blue text-xs text-white px-2 py-0.5 rounded font-mono">95</span>
+                  1995: Inaugural Season & Dominance
+                </h3>
+                <p class="text-panthers-silver text-sm">
+                  Founded as the NFL's 29th franchise. Dom Capers led Carolina to a 7-9 inaugural record—the most wins by an expansion team in NFL history at the time.
+                </p>
+              </div>
+
+              <div class="bg-panthers-black/50 border border-panthers-cardBorder p-4 rounded-xl border-l-4 border-l-panthers-blue">
+                <h3 class="font-heading font-bold text-lg text-white mb-1 flex items-center gap-2">
+                  <span class="bg-panthers-blue text-xs text-white px-2 py-0.5 rounded font-mono">03</span>
+                  2003: "Cardiac Cats" & Super Bowl XXXVIII
+                </h3>
+                <p class="text-panthers-silver text-sm">
+                  Behind Jake Delhomme, Stephen Davis, and Steve Smith Sr., the Panthers executed thrilling comeback victories, capturing the NFC Championship and advancing to Super Bowl XXXVIII.
+                </p>
+              </div>
+
+              <div class="bg-panthers-black/50 border border-panthers-cardBorder p-4 rounded-xl border-l-4 border-l-panthers-blue">
+                <h3 class="font-heading font-bold text-lg text-white mb-1 flex items-center gap-2">
+                  <span class="bg-panthers-blue text-xs text-white px-2 py-0.5 rounded font-mono">15</span>
+                  2015: 15-1 Season & MVP Cam Newton
+                </h3>
+                <p class="text-panthers-silver text-sm">
+                  Historic 15-1 regular season led by League MVP Cam Newton and Defensive Player of the Year candidate Luke Kuechly, securing Carolina's second NFC Title.
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Side Widgets Span 1 -->
+        <div class="space-y-8">
+          
+          <!-- Snapshot Widget -->
+          <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-6 shadow-xl">
+            <span class="text-xs font-heading font-bold uppercase tracking-widest text-panthers-blue block mb-4">
+              FRANCHISE SNAPSHOT
             </span>
 
-            <svg viewBox="0 0 800 500" class="w-full h-auto max-h-[460px] drop-shadow-2xl">
-              <!-- Stadium Outer Structure -->
-              <ellipse cx="400" cy="250" rx="350" ry="200" fill="#1e293b" stroke="#0085CA" stroke-width="6" />
-              <!-- Inner Concourse ring -->
-              <ellipse cx="400" cy="250" rx="280" ry="150" fill="#0f172a" stroke="#334155" stroke-width="4" />
-              
-              <!-- Field Area -->
-              <rect x="230" y="150" width="340" height="200" rx="10" fill="#15803d" stroke="#ffffff" stroke-width="3" />
-              
-              <!-- Endzones -->
-              <rect x="230" y="150" width="45" height="200" fill="#0085CA" />
-              <rect x="525" y="150" width="45" height="200" fill="#0085CA" />
-              <text x="252" y="255" fill="#ffffff" font-family="Oswald" font-size="16" font-weight="bold" transform="rotate(-90 252 255)" text-anchor="middle" letter-spacing="2">PANTHERS</text>
-              <text x="548" y="255" fill="#ffffff" font-family="Oswald" font-size="16" font-weight="bold" transform="rotate(90 548 255)" text-anchor="middle" letter-spacing="2">PANTHERS</text>
-
-              <!-- Yard Lines -->
-              <line x1="315" y1="150" x2="315" y2="350" stroke="#ffffff" stroke-width="2" stroke-dasharray="4,4" />
-              <line x1="400" y1="150" x2="400" y2="350" stroke="#ffffff" stroke-width="3" />
-              <line x1="485" y1="150" x2="485" y2="350" stroke="#ffffff" stroke-width="2" stroke-dasharray="4,4" />
-
-              <!-- Field Logo Banner -->
-              <text x="400" y="255" fill="#ffffff" font-family="Oswald" font-size="22" font-weight="bold" text-anchor="middle" letter-spacing="2">KEEP POUNDING</text>
-
-              <!-- HOTSPOT 1: North Gate Keep Pounding Drum -->
-              <g onclick="selectHotspot('drum')" class="cursor-pointer group">
-                <circle cx="400" cy="40" r="22" fill="#0085CA" stroke="#ffffff" stroke-width="3" class="animate-bounce" />
-                <text x="400" y="45" fill="#ffffff" font-size="18" text-anchor="middle">🥁</text>
-                <text x="400" y="78" fill="#38bdf8" font-family="Oswald" font-size="13" font-weight="bold" text-anchor="middle">NORTH GATE DRUM</text>
-              </g>
-
-              <!-- HOTSPOT 2: Field Level Sideline -->
-              <g onclick="selectHotspot('field')" class="cursor-pointer group">
-                <circle cx="400" cy="300" r="18" fill="#22c55e" stroke="#ffffff" stroke-width="2" />
-                <text x="400" y="305" fill="#ffffff" font-size="14" text-anchor="middle">🏈</text>
-                <text x="400" y="332" fill="#4ade80" font-family="Oswald" font-size="12" font-weight="bold" text-anchor="middle">FIELD LEVEL</text>
-              </g>
-
-              <!-- HOTSPOT 3: Mint Street Tailgate Zone -->
-              <g onclick="selectHotspot('tailgate')" class="cursor-pointer group">
-                <circle cx="100" cy="250" r="22" fill="#eab308" stroke="#ffffff" stroke-width="3" />
-                <text x="100" y="255" fill="#ffffff" font-size="18" text-anchor="middle">🍔</text>
-                <text x="100" y="288" fill="#fde047" font-family="Oswald" font-size="13" font-weight="bold" text-anchor="middle">MINT ST. TAILGATE</text>
-              </g>
-
-              <!-- HOTSPOT 4: Team Store & Gallery -->
-              <g onclick="selectHotspot('store')" class="cursor-pointer group">
-                <circle cx="700" cy="250" r="22" fill="#a855f7" stroke="#ffffff" stroke-width="3" />
-                <text x="700" y="255" fill="#ffffff" font-size="18" text-anchor="middle">🛍️</text>
-                <text x="700" y="288" fill="#c084fc" font-family="Oswald" font-size="13" font-weight="bold" text-anchor="middle">TEAM STORE</text>
-              </g>
-            </svg>
-          </div>
-
-          <!-- Hotspot Info Details Box (Col 3) -->
-          <div id="hotspot-detail-card" class="bg-black/60 border border-panthers-cardBorder rounded-2xl p-6 flex flex-col justify-between">
-            <div>
-              <div class="inline-block bg-panthers-blue/20 text-panthers-accent border border-panthers-blue/30 px-3 py-1 rounded-md text-xs font-heading font-bold uppercase tracking-wider mb-3" id="hotspot-badge">
-                SELECT A HOTSPOT
+            <div class="grid grid-cols-2 gap-3">
+              <div class="bg-panthers-black/60 border border-panthers-cardBorder p-3 rounded-xl text-center">
+                <h4 class="text-2xl font-heading font-bold text-panthers-blue">1995</h4>
+                <span class="text-[10px] text-panthers-silver uppercase tracking-wider block mt-1">INAUGURAL YEAR</span>
               </div>
-              <h3 class="text-2xl font-bold font-heading text-white uppercase" id="hotspot-title">North Gate 6-Foot Drum</h3>
-              <p class="text-sm text-gray-300 mt-3 leading-relaxed" id="hotspot-desc">
-                Located right outside North Gate entrance. 30 minutes before kickoff, an honorary team legend or celebrity guest bangs the giant 6-foot Keep Pounding Drum to ignite the crowd!
-              </p>
+              <div class="bg-panthers-black/60 border border-panthers-cardBorder p-3 rounded-xl text-center">
+                <h4 class="text-2xl font-heading font-bold text-panthers-blue">2</h4>
+                <span class="text-[10px] text-panthers-silver uppercase tracking-wider block mt-1">NFC CHAMPIONSHIPS</span>
+              </div>
+              <div class="bg-panthers-black/60 border border-panthers-cardBorder p-3 rounded-xl text-center">
+                <h4 class="text-2xl font-heading font-bold text-panthers-blue">74,867</h4>
+                <span class="text-[10px] text-panthers-silver uppercase tracking-wider block mt-1">STADIUM CAPACITY</span>
+              </div>
+              <div class="bg-panthers-black/60 border border-panthers-cardBorder p-3 rounded-xl text-center">
+                <h4 class="text-2xl font-heading font-bold text-panthers-blue">#51</h4>
+                <span class="text-[10px] text-panthers-silver uppercase tracking-wider block mt-1">SAM MILLS RETIRED</span>
+              </div>
             </div>
+          </div>
 
-            <div class="mt-6 pt-4 border-t border-panthers-cardBorder space-y-2">
-              <div class="text-xs text-panthers-silver font-semibold uppercase">Game Day Tip:</div>
-              <p class="text-xs text-gray-300 italic" id="hotspot-tip">
-                "Arrive 90 minutes early to watch player warmups and catch the drum ceremony!"
-              </p>
+          <!-- Hall of Honor Legends Widget -->
+          <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-6 shadow-xl">
+            <h2 class="text-xl font-heading font-bold uppercase tracking-wider text-white mb-4 flex items-center gap-2">
+              <span class="text-amber-400">★</span> HALL OF HONOR LEGENDS
+            </h2>
+
+            <div class="space-y-3">
+              <div class="bg-panthers-black/50 border border-panthers-cardBorder p-3.5 rounded-xl flex justify-between items-center">
+                <div>
+                  <h3 class="font-heading font-bold text-white text-base">Sam Mills</h3>
+                  <p class="text-xs text-panthers-silver">Franchise cornerstone, Hall of Famer, Keep Pounding founder.</p>
+                </div>
+                <span class="bg-panthers-blue/20 text-panthers-blue border border-panthers-blue font-heading text-xs font-bold px-2 py-1 rounded">#51 LB</span>
+              </div>
+
+              <div class="bg-panthers-black/50 border border-panthers-cardBorder p-3.5 rounded-xl flex justify-between items-center">
+                <div>
+                  <h3 class="font-heading font-bold text-white text-base">Steve Smith Sr.</h3>
+                  <p class="text-xs text-panthers-silver">2005 Triple Crown Winner & all-time receiving leader.</p>
+                </div>
+                <span class="bg-panthers-blue/20 text-panthers-blue border border-panthers-blue font-heading text-xs font-bold px-2 py-1 rounded">#89 WR</span>
+              </div>
+
+              <div class="bg-panthers-black/50 border border-panthers-cardBorder p-3.5 rounded-xl flex justify-between items-center">
+                <div>
+                  <h3 class="font-heading font-bold text-white text-base">Julius Peppers</h3>
+                  <p class="text-xs text-panthers-silver">N.C. native, Hall of Fame inductee, franchise sack leader.</p>
+                </div>
+                <span class="bg-panthers-blue/20 text-panthers-blue border border-panthers-blue font-heading text-xs font-bold px-2 py-1 rounded">#90 DE</span>
+              </div>
+
+              <div class="bg-panthers-black/50 border border-panthers-cardBorder p-3.5 rounded-xl flex justify-between items-center">
+                <div>
+                  <h3 class="font-heading font-bold text-white text-base">Jake Delhomme</h3>
+                  <p class="text-xs text-panthers-silver">Led 2003 Super Bowl XXXVIII Cardiac Cats run.</p>
+                </div>
+                <span class="bg-panthers-blue/20 text-panthers-blue border border-panthers-blue font-heading text-xs font-bold px-2 py-1 rounded">#17 QB</span>
+              </div>
             </div>
           </div>
 
         </div>
 
-        <!-- STADIUM QUICK FACTS -->
-        <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div class="bg-black/40 border border-panthers-cardBorder p-4 rounded-xl">
-            <div class="text-xs uppercase text-panthers-silver font-semibold">Address</div>
-            <div class="text-sm font-bold text-white mt-1">800 S Mint St, Charlotte, NC 28202</div>
+      </div>
+    </div>
+
+    <!-- TAB 2: ROSTER & DEPTH CHART -->
+    <div id="roster-tab" class="tab-content hidden">
+      <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-6 sm:p-8 shadow-xl">
+        <h2 class="text-3xl font-heading font-bold uppercase tracking-wider text-white mb-2">
+          2026 CAROLINA PANTHERS ROSTER & DEPTH CHART
+        </h2>
+        <p class="text-panthers-silver text-sm mb-6">Active starters and rotation players for the 2026 season:</p>
+
+        <!-- Depth Group Filter Buttons -->
+        <div class="flex flex-wrap gap-2 mb-6">
+          <button onclick="showGroup('offense', this)" class="depth-btn active bg-panthers-blue text-white border border-panthers-blue font-heading font-bold px-4 py-2 rounded text-sm uppercase tracking-wider transition-all">
+            Offense
+          </button>
+          <button onclick="showGroup('defense', this)" class="depth-btn bg-panthers-black/80 text-panthers-silver border border-panthers-cardBorder font-heading font-bold px-4 py-2 rounded text-sm uppercase tracking-wider transition-all hover:text-white">
+            Defense
+          </button>
+          <button onclick="showGroup('special', this)" class="depth-btn bg-panthers-black/80 text-panthers-silver border border-panthers-cardBorder font-heading font-bold px-4 py-2 rounded text-sm uppercase tracking-wider transition-all hover:text-white">
+            Special Teams & Staff
+          </button>
+        </div>
+
+        <!-- Offense Group -->
+        <div id="offense-group" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-4 rounded-xl">
+            <h3 class="font-heading font-bold text-white text-lg">Bryce Young (#9)</h3>
+            <span class="inline-block bg-panthers-blue/20 text-panthers-blue border border-panthers-blue text-xs font-heading font-bold px-2 py-0.5 rounded my-1">QB • Starter</span>
+            <p class="text-panthers-silver text-xs">Franchise Quarterback orchestrating the offense in 2026.</p>
           </div>
-          <div class="bg-black/40 border border-panthers-cardBorder p-4 rounded-xl">
-            <div class="text-xs uppercase text-panthers-silver font-semibold">Clear Bag Policy</div>
-            <div class="text-sm font-bold text-white mt-1">Clear plastic up to 12" x 6" x 12"</div>
+
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-4 rounded-xl">
+            <h3 class="font-heading font-bold text-white text-lg">Chuba Hubbard (#30)</h3>
+            <span class="inline-block bg-panthers-blue/20 text-panthers-blue border border-panthers-blue text-xs font-heading font-bold px-2 py-0.5 rounded my-1">RB • Starter</span>
+            <p class="text-panthers-silver text-xs">Lead running back and core piece of Carolina's ground attack.</p>
           </div>
-          <div class="bg-black/40 border border-panthers-cardBorder p-4 rounded-xl">
-            <div class="text-xs uppercase text-panthers-silver font-semibold">Turf Surface</div>
-            <div class="text-sm font-bold text-white mt-1">FieldTurf Revolution 360</div>
+
+          <!-- WR1: Tetairoa McMillan -->
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-4 rounded-xl">
+            <h3 class="font-heading font-bold text-white text-lg">Tetairoa McMillan (#4)</h3>
+            <span class="inline-block bg-panthers-blue/20 text-panthers-blue border border-panthers-blue text-xs font-heading font-bold px-2 py-0.5 rounded my-1">WR1 • Starter</span>
+            <p class="text-panthers-silver text-xs">Primary WR target on the outside leading the receiving room.</p>
           </div>
-          <div class="bg-black/40 border border-panthers-cardBorder p-4 rounded-xl">
-            <div class="text-xs uppercase text-panthers-silver font-semibold">Gates Open</div>
-            <div class="text-sm font-bold text-white mt-1">2 Hours Prior to Kickoff</div>
+
+          <!-- WR2: Jalen Coker -->
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-4 rounded-xl">
+            <h3 class="font-heading font-bold text-white text-lg">Jalen Coker (#18)</h3>
+            <span class="inline-block bg-panthers-blue/20 text-panthers-blue border border-panthers-blue text-xs font-heading font-bold px-2 py-0.5 rounded my-1">WR2 • Starter</span>
+            <p class="text-panthers-silver text-xs">Key WR2 target working all levels of the defense.</p>
+          </div>
+
+          <!-- WR3: Xavier Legette -->
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-4 rounded-xl">
+            <h3 class="font-heading font-bold text-white text-lg">Xavier Legette (#17)</h3>
+            <span class="inline-block bg-panthers-blue/20 text-panthers-blue border border-panthers-blue text-xs font-heading font-bold px-2 py-0.5 rounded my-1">WR3 • Rotation</span>
+            <p class="text-panthers-silver text-xs">Explosive WR3 deep threat in rotation.</p>
+          </div>
+
+          <!-- Rotation Receiver: John Metchie III -->
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-4 rounded-xl">
+            <h3 class="font-heading font-bold text-white text-lg">John Metchie III (#13)</h3>
+            <span class="inline-block bg-panthers-blue/20 text-panthers-blue border border-panthers-blue text-xs font-heading font-bold px-2 py-0.5 rounded my-1">WR • Rotation</span>
+            <p class="text-panthers-silver text-xs">Versatile receiver in rotation and return specialist.</p>
+          </div>
+
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-4 rounded-xl">
+            <h3 class="font-heading font-bold text-white text-lg">Ja'Tavion Sanders (#0)</h3>
+            <span class="inline-block bg-panthers-blue/20 text-panthers-blue border border-panthers-blue text-xs font-heading font-bold px-2 py-0.5 rounded my-1">TE • Playmaker</span>
+            <p class="text-panthers-silver text-xs">Dynamic tight end weapon across the middle.</p>
+          </div>
+
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-4 rounded-xl">
+            <h3 class="font-heading font-bold text-white text-lg">Robert Hunt (#50)</h3>
+            <span class="inline-block bg-panthers-blue/20 text-panthers-blue border border-panthers-blue text-xs font-heading font-bold px-2 py-0.5 rounded my-1">OG • Starter</span>
+            <p class="text-panthers-silver text-xs">Anchor on the interior offensive line.</p>
+          </div>
+        </div>
+
+        <!-- Defense Group -->
+        <div id="defense-group" class="hidden grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-4 rounded-xl">
+            <h3 class="font-heading font-bold text-white text-lg">Derrick Brown (#95)</h3>
+            <span class="inline-block bg-panthers-blue/20 text-panthers-blue border border-panthers-blue text-xs font-heading font-bold px-2 py-0.5 rounded my-1">DT • Pro Bowl</span>
+            <p class="text-panthers-silver text-xs">Dominant interior defensive tackle and run stopper.</p>
+          </div>
+
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-4 rounded-xl">
+            <h3 class="font-heading font-bold text-white text-lg">Jaycee Horn (#8)</h3>
+            <span class="inline-block bg-panthers-blue/20 text-panthers-blue border border-panthers-blue text-xs font-heading font-bold px-2 py-0.5 rounded my-1">CB • Lockdown</span>
+            <p class="text-panthers-silver text-xs">Primary shutdown cornerback covering top opponent wideouts.</p>
+          </div>
+
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-4 rounded-xl">
+            <h3 class="font-heading font-bold text-white text-lg">Devin Lloyd (#55)</h3>
+            <span class="inline-block bg-panthers-blue/20 text-panthers-blue border border-panthers-blue text-xs font-heading font-bold px-2 py-0.5 rounded my-1">LB • Starter</span>
+            <p class="text-panthers-silver text-xs">High-tackling middle linebacker directing defensive calls.</p>
+          </div>
+
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-4 rounded-xl">
+            <h3 class="font-heading font-bold text-white text-lg">Jaelan Phillips (#5)</h3>
+            <span class="inline-block bg-panthers-blue/20 text-panthers-blue border border-panthers-blue text-xs font-heading font-bold px-2 py-0.5 rounded my-1">OLB • Pass Rusher</span>
+            <p class="text-panthers-silver text-xs">Edge rusher leading the team in quarterback pressures.</p>
+          </div>
+
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-4 rounded-xl">
+            <h3 class="font-heading font-bold text-white text-lg">Bobby Okereke (#58)</h3>
+            <span class="inline-block bg-panthers-blue/20 text-panthers-blue border border-panthers-blue text-xs font-heading font-bold px-2 py-0.5 rounded my-1">LB • Starter</span>
+            <p class="text-panthers-silver text-xs">Versatile linebacker strong in coverage and gap defense.</p>
+          </div>
+
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-4 rounded-xl">
+            <h3 class="font-heading font-bold text-white text-lg">Tre'von Moehrig (#7)</h3>
+            <span class="inline-block bg-panthers-blue/20 text-panthers-blue border border-panthers-blue text-xs font-heading font-bold px-2 py-0.5 rounded my-1">S • Starter</span>
+            <p class="text-panthers-silver text-xs">Free safety ranging top coverage in the defensive backfield.</p>
+          </div>
+        </div>
+
+        <!-- Special Teams Group -->
+        <div id="special-group" class="hidden grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-4 rounded-xl">
+            <h3 class="font-heading font-bold text-white text-lg">Ryan Fitzgerald (#10)</h3>
+            <span class="inline-block bg-panthers-blue/20 text-panthers-blue border border-panthers-blue text-xs font-heading font-bold px-2 py-0.5 rounded my-1">K • Placekicker</span>
+            <p class="text-panthers-silver text-xs">Field goal specialist.</p>
+          </div>
+
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-4 rounded-xl">
+            <h3 class="font-heading font-bold text-white text-lg">Sam Martin (#6)</h3>
+            <span class="inline-block bg-panthers-blue/20 text-panthers-blue border border-panthers-blue text-xs font-heading font-bold px-2 py-0.5 rounded my-1">P • Punter</span>
+            <p class="text-panthers-silver text-xs">Punting and field position controller.</p>
+          </div>
+
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-4 rounded-xl">
+            <h3 class="font-heading font-bold text-white text-lg">JJ Jansen (#44)</h3>
+            <span class="inline-block bg-panthers-blue/20 text-panthers-blue border border-panthers-blue text-xs font-heading font-bold px-2 py-0.5 rounded my-1">LS • Legend</span>
+            <p class="text-panthers-silver text-xs">Long snapper and franchise record holder in total games played.</p>
+          </div>
+
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-4 rounded-xl">
+            <h3 class="font-heading font-bold text-white text-lg">Dave Canales</h3>
+            <span class="inline-block bg-panthers-blue/20 text-panthers-blue border border-panthers-blue text-xs font-heading font-bold px-2 py-0.5 rounded my-1">Head Coach</span>
+            <p class="text-panthers-silver text-xs">Head coach building the Panthers' offensive system and team culture.</p>
           </div>
         </div>
 
       </div>
+    </div>
 
-    </section>
+    <!-- TAB 3: STADIUM TOUR -->
+    <div id="stadium-tab" class="tab-content hidden">
+      <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-6 sm:p-8 shadow-xl">
+        <h2 class="text-3xl font-heading font-bold uppercase tracking-wider text-white mb-2">
+          BANK OF AMERICA STADIUM FAN GUIDE
+        </h2>
+        <p class="text-panthers-silver text-sm mb-6">Essential game day details for Uptown Charlotte:</p>
 
-    <!-- ========================================== -->
-    <!-- TAB 4: 2026 SCHEDULE & LIVE SCORE TRACKER -->
-    <!-- ========================================== -->
-    <section id="page-schedule" class="hidden space-y-6">
-      
-      <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-6 shadow-xl">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-panthers-cardBorder pb-6">
-          <div>
-            <h2 class="text-3xl font-extrabold uppercase tracking-wider text-panthers-blue">
-              2026 Season Schedule & Results
-            </h2>
-            <p class="text-sm text-gray-400 mt-1">Track scores, game statuses, home/away matchups, and filter results.</p>
-          </div>
-
-          <!-- Schedule Filter Buttons -->
-          <div class="flex bg-black/60 p-1.5 rounded-xl border border-panthers-cardBorder">
-            <button onclick="filterSchedule('all')" id="sched-filter-all" class="sched-btn px-4 py-2 rounded-lg text-xs font-heading font-bold uppercase transition bg-panthers-blue text-white">All Games</button>
-            <button onclick="filterSchedule('win')" id="sched-filter-win" class="sched-btn px-4 py-2 rounded-lg text-xs font-heading font-bold uppercase transition text-panthers-silver hover:text-white">Wins</button>
-            <button onclick="filterSchedule('loss')" id="sched-filter-loss" class="sched-btn px-4 py-2 rounded-lg text-xs font-heading font-bold uppercase transition text-panthers-silver hover:text-white">Losses</button>
-            <button onclick="filterSchedule('upcoming')" id="sched-filter-upcoming" class="sched-btn px-4 py-2 rounded-lg text-xs font-heading font-bold uppercase transition text-panthers-silver hover:text-white">Upcoming</button>
-          </div>
-        </div>
-
-        <!-- Schedule Table -->
-        <div class="overflow-x-auto mt-6">
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr class="border-b border-panthers-cardBorder text-panthers-silver font-heading uppercase text-sm tracking-wider">
-                <th class="py-3 px-4">Week</th>
-                <th class="py-3 px-4">Opponent</th>
-                <th class="py-3 px-4">Date / Time</th>
-                <th class="py-3 px-4">Location</th>
-                <th class="py-3 px-4 text-right">Result / Status</th>
-              </tr>
-            </thead>
-            <tbody id="schedule-tbody" class="divide-y divide-panthers-cardBorder text-sm">
-              <!-- Dynamically populated rows -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- ========================================== -->
-    <!-- TAB 5: CHEER & CHANT SOUNDBOARD -->
-    <!-- ========================================== -->
-    <section id="page-soundboard" class="hidden space-y-6">
-      
-      <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-6 shadow-xl space-y-6">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div>
-            <h2 class="text-3xl font-extrabold uppercase tracking-wider text-panthers-blue">
-              Interactive Fan Cheer Soundboard
-            </h2>
-            <p class="text-sm text-gray-400 mt-1">
-              Trigger real audio synthesizer sound effects, stadium horns, and animated visual equalizer waves!
-            </p>
-          </div>
-
-          <div class="flex items-center gap-2 bg-black/60 px-4 py-2 rounded-xl border border-panthers-cardBorder">
-            <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span class="text-xs font-heading font-bold uppercase text-gray-300">Web Audio Synth Ready</span>
-          </div>
-        </div>
-
-        <!-- AUDIO EQUALIZER VISUALIZER WAVE -->
-        <div class="bg-black border border-panthers-cardBorder rounded-2xl p-6 flex items-end justify-center gap-1.5 h-36 overflow-hidden relative shadow-inner">
-          <div class="absolute top-3 left-4 text-xs font-heading uppercase text-panthers-silver tracking-widest" id="sound-status-text">
-            AUDIO WAVE VISUALIZER • READY
-          </div>
-
-          <!-- 24 Equalizer Bars -->
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-3"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-5"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-2"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-8"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-4"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-12"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-6"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-10"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-4"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-14"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-7"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-16"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-16"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-7"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-14"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-4"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-10"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-6"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-12"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-4"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-8"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-2"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-5"></div>
-          <div class="eq-bar w-2 bg-panthers-blue rounded-t h-3"></div>
-        </div>
-
-        <!-- CHEER TRIGGER BUTTONS GRID -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          
-          <button onclick="triggerCheer('drum')" class="p-5 bg-gradient-to-br from-black to-panthers-cardBg border border-panthers-blue/60 hover:border-panthers-blue rounded-2xl shadow-xl hover:scale-105 transition-all text-left space-y-2 group">
-            <div class="text-3xl">🥁</div>
-            <div class="font-heading font-bold text-lg text-white group-hover:text-panthers-accent uppercase">Keep Pounding Drum</div>
-            <div class="text-xs text-gray-400">Deep bass drum pulse beat</div>
-          </button>
-
-          <button onclick="triggerCheer('horn')" class="p-5 bg-gradient-to-br from-black to-panthers-cardBg border border-panthers-blue/60 hover:border-panthers-blue rounded-2xl shadow-xl hover:scale-105 transition-all text-left space-y-2 group">
-            <div class="text-3xl">📯</div>
-            <div class="font-heading font-bold text-lg text-white group-hover:text-panthers-accent uppercase">3rd Down Horn</div>
-            <div class="text-xs text-gray-400">Stadium defense foghorn blast</div>
-          </button>
-
-          <button onclick="triggerCheer('touchdown')" class="p-5 bg-gradient-to-br from-black to-panthers-cardBg border border-panthers-blue/60 hover:border-panthers-blue rounded-2xl shadow-xl hover:scale-105 transition-all text-left space-y-2 group">
-            <div class="text-3xl">🙌</div>
-            <div class="font-heading font-bold text-lg text-white group-hover:text-panthers-accent uppercase">Touchdown Sirens</div>
-            <div class="text-xs text-gray-400">High pitch score celebration</div>
-          </button>
-
-          <button onclick="triggerCheer('caroline')" class="p-5 bg-gradient-to-br from-black to-panthers-cardBg border border-panthers-blue/60 hover:border-panthers-blue rounded-2xl shadow-xl hover:scale-105 transition-all text-left space-y-2 group">
-            <div class="text-3xl">🎶</div>
-            <div class="font-heading font-bold text-lg text-white group-hover:text-panthers-accent uppercase">Sweet Caroline</div>
-            <div class="text-xs text-gray-400">Victory fan anthem synth arpeggio</div>
-          </button>
-
-        </div>
-      </div>
-
-    </section>
-
-    <!-- ========================================== -->
-    <!-- TAB 6: ARCADE & TRIVIA HUB -->
-    <!-- ========================================== -->
-    <section id="page-arcade" class="hidden space-y-6">
-      
-      <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
-        <div class="max-w-3xl space-y-3">
-          <div class="inline-flex items-center gap-2 bg-purple-500/20 text-purple-300 border border-purple-500/30 px-3 py-1 rounded-md text-xs font-heading font-bold uppercase tracking-wider">
-            🎮 Fan Arcade & Game Center
-          </div>
-          <h2 class="text-3xl sm:text-4xl font-extrabold uppercase tracking-wider text-white">
-            Panthers Trivia Challenge & Mini-Games
-          </h2>
-          <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
-            Test your knowledge on Panthers franchise records, draft picks, and legendary moments. Play our full standalone trivia web game app linked below!
-          </p>
-        </div>
-
-        <!-- MAIN GAME LINK CARD -->
-        <div class="bg-gradient-to-r from-slate-900 via-panthers-cardBg to-slate-900 border-2 border-panthers-blue rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 glow-panthers">
-          <div class="space-y-3">
-            <h3 class="text-2xl sm:text-3xl font-extrabold font-heading text-white uppercase tracking-wider">
-              🏈 Play Carolina Trivia Game
+        <!-- Custom Field Pattern Graphic -->
+        <div class="relative overflow-hidden rounded-xl border-2 border-panthers-blue p-8 text-center field-pattern shadow-inner mb-8">
+          <div class="relative z-10">
+            <h3 class="text-3xl font-heading font-bold text-white tracking-widest drop-shadow-md">
+              🏟️ BANK OF AMERICA STADIUM
             </h3>
-            <p class="text-sm text-panthers-silver max-w-xl">
-              Launch our custom Vercel web app game featuring multiple difficulty levels, instant scorekeeping, and timed trivia rounds!
+            <p class="text-xs font-heading font-bold text-panthers-silver tracking-widest uppercase mt-1">
+              CHARLOTTE, NC • CAPACITY: 74,867
             </p>
-            <div class="flex items-center gap-4 text-xs text-gray-400">
-              <span>✅ Fully Responsive</span>
-              <span>•</span>
-              <span>✅ High Scores</span>
-              <span>•</span>
-              <span>✅ Free to Play</span>
+            <div class="mt-4 inline-block bg-panthers-blue text-white font-heading font-bold px-6 py-2 rounded-full uppercase tracking-widest text-sm shadow-md">
+              KEEP POUNDING FIELD 🏈
             </div>
           </div>
+        </div>
 
-          <a href="https://my-first-game-opal.vercel.app" target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-panthers-blue hover:bg-panthers-blueHover text-white font-heading font-bold text-lg tracking-wider uppercase rounded-xl transition shadow-2xl flex items-center gap-3 whitespace-nowrap transform hover:scale-105">
-            <span>Launch Trivia Game</span>
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-4 rounded-xl">
+            <h3 class="font-heading font-bold text-panthers-blue text-base mb-1">🏟️ Location</h3>
+            <p class="text-panthers-silver text-xs">800 S Mint St, Charlotte, NC 28202. Located in Uptown Charlotte.</p>
+          </div>
+
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-4 rounded-xl">
+            <h3 class="font-heading font-bold text-panthers-blue text-base mb-1">🥁 Drum Tradition</h3>
+            <p class="text-panthers-silver text-xs">The 6-foot Keep Pounding Drum is banged at North Gate 30 mins before kickoff!</p>
+          </div>
+
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-4 rounded-xl">
+            <h3 class="font-heading font-bold text-panthers-blue text-base mb-1">🍔 Tailgating</h3>
+            <p class="text-panthers-silver text-xs">Prime tailgates take place along Mint, Morehead, and Graham Street lots.</p>
+          </div>
+
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-4 rounded-xl">
+            <h3 class="font-heading font-bold text-panthers-blue text-base mb-1">🎒 Clear Bag Policy</h3>
+            <p class="text-panthers-silver text-xs">NFL Clear Bag Policy enforced. Standard clear bags up to 12" x 6" x 12" permitted.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: 2026 SCHEDULE -->
+    <div id="schedule-tab" class="tab-content hidden">
+      <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-6 sm:p-8 shadow-xl">
+        <h2 class="text-3xl font-heading font-bold uppercase tracking-wider text-white mb-2">
+          2026 SEASON SCHEDULE & RESULTS
+        </h2>
+        <p class="text-panthers-silver text-sm mb-6">Current 2026 Regular Season Record: <strong class="text-white">3–2</strong></p>
+
+        <div class="flex gap-2 mb-6">
+          <button onclick="filterSchedule('all', this)" class="sched-btn active bg-panthers-blue text-white font-heading font-bold px-4 py-2 rounded text-sm uppercase tracking-wider transition-all">
+            All Games
+          </button>
+          <button onclick="filterSchedule('win', this)" class="sched-btn bg-panthers-black/80 text-panthers-silver border border-panthers-cardBorder font-heading font-bold px-4 py-2 rounded text-sm uppercase tracking-wider transition-all hover:text-white">
+            Wins Only
+          </button>
+        </div>
+
+        <div id="schedule-container" class="overflow-x-auto"></div>
+      </div>
+    </div>
+
+    <!-- TAB 5: CHEER SOUNDBOARD -->
+    <div id="soundboard-tab" class="tab-content hidden">
+      <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-6 sm:p-8 shadow-xl">
+        <h2 class="text-3xl font-heading font-bold uppercase tracking-wider text-white mb-2">
+          INTERACTIVE FAN CHEER SOUNDBOARD
+        </h2>
+        <p class="text-panthers-silver text-sm mb-6">Click any cheer button below to trigger stadium cheer sounds:</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <button onclick="playCheer('KEEP POUNDING! 🥁 🏈')" class="bg-panthers-black/80 hover:bg-panthers-blue border border-panthers-blue text-white font-heading font-bold p-6 rounded-xl uppercase tracking-wider transition-all transform hover:scale-[1.02] text-left">
+            <span class="text-2xl block mb-2">🥁</span>
+            <span class="text-lg">Keep Pounding!</span>
+          </button>
+
+          <button onclick="playCheer('THIRD DOWN NOISE! 🔊 🏈')" class="bg-panthers-black/80 hover:bg-panthers-blue border border-panthers-blue text-white font-heading font-bold p-6 rounded-xl uppercase tracking-wider transition-all transform hover:scale-[1.02] text-left">
+            <span class="text-2xl block mb-2">🔊</span>
+            <span class="text-lg">3rd Down Defense!</span>
+          </button>
+
+          <button onclick="playCheer('TOUCHDOWN PANTHERS! 🪶 🙌')" class="bg-panthers-black/80 hover:bg-panthers-blue border border-panthers-blue text-white font-heading font-bold p-6 rounded-xl uppercase tracking-wider transition-all transform hover:scale-[1.02] text-left">
+            <span class="text-2xl block mb-2">🙌</span>
+            <span class="text-lg">Touchdown Panthers!</span>
+          </button>
+
+          <button onclick="playCheer('SWEET CAROLINE! 🎶 💙')" class="bg-panthers-black/80 hover:bg-panthers-blue border border-panthers-blue text-white font-heading font-bold p-6 rounded-xl uppercase tracking-wider transition-all transform hover:scale-[1.02] text-left">
+            <span class="text-2xl block mb-2">🎶</span>
+            <span class="text-lg">Sweet Caroline!</span>
+          </button>
+        </div>
+
+        <div id="cheer-display" class="mt-8 text-center font-heading text-2xl text-panthers-blue min-h-[3rem] transition-all flex items-center justify-center"></div>
+      </div>
+    </div>
+
+    <!-- TAB 6: ARCADE & TRIVIA -->
+    <div id="arcade-tab" class="tab-content hidden">
+      <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-8 shadow-xl text-center max-w-2xl mx-auto">
+        <h2 class="text-3xl font-heading font-bold uppercase tracking-wider text-white mb-2">
+          PANTHERS TRIVIA CHALLENGE ARCADE
+        </h2>
+        <p class="text-panthers-silver text-sm mb-6">Test your knowledge on franchise history and legends!</p>
+
+        <div class="bg-panthers-black/60 border border-panthers-cardBorder p-8 rounded-2xl">
+          <span class="text-5xl mb-4 block">🎮</span>
+          <h3 class="text-2xl font-heading font-bold text-panthers-blue uppercase tracking-wider mb-2">
+            PANTHERS TRIVIA GAME
+          </h3>
+          <p class="text-panthers-silver text-xs mb-6">Launch our standalone web game built for Panthers fans!</p>
+
+          <a href="https://my-first-game-opal.vercel.app" target="_blank" class="inline-block bg-panthers-blue hover:bg-panthers-blueHover text-white font-heading font-bold px-8 py-3.5 rounded-lg uppercase tracking-wider shadow-lg shadow-panthers-blue/30 transition-all transform hover:-translate-y-0.5">
+            🏈 PLAY PANTHERS TRIVIA CHALLENGE
           </a>
         </div>
-
-        <!-- QUICK FAN NEWSLETTER SIGNUP -->
-        <div class="bg-black/50 border border-panthers-cardBorder rounded-2xl p-6 space-y-4">
-          <h3 class="text-xl font-bold font-heading text-panthers-blue uppercase">Get Fan Central Alerts</h3>
-          <p class="text-sm text-gray-300">Sign up for weekly schedule updates, injury reports, and stadium news.</p>
-          
-          <form onsubmit="handleSignup(event)" class="flex flex-col sm:flex-row gap-3 max-w-md">
-            <input type="email" required placeholder="Enter your email address..." class="bg-panthers-cardBg border border-panthers-cardBorder text-white text-sm rounded-xl px-4 py-3 flex-grow focus:outline-none focus:border-panthers-blue">
-            <button type="submit" class="px-6 py-3 bg-panthers-blue hover:bg-panthers-blueHover text-white font-heading font-bold uppercase rounded-xl text-sm tracking-wider whitespace-nowrap transition">
-              Subscribe
-            </button>
-          </form>
-          <div id="signup-msg" class="text-xs font-bold text-emerald-400 hidden"></div>
-        </div>
-
       </div>
-
-    </section>
+    </div>
 
   </main>
 
   <!-- FOOTER -->
-  <footer class="bg-black border-t border-panthers-cardBorder py-8 text-center text-xs text-panthers-silver space-y-2 mt-auto">
-    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="font-heading uppercase tracking-widest text-sm text-white">
-        Carolina Panthers Fan Central Portal
-      </div>
-      <div>
-        &copy; 2026 Fan Central Hub. Unofficial Fan Page. All rights reserved.
-      </div>
-    </div>
+  <footer class="bg-black border-t border-panthers-cardBorder py-6 text-center text-panthers-silver text-xs">
+    <p>&copy; 2026 Carolina Panthers Fan Site. Designed by a Panthers Fan.</p>
   </footer>
 
-  <!-- ========================================== -->
-  <!-- JAVASCRIPT LOGIC & AUDIO SYNTHESIZER -->
-  <!-- ========================================== -->
+  <!-- SCRIPT CONTROLLERS -->
   <script>
-    // -------------------------------------------------------------
-    // 1. NAVIGATION TAB SWITCHER
-    // -------------------------------------------------------------
-    const tabs = ['home', 'roster', 'stadium', 'schedule', 'soundboard', 'arcade'];
+    // Tabbed Switcher
+    function openTab(evt, tabId) {
+      const contents = document.querySelectorAll('.tab-content');
+      contents.forEach(c => c.classList.add('hidden'));
 
-    function switchTab(targetTab) {
-      tabs.forEach(tab => {
-        const page = document.getElementById(`page-${tab}`);
-        const btn = document.getElementById(`tab-${tab}`);
-        
-        if (tab === targetTab) {
-          page.classList.remove('hidden');
-          btn.className = "nav-tab px-3 py-2.5 sm:px-4 sm:py-3 rounded-lg text-xs sm:text-sm font-heading font-bold tracking-wider uppercase whitespace-nowrap transition-all duration-200 flex items-center gap-2 bg-panthers-blue text-white shadow-lg shadow-panthers-blue/30";
-        } else {
-          page.classList.add('hidden');
-          btn.className = "nav-tab px-3 py-2.5 sm:px-4 sm:py-3 rounded-lg text-xs sm:text-sm font-heading font-bold tracking-wider uppercase whitespace-nowrap transition-all duration-200 flex items-center gap-2 text-panthers-silver hover:text-white hover:bg-panthers-cardBg";
-        }
+      const tabs = document.querySelectorAll('.nav-tab');
+      tabs.forEach(t => {
+        t.classList.remove('active', 'border-panthers-blue', 'text-white', 'bg-panthers-blue/20');
+        t.classList.add('border-transparent', 'text-panthers-silver');
       });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      document.getElementById(tabId).classList.remove('hidden');
+
+      if (evt && evt.currentTarget) {
+        evt.currentTarget.classList.add('active', 'border-panthers-blue', 'text-white', 'bg-panthers-blue/20');
+        evt.currentTarget.classList.remove('border-transparent', 'text-panthers-silver');
+      }
     }
 
-    // -------------------------------------------------------------
-    // 2. ROSTER & DEPTH CHART DATA & FILTER
-    // -------------------------------------------------------------
-    const rosterData = [
-      { name: "Bryce Young", pos: "QB", num: "#9", unit: "offense", status: "Starter", notes: "Former #1 Overall Pick entering key 2026 campaign." },
-      { name: "Chuba Hubbard", pos: "RB", num: "#30", unit: "offense", status: "Starter", notes: "Workhorse back with high tackle-breaking rate." },
-      { name: "Tetairoa McMillan", pos: "WR", num: "#4", unit: "offense", status: "Starter", notes: "Dynamic perimeter playmaker and red-zone target." },
-      { name: "Xavier Legette", pos: "WR", num: "#17", unit: "offense", status: "Starter", notes: "Explosive deep threat with elite speed." },
-      { name: "Robert Hunt", pos: "OG", num: "#50", unit: "offense", status: "Starter", notes: "Anchor of interior offensive line protection." },
-      
-      { name: "Derrick Brown", pos: "DT", num: "#95", unit: "defense", status: "Starter", notes: "Pro Bowl interior force and run-stopper." },
-      { name: "Jaycee Horn", pos: "CB", num: "#8", unit: "defense", status: "Starter", notes: "Lockdown shutdown corner on perimeter receivers." },
-      { name: "Devin Lloyd", pos: "LB", num: "#55", unit: "defense", status: "Starter", notes: "Sideline-to-sideline tackler and coverage linebacker." },
-      { name: "Jaelan Phillips", pos: "OLB", num: "#5", unit: "defense", status: "Starter", notes: "Primary edge rush threat with high pressure rate." },
-      { name: "Tre'von Moehrig", pos: "S", num: "#7", unit: "defense", status: "Starter", notes: "Versatile safety leading secondary communication." },
+    function openTabByNav(tabId) {
+      const tabs = document.querySelectorAll('.nav-tab');
+      tabs.forEach(t => {
+        if (t.getAttribute('onclick').includes(tabId)) {
+          t.click();
+        }
+      });
+    }
 
-      { name: "Ryan Fitzgerald", pos: "K", num: "#10", unit: "special", status: "Starter", notes: "Reliable long-range field goal kicker." },
-      { name: "Sam Martin", pos: "P", num: "#6", unit: "special", status: "Starter", notes: "Veteran punter pinning opponents inside the 20." },
-      { name: "JJ Jansen", pos: "LS", num: "#44", unit: "special", status: "Legend", notes: "All-time Carolina franchise leader in consecutive games played." },
-      { name: "Dave Canales", pos: "Head Coach", num: "HC", unit: "special", status: "Coach", notes: "Offensive-minded leader driving tactical growth." }
+    // Depth Chart Switcher
+    function showGroup(groupId, btn) {
+      document.getElementById('offense-group').classList.add('hidden');
+      document.getElementById('offense-group').classList.remove('grid');
+      document.getElementById('defense-group').classList.add('hidden');
+      document.getElementById('defense-group').classList.remove('grid');
+      document.getElementById('special-group').classList.add('hidden');
+      document.getElementById('special-group').classList.remove('grid');
+
+      const target = document.getElementById(groupId + '-group');
+      target.classList.remove('hidden');
+      target.classList.add('grid');
+
+      const btns = btn.parentElement.querySelectorAll('.depth-btn');
+      btns.forEach(b => {
+        b.classList.remove('bg-panthers-blue', 'text-white', 'border-panthers-blue');
+        b.classList.add('bg-panthers-black/80', 'text-panthers-silver', 'border-panthers-cardBorder');
+      });
+
+      btn.classList.add('bg-panthers-blue', 'text-white', 'border-panthers-blue');
+      btn.classList.remove('bg-panthers-black/80', 'text-panthers-silver', 'border-panthers-cardBorder');
+    }
+
+    // Official 2026 Schedule Data
+    const panthers2026Schedule = [
+      { week: "Wk 1", opp: "vs. Chicago Bears", date: "Sep 13, 2026", status: "L 37-59", type: "loss" },
+      { week: "Wk 2", opp: "@ Atlanta Falcons", date: "Sep 20, 2026", status: "W 34-3", type: "win" },
+      { week: "Wk 3", opp: "@ Cleveland Browns", date: "Sep 27, 2026", status: "L 18-21", type: "loss" },
+      { week: "Wk 4", opp: "vs. Detroit Lions", date: "Oct 4, 2026", status: "W 32-26", type: "win" },
+      { week: "Wk 5", opp: "BYE WEEK", date: "Oct 11, 2026", status: "BYE", type: "normal" },
+      { week: "Wk 6", opp: "@ Philadelphia Eagles", date: "Oct 18, 2026", status: "W 25-14", type: "win" },
+      { week: "Wk 7", opp: "vs. Tampa Bay Buccaneers", date: "Oct 25, 2026 (1:00 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 8", opp: "@ Green Bay Packers", date: "Oct 29, 2026 (8:15 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 9", opp: "vs. Denver Broncos", date: "Nov 8, 2026 (1:00 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 10", opp: "@ New Orleans Saints", date: "Nov 15, 2026 (1:00 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 11", opp: "vs. Baltimore Ravens", date: "Nov 22, 2026 (1:00 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 12", opp: "@ Tampa Bay Buccaneers", date: "Nov 30, 2026 (8:15 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 13", opp: "@ Minnesota Vikings", date: "Dec 6, 2026 (4:25 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 14", opp: "vs. New Orleans Saints", date: "Dec 13, 2026 (1:00 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 15", opp: "vs. Cincinnati Bengals", date: "Dec 20, 2026 (1:00 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 16", opp: "@ Pittsburgh Steelers", date: "Dec 27, 2026 (TBD)", status: "Upcoming", type: "normal" },
+      { week: "Wk 17", opp: "vs. Seattle Seahawks", date: "Jan 3, 2027 (1:00 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 18", opp: "vs. Atlanta Falcons", date: "Jan 10, 2027 (TBD)", status: "Upcoming", type: "normal" }
     ];
 
-    function filterRoster(filterUnit) {
-      // Update Filter Active Button Styles
-      ['all', 'offense', 'defense', 'special'].forEach(u => {
-        const btn = document.getElementById(`roster-btn-${u}`);
-        if (u === filterUnit) {
-          btn.className = "roster-filter-btn px-4 py-2 rounded-lg text-xs font-heading font-bold uppercase transition bg-panthers-blue text-white";
-        } else {
-          btn.className = "roster-filter-btn px-4 py-2 rounded-lg text-xs font-heading font-bold uppercase transition text-panthers-silver hover:text-white";
-        }
-      });
+    function renderSchedule(filter = 'all') {
+      const container = document.getElementById("schedule-container");
+      let tableHTML = `
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-panthers-cardBorder text-panthers-silver font-heading text-sm uppercase tracking-wider">
+              <th class="py-3 px-4">Week</th>
+              <th class="py-3 px-4">Opponent</th>
+              <th class="py-3 px-4">Date / Time</th>
+              <th class="py-3 px-4">Result / Status</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-panthers-cardBorder/50 text-sm">
+      `;
 
-      const grid = document.getElementById("roster-grid");
-      grid.innerHTML = "";
+      panthers2026Schedule.forEach(g => {
+        if (filter === 'win' && g.type !== 'win') return;
 
-      const filtered = filterUnit === 'all' ? rosterData : rosterData.filter(p => p.unit === filterUnit);
+        let badge = `<span class="bg-panthers-black border border-panthers-cardBorder text-panthers-silver px-2.5 py-1 rounded text-xs font-heading font-bold">${g.status}</span>`;
+        if (g.type === "win") badge = `<span class="bg-emerald-950 border border-emerald-500 text-emerald-400 px-2.5 py-1 rounded text-xs font-heading font-bold">${g.status}</span>`;
+        if (g.type === "loss") badge = `<span class="bg-rose-950 border border-rose-500 text-rose-400 px-2.5 py-1 rounded text-xs font-heading font-bold">${g.status}</span>`;
 
-      filtered.forEach(p => {
-        const card = document.createElement("div");
-        card.className = "bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-5 hover:border-panthers-blue transition shadow-lg space-y-3";
-        card.innerHTML = `
-          <div class="flex justify-between items-start border-b border-panthers-cardBorder pb-3">
-            <div>
-              <h3 class="font-heading font-bold text-xl text-white">${p.name}</h3>
-              <span class="text-xs text-panthers-accent font-semibold">${p.pos} • ${p.status}</span>
-            </div>
-            <span class="text-xl font-heading font-bold text-panthers-blue bg-black/60 px-3 py-1 rounded-lg border border-panthers-cardBorder">${p.num}</span>
-          </div>
-          <p class="text-xs text-gray-300">${p.notes}</p>
+        tableHTML += `
+          <tr class="hover:bg-panthers-blue/5 transition-colors">
+            <td class="py-3.5 px-4 font-heading font-bold text-white">${g.week}</td>
+            <td class="py-3.5 px-4 text-panthers-silver">${g.opp}</td>
+            <td class="py-3.5 px-4 text-panthers-silver">${g.date}</td>
+            <td class="py-3.5 px-4">${badge}</td>
+          </tr>
         `;
-        grid.appendChild(card);
-      });
-    }
-
-    filterRoster('all');
-
-    // -------------------------------------------------------------
-    // 3. STADIUM MAP HOTSPOT INTERACTION
-    // -------------------------------------------------------------
-    const hotspotData = {
-      drum: {
-        badge: "NORTH GATE CEREMONY",
-        title: "6-Foot Keep Pounding Drum",
-        desc: "Located outside North Gate 30 minutes before kickoff. Guest sounders include Panthers Hall of Famers, military veterans, and celebrity guests.",
-        tip: "Arrive 90 minutes early to catch player warmups and grab a spot by the drum stage!"
-      },
-      field: {
-        badge: "FIELD LEVEL TURF",
-        title: "Revolution 360 Turf Field",
-        desc: "Bank of America Stadium features state-of-the-art FieldTurf. Complete with custom Carolina Process Blue end zones.",
-        tip: "Seats in sections 111-114 offer prime views directly behind the Panthers bench!"
-      },
-      tailgate: {
-        badge: "MINT STREET TAILGATE ZONE",
-        title: "Uptown Tailgate Hotspot",
-        desc: "Lively tailgate parties along Mint Street, Graham Street, and Morehead Street. Features local food trucks, fan games, and live broadcasts.",
-        tip: "Parking lots open 4 hours prior to kickoff!"
-      },
-      store: {
-        badge: "TEAM STORE & GALLERY",
-        title: "Official Panthers Team Store",
-        desc: "The premier fan gear destination located near the South Gate, offering official jerseys, sideline caps, and game gear.",
-        tip: "Skip the lines by shopping before gates officially open!"
-      }
-    };
-
-    function selectHotspot(key) {
-      const info = hotspotData[key];
-      if (!info) return;
-
-      document.getElementById("hotspot-badge").textContent = info.badge;
-      document.getElementById("hotspot-title").textContent = info.title;
-      document.getElementById("hotspot-desc").textContent = info.desc;
-      document.getElementById("hotspot-tip").textContent = `"${info.tip}"`;
-    }
-
-    // -------------------------------------------------------------
-    // 4. 2026 SCHEDULE DATA & DYNAMIC FILTER
-    // -------------------------------------------------------------
-    const schedule2026 = [
-      { week: "Wk 1", opp: "vs. Chicago Bears", date: "Sep 13, 2026", loc: "Home", status: "37 - 59", type: "loss" },
-      { week: "Wk 2", opp: "@ Atlanta Falcons", date: "Sep 20, 2026", loc: "Away", status: "34 - 3", type: "win" },
-      { week: "Wk 3", opp: "@ Cleveland Browns", date: "Sep 27, 2026", loc: "Away", status: "18 - 21", type: "loss" },
-      { week: "Wk 4", opp: "vs. Detroit Lions", date: "Oct 4, 2026", loc: "Home", status: "32 - 26", type: "win" },
-      { week: "Wk 5", opp: "BYE WEEK", date: "Oct 11, 2026", loc: "-", status: "BYE", type: "upcoming" },
-      { week: "Wk 6", opp: "@ Philadelphia Eagles", date: "Oct 18, 2026", loc: "Away", status: "25 - 14", type: "win" },
-      { week: "Wk 7", opp: "vs. Tampa Bay Buccaneers", date: "Oct 25, 2026 (1:00 PM)", loc: "Home", status: "Upcoming", type: "upcoming" },
-      { week: "Wk 8", opp: "@ Green Bay Packers", date: "Oct 29, 2026 (8:15 PM)", loc: "Away", status: "Upcoming", type: "upcoming" },
-      { week: "Wk 9", opp: "vs. Denver Broncos", date: "Nov 8, 2026 (1:00 PM)", loc: "Home", status: "Upcoming", type: "upcoming" },
-      { week: "Wk 10", opp: "@ New Orleans Saints", date: "Nov 15, 2026 (1:00 PM)", loc: "Away", status: "Upcoming", type: "upcoming" },
-      { week: "Wk 11", opp: "vs. Baltimore Ravens", date: "Nov 22, 2026 (1:00 PM)", loc: "Home", status: "Upcoming", type: "upcoming" },
-      { week: "Wk 12", opp: "@ Tampa Bay Buccaneers", date: "Nov 30, 2026 (8:15 PM)", loc: "Away", status: "Upcoming", type: "upcoming" },
-      { week: "Wk 13", opp: "@ Minnesota Vikings", date: "Dec 6, 2026 (4:25 PM)", loc: "Away", status: "Upcoming", type: "upcoming" },
-      { week: "Wk 14", opp: "vs. New Orleans Saints", date: "Dec 13, 2026 (1:00 PM)", loc: "Home", status: "Upcoming", type: "upcoming" },
-      { week: "Wk 15", opp: "vs. Cincinnati Bengals", date: "Dec 20, 2026 (1:00 PM)", loc: "Home", status: "Upcoming", type: "upcoming" },
-      { week: "Wk 16", opp: "@ Pittsburgh Steelers", date: "Dec 27, 2026 (TBD)", loc: "Away", status: "Upcoming", type: "upcoming" },
-      { week: "Wk 17", opp: "vs. Seattle Seahawks", date: "Jan 3, 2027 (1:00 PM)", loc: "Home", status: "Upcoming", type: "upcoming" },
-      { week: "Wk 18", opp: "vs. Atlanta Falcons", date: "Jan 10, 2027 (TBD)", status: "Upcoming", loc: "Home", type: "upcoming" }
-    ];
-
-    function filterSchedule(filterType) {
-      ['all', 'win', 'loss', 'upcoming'].forEach(t => {
-        const btn = document.getElementById(`sched-filter-${t}`);
-        if (t === filterType) {
-          btn.className = "sched-btn px-4 py-2 rounded-lg text-xs font-heading font-bold uppercase transition bg-panthers-blue text-white";
-        } else {
-          btn.className = "sched-btn px-4 py-2 rounded-lg text-xs font-heading font-bold uppercase transition text-panthers-silver hover:text-white";
-        }
       });
 
-      const tbody = document.getElementById("schedule-tbody");
-      tbody.innerHTML = "";
+      tableHTML += "</tbody></table>";
+      container.innerHTML = tableHTML;
+    }
 
-      const filtered = filterType === 'all' ? schedule2026 : schedule2026.filter(g => g.type === filterType);
-
-      filtered.forEach(g => {
-        let badgeStyle = "bg-gray-800 text-gray-300 border-gray-700";
-        if (g.type === "win") badgeStyle = "bg-emerald-950/80 text-emerald-400 border-emerald-500/40 font-bold";
-        if (g.type === "loss") badgeStyle = "bg-red-950/80 text-red-400 border-red-500/40 font-bold";
-
-        const tr = document.createElement("tr");
-        tr.className = "hover:bg-panthers-cardBg/60 transition";
-        tr.innerHTML = `
-          <td class="py-3.5 px-4 font-heading font-bold text-white">${g.week}</td>
-          <td class="py-3.5 px-4 font-semibold text-gray-200">${g.opp}</td>
-          <td class="py-3.5 px-4 text-gray-400 text-xs">${g.date}</td>
-          <td class="py-3.5 px-4 text-xs font-heading uppercase text-panthers-silver">${g.loc}</td>
-          <td class="py-3.5 px-4 text-right">
-            <span class="inline-block px-3 py-1 rounded-md text-xs border ${badgeStyle}">${g.status}</span>
-          </td>
-        `;
-        tbody.appendChild(tr);
+    function filterSchedule(filter, btn) {
+      const btns = btn.parentElement.querySelectorAll('.sched-btn');
+      btns.forEach(b => {
+        b.classList.remove('bg-panthers-blue', 'text-white');
+        b.classList.add('bg-panthers-black/80', 'text-panthers-silver');
       });
+      btn.classList.add('bg-panthers-blue', 'text-white');
+      btn.classList.remove('bg-panthers-black/80', 'text-panthers-silver');
+      renderSchedule(filter);
     }
 
-    filterSchedule('all');
-
-    // -------------------------------------------------------------
-    // 5. WEB AUDIO SYNTHESIZER & EQUALIZER ANIMATION
-    // -------------------------------------------------------------
-    let audioCtx = null;
-
-    function initAudio() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
+    function playCheer(msg) {
+      const display = document.getElementById("cheer-display");
+      display.textContent = msg;
     }
 
-    function animateEqBars() {
-      const bars = document.querySelectorAll('.eq-bar');
-      const statusText = document.getElementById('sound-status-text');
-      statusText.textContent = "AUDIO SYNTHESIZER ACTIVE • CHEER PLAYING";
-
-      let count = 0;
-      const interval = setInterval(() => {
-        bars.forEach(bar => {
-          const randomHeight = Math.floor(Math.random() * 80) + 10;
-          bar.style.height = `${randomHeight}px`;
-        });
-        count++;
-        if (count > 25) {
-          clearInterval(interval);
-          bars.forEach((bar, idx) => {
-            bar.style.height = `${(idx % 5) * 4 + 8}px`;
-          });
-          statusText.textContent = "AUDIO WAVE VISUALIZER • READY";
-        }
-      }, 80);
-    }
-
-    function triggerCheer(type) {
-      initAudio();
-      animateEqBars();
-
-      if (!audioCtx) return;
-
-      const now = audioCtx.currentTime;
-
-      if (type === 'drum') {
-        // Deep bass drum synth oscillator
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(120, now);
-        osc.frequency.exponentialRampToValueAtTime(30, now + 0.4);
-        gain.gain.setValueAtTime(1, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(now);
-        osc.stop(now + 0.4);
-      } else if (type === 'horn') {
-        // Dual Sawtooth Defense Stadium Horn
-        [180, 225].forEach(freq => {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(freq, now);
-          gain.gain.setValueAtTime(0.3, now);
-          gain.gain.linearRampToValueAtTime(0.01, now + 0.8);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(now);
-          osc.stop(now + 0.8);
-        });
-      } else if (type === 'touchdown') {
-        // Touchdown High Pitch Siren Sweeper
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(400, now);
-        osc.frequency.linearRampToValueAtTime(880, now + 0.6);
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.linearRampToValueAtTime(0.01, now + 0.6);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(now);
-        osc.stop(now + 0.6);
-      } else if (type === 'caroline') {
-        // Victory Anthem Synth Arpeggio
-        const notes = [261.63, 329.63, 392.00, 523.25];
-        notes.forEach((freq, idx) => {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(freq, now + idx * 0.12);
-          gain.gain.setValueAtTime(0.2, now + idx * 0.12);
-          gain.gain.linearRampToValueAtTime(0.01, now + idx * 0.12 + 0.3);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(now + idx * 0.12);
-          osc.stop(now + idx * 0.12 + 0.3);
-        });
-      }
-    }
-
-    // -------------------------------------------------------------
-    // 6. NEWSLETTER SIGNUP FORM HANDLER
-    // -------------------------------------------------------------
-    function handleSignup(e) {
-      e.preventDefault();
-      const msg = document.getElementById("signup-msg");
-      msg.textContent = "🎉 Welcome to Keep Pounding Nation! Check your inbox for updates.";
-      msg.classList.remove("hidden");
-    }
+    // Init
+    renderSchedule();
   </script>
+
 </body>
 </html>
