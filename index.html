@@ -19,6 +19,7 @@
       --card-bg: #161D27;
       --card-border: #263345;
       --win-color: #22c55e;
+      --loss-color: #ef4444;
     }
 
     body {
@@ -163,6 +164,12 @@
       border-color: var(--win-color);
     }
 
+    .badge.loss {
+      background-color: #3b1313;
+      color: var(--loss-color);
+      border-color: var(--loss-color);
+    }
+
     .stats-table {
       width: 100%;
       border-collapse: collapse;
@@ -300,7 +307,7 @@
     <a href="#history">Milestones</a>
     <a href="#hall">Hall of Honor</a>
     <a href="#roster">Roster</a>
-    <a href="#schedule">Schedule</a>
+    <a href="#schedule">Schedule & Results</a>
     <a href="#gameday">Game Day Guide</a>
     <a href="#soundboard">Soundboard</a>
     <a href="#fan-zone">Fan Zone</a>
@@ -378,43 +385,11 @@
     </section>
 
     <section id="schedule" class="card">
-      <h2>Game Day Schedule & Division Battles</h2>
-      <table class="stats-table">
-        <thead>
-          <tr>
-            <th>Matchup</th>
-            <th>Location</th>
-            <th>Broadcast / Focus</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>vs. Atlanta Falcons</td>
-            <td>Bank of America Stadium</td>
-            <td>FOX | I-85 Rivalry Game</td>
-            <td><span class="badge win">Home Matchup</span></td>
-          </tr>
-          <tr>
-            <td>@ New Orleans Saints</td>
-            <td>Caesars Superdome</td>
-            <td>CBS | Division Battle</td>
-            <td><span class="badge">Away Matchup</span></td>
-          </tr>
-          <tr>
-            <td>vs. Tampa Bay Buccaneers</td>
-            <td>Bank of America Stadium</td>
-            <td>FOX | NFC South Clash</td>
-            <td><span class="badge win">Home Matchup</span></td>
-          </tr>
-          <tr>
-            <td>@ Atlanta Falcons</td>
-            <td>Mercedes-Benz Stadium</td>
-            <td>FOX | Division Rematch</td>
-            <td><span class="badge">Away Matchup</span></td>
-          </tr>
-        </tbody>
-      </table>
+      <h2>Live Season Schedule & Results</h2>
+      <p>Live schedule & scores powered directly by live ESPN game data:</p>
+      <div id="dynamic-schedule">
+        <p style="color: var(--panthers-silver);">Loading live schedule and scores...</p>
+      </div>
     </section>
 
     <section id="gameday" class="card">
@@ -482,6 +457,96 @@
         display.style.transform = "scale(1)";
       }, 200);
     }
+
+    // Dynamic ESPN API Live Schedule Fetcher
+    async function loadLiveSchedule() {
+      const scheduleContainer = document.getElementById("dynamic-schedule");
+      
+      // ESPN Public API Endpoint for Carolina Panthers (Team ID: 29)
+      const apiUrl = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/29/schedule";
+
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error("Network response failed");
+        
+        const data = await response.json();
+        const events = data.events || [];
+
+        if (events.length === 0) {
+          scheduleContainer.innerHTML = "<p>No schedule events currently available.</p>";
+          return;
+        }
+
+        let tableHTML = `
+          <table class="stats-table">
+            <thead>
+              <tr>
+                <th>Week</th>
+                <th>Opponent</th>
+                <th>Date / Time</th>
+                <th>Status / Result</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        events.forEach(evt => {
+          const game = evt.competitions[0];
+          const isCompleted = evt.status.type.completed;
+          const weekName = evt.week ? `Wk ${evt.week.number}` : "Game";
+          
+          // Find panthers vs opponent
+          const panthersCompetitor = game.competitors.find(c => c.team.id === "29");
+          const opponentCompetitor = game.competitors.find(c => c.team.id !== "29");
+          
+          const isHome = panthersCompetitor.homeAway === "home";
+          const vsAt = isHome ? "vs" : "@";
+          const oppName = `${vsAt} ${opponentCompetitor.team.displayName}`;
+
+          const gameDate = new Date(evt.date).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit"
+          });
+
+          let statusBadge = "";
+
+          if (isCompleted) {
+            const panthersScore = parseInt(panthersCompetitor.score.displayValue || "0");
+            const opponentScore = parseInt(opponentCompetitor.score.displayValue || "0");
+            const won = panthersCompetitor.winner;
+
+            if (won) {
+              statusBadge = `<span class="badge win">W ${panthersScore}-${opponentScore}</span>`;
+            } else {
+              statusBadge = `<span class="badge loss">L ${panthersScore}-${opponentScore}</span>`;
+            }
+          } else {
+            statusBadge = `<span class="badge">${evt.status.type.shortDetail || "Scheduled"}</span>`;
+          }
+
+          tableHTML += `
+            <tr>
+              <td><strong>${weekName}</strong></td>
+              <td>${oppName}</td>
+              <td>${gameDate}</td>
+              <td>${statusBadge}</td>
+            </tr>
+          `;
+        });
+
+        tableHTML += "</tbody></table>";
+        scheduleContainer.innerHTML = tableHTML;
+
+      } catch (err) {
+        console.error("Error fetching live ESPN schedule:", err);
+        scheduleContainer.innerHTML = "<p style='color: #ef4444;'>Unable to load live ESPN schedule at this moment.</p>";
+      }
+    }
+
+    // Load dynamic schedule on page initialization
+    loadLiveSchedule();
   </script>
 
 </body>
