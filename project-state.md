@@ -1,14 +1,15 @@
 # Project State: my-first-site
 
-- **Current Version:** v0.2 - Content & Fan Zone Added
+- **Current Version:** v0.3 - Connected Game Button Added
 - **Goal:** Carolina Panthers Fan Site
-- **Status:** In Progress
+- **Status:** Published & Fully Integrated
 
 ## Recent Actions
-- Created initial repository and pushed starter index.html
-- Updated index.html with real Panthers player list and an interactive email signup form
+- Deployed website and trivia game to Vercel as two separate projects
+- Integrated a direct call-to-action button in Fan Zone linking directly to `my-first-game`
 
 ## Acceptance Test
-- Open index.html in a browser.
-- Verify player list displays under Player Spotlight.
-- Test typing an email into the Fan Zone form and clicking "Join Now" to see the pop-up alert.
+- Open `my-first-site` live Vercel URL in a browser.
+- Scroll to Fan Zone section.
+- Click the "Play Panthers Trivia Challenge" button.
+- Verify it opens your live trivia game in a new tab.
