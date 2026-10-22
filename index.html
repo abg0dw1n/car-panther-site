@@ -15,13 +15,15 @@
     header {
       background-color: #0085CA;
       color: white;
-      padding: 2rem;
+      padding: 2.5rem 1rem;
       text-align: center;
     }
     nav {
       background-color: #000000;
-      padding: 0.5rem;
+      padding: 0.75rem;
       text-align: center;
+      position: sticky;
+      top: 0;
     }
     nav a {
       color: #0085CA;
@@ -29,21 +31,46 @@
       text-decoration: none;
       font-weight: bold;
     }
+    nav a:hover {
+      color: #ffffff;
+    }
     .container {
-      padding: 2rem;
+      padding: 2rem 1rem;
       max-width: 800px;
       margin: 0 auto;
     }
     .card {
       background-color: #1e293b;
-      border-left: 4px solid #0085CA;
-      padding: 1rem;
+      border-left: 5px solid #0085CA;
+      padding: 1.5rem;
       margin-bottom: 1.5rem;
+      border-radius: 6px;
+    }
+    ul {
+      line-height: 1.6;
+    }
+    input, button {
+      padding: 0.5rem;
+      margin-top: 0.5rem;
       border-radius: 4px;
+      border: none;
+    }
+    input[type="email"] {
+      width: 60%;
+      max-width: 300px;
+    }
+    button {
+      background-color: #0085CA;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #006093;
     }
     footer {
       text-align: center;
-      padding: 1rem;
+      padding: 1.5rem;
       background-color: #000000;
       color: #888888;
       font-size: 0.9rem;
@@ -54,34 +81,44 @@
 
   <header>
     <h1>Carolina Panthers Fan Central</h1>
-    <p>Keep Pounding!</p>
+    <p><strong>Keep Pounding!</strong> | Unofficial Fan Hub</p>
   </header>
 
   <nav>
     <a href="#about">About</a>
-    <a href="#players">Players</a>
-    <a href="#community">Community</a>
+    <a href="#players">Player Roster</a>
+    <a href="#fan-zone">Fan Zone</a>
   </nav>
 
   <div class="container">
     <section id="about" class="card">
       <h2>About the Panthers</h2>
-      <p>Welcome to the ultimate fan hub for the Carolina Panthers. Established in 1995, the Panthers bring pride and excitement to the Carolinas.</p>
+      <p>Founded in 1995, the Carolina Panthers represent North and South Carolina in the NFL. Playing out of Bank of America Stadium in Charlotte, NC, the team is built on tradition, pride, and the legendary "Keep Pounding" rally cry.</p>
     </section>
 
     <section id="players" class="card">
       <h2>Player Spotlight</h2>
-      <p>Keep an eye on key players making big plays this season on both offense and defense.</p>
+      <ul>
+        <li><strong>Bryce Young (#9)</strong> – Quarterback</li>
+        <li><strong>Derrick Brown (#95)</strong> – Defensive Tackle</li>
+        <li><strong>Chuba Hubbard (#30)</strong> – Running Back</li>
+        <li><strong>Jaycee Horn (#8)</strong> – Cornerback</li>
+      </ul>
     </section>
 
-    <section id="community" class="card">
+    <section id="fan-zone" class="card">
       <h2>Join the Fan Club</h2>
-      <p>Connect with other fans on game day and stay updated with the latest news.</p>
+      <p>Sign up to receive fan updates and game day alerts!</p>
+      <form onsubmit="alert('Thanks for signing up! Keep Pounding!'); return false;">
+        <label for="email">Email Address:</label><br>
+        <input type="email" id="email" placeholder="enter your email..." required>
+        <button type="submit">Join Now</button>
+      </form>
     </section>
   </div>
 
   <footer>
-    <p>&copy; 2026 Carolina Panthers Fan Site. Unofficial fan page.</p>
+    <p>&copy; 2026 Carolina Panthers Fan Site. Designed by a Panthers Fan.</p>
   </footer>
 
 </body>
