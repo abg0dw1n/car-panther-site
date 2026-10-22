@@ -24,10 +24,11 @@
       text-align: center;
       position: sticky;
       top: 0;
+      z-index: 100;
     }
     nav a {
       color: #0085CA;
-      margin: 0 1rem;
+      margin: 0 0.75rem;
       text-decoration: none;
       font-weight: bold;
     }
@@ -36,7 +37,7 @@
     }
     .container {
       padding: 2rem 1rem;
-      max-width: 800px;
+      max-width: 850px;
       margin: 0 auto;
     }
     .card {
@@ -47,7 +48,20 @@
       border-radius: 6px;
     }
     ul {
-      line-height: 1.6;
+      line-height: 1.7;
+    }
+    .stats-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    .stats-table th, .stats-table td {
+      text-align: left;
+      padding: 0.6rem;
+      border-bottom: 1px solid #334155;
+    }
+    .stats-table th {
+      color: #0085CA;
     }
     input, button, .btn-game {
       padding: 0.5rem 1rem;
@@ -100,18 +114,65 @@
 
   <nav>
     <a href="#about">About</a>
-    <a href="#players">Player Roster</a>
+    <a href="#history">Milestones</a>
+    <a href="#records">Records</a>
+    <a href="#players">Roster</a>
     <a href="#fan-zone">Fan Zone</a>
   </nav>
 
   <div class="container">
     <section id="about" class="card">
       <h2>About the Panthers</h2>
-      <p>Founded in 1995, the Carolina Panthers represent North and South Carolina in the NFL. Playing out of Bank of America Stadium in Charlotte, NC, the team is built on tradition, pride, and the legendary "Keep Pounding" rally cry.</p>
+      <p>Founded in 1995 as the NFL's 29th franchise, the Carolina Panthers represent North and South Carolina. Playing at Bank of America Stadium in Charlotte, NC, the franchise is built on relentless defense, blue-collar pride, and the enduring "Keep Pounding" mantra.</p>
+    </section>
+
+    <section id="history" class="card">
+      <h2>Franchise Milestones & Legacy</h2>
+      <ul>
+        <li><strong>1995 Inaugural Season:</strong> Set the then-record for most wins by an expansion team (7–9) under Coach Dom Capers.</li>
+        <li><strong>2003 "Cardiac Cats" (Super Bowl XXXVIII):</strong> Won the NFC Championship behind Jake Delhomme, Stephen Davis, and Steve Smith Sr., making their first Super Bowl appearance.</li>
+        <li><strong>2015 NFC Champions (Super Bowl 50):</strong> Historic 15–1 regular season led by MVP Cam Newton, Luke Kuechly, and Coach Ron Rivera.</li>
+        <li><strong>The "Keep Pounding" Tradition:</strong> Inspired by late linebacker and coach Sam Mills during his battle with cancer in 2003; now symbolized by the giant Keep Pounding Drum banged before every home game.</li>
+      </ul>
+    </section>
+
+    <section id="records" class="card">
+      <h2>All-Time Franchise Leaders</h2>
+      <table class="stats-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Player</th>
+            <th>Stat Record</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Passing Yards</td>
+            <td>Cam Newton</td>
+            <td>29,725 YDS</td>
+          </tr>
+          <tr>
+            <td>Rushing Yards</td>
+            <td>Jonathan Stewart</td>
+            <td>7,318 YDS</td>
+          </tr>
+          <tr>
+            <td>Receiving Yards</td>
+            <td>Steve Smith Sr.</td>
+            <td>12,197 YDS</td>
+          </tr>
+          <tr>
+            <td>All-Time Tackles</td>
+            <td>Luke Kuechly</td>
+            <td>1,092 Tackles</td>
+          </tr>
+        </tbody>
+      </table>
     </section>
 
     <section id="players" class="card">
-      <h2>Player Spotlight</h2>
+      <h2>Current Player Spotlight</h2>
       <ul>
         <li><strong>Bryce Young (#9)</strong> – Quarterback</li>
         <li><strong>Derrick Brown (#95)</strong> – Defensive Tackle</li>
@@ -124,7 +185,7 @@
       <h2>Fan Zone & Arcade</h2>
       <p>Test your knowledge on Carolina Panthers history!</p>
       
-      <!-- GAME BUTTON: Replace URL below with your actual my-first-game Vercel link -->
+      <!-- Replace URL below with your actual my-first-game Vercel link -->
       <a href="https://my-first-game-opal.vercel.app" target="_blank" class="btn-game">🏈 Play Panthers Trivia Challenge</a>
 
       <hr style="border: 0; border-top: 1px solid #334155; margin: 1.5rem 0;">
