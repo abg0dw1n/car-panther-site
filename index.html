@@ -385,11 +385,9 @@
     </section>
 
     <section id="schedule" class="card">
-      <h2>Season Schedule & Results Hub</h2>
-      <p>Dynamic games and results schedule tracker:</p>
-      <div id="dynamic-schedule">
-        <p style="color: var(--panthers-silver);">Loading schedule data...</p>
-      </div>
+      <h2>2026 Season Schedule & Results</h2>
+      <p>Current 2026 Season (Record: 3-2):</p>
+      <div id="dynamic-schedule"></div>
     </section>
 
     <section id="gameday" class="card">
@@ -458,29 +456,29 @@
       }, 200);
     }
 
-    // Season Schedule Data with Fallback & ESPN Scoreboard Matcher
-    const fullSeasonSchedule = [
-      { week: "Wk 1", opp: "@ Atlanta Falcons", date: "Sep 8", status: "L 10-24", type: "loss" },
-      { week: "Wk 2", opp: "vs. Los Angeles Chargers", date: "Sep 15", status: "L 3-26", type: "loss" },
-      { week: "Wk 3", opp: "@ Las Vegas Raiders", date: "Sep 22", status: "W 36-22", type: "win" },
-      { week: "Wk 4", opp: "vs. Cincinnati Bengals", date: "Sep 29", status: "L 24-34", type: "loss" },
-      { week: "Wk 5", opp: "@ Chicago Bears", date: "Oct 6", status: "L 10-36", type: "loss" },
-      { week: "Wk 6", opp: "vs. Atlanta Falcons", date: "Oct 13", status: "L 20-38", type: "loss" },
-      { week: "Wk 7", opp: "@ Washington Commanders", date: "Oct 20", status: "L 7-40", type: "loss" },
-      { week: "Wk 8", opp: "@ Denver Broncos", date: "Oct 27", status: "Scheduled", type: "normal" },
-      { week: "Wk 9", opp: "vs. New Orleans Saints", date: "Nov 3", status: "Scheduled", type: "normal" },
-      { week: "Wk 10", opp: "vs. New York Giants", date: "Nov 10", status: "Scheduled", type: "normal" },
-      { week: "Wk 11", opp: "BYE WEEK", date: "Nov 17", status: "Bye", type: "normal" },
-      { week: "Wk 12", opp: "vs. Kansas City Chiefs", date: "Nov 24", status: "Scheduled", type: "normal" },
-      { week: "Wk 13", opp: "vs. Tampa Bay Buccaneers", date: "Dec 1", status: "Scheduled", type: "normal" },
-      { week: "Wk 14", opp: "@ Philadelphia Eagles", date: "Dec 8", status: "Scheduled", type: "normal" },
-      { week: "Wk 15", opp: "vs. Dallas Cowboys", date: "Dec 15", status: "Scheduled", type: "normal" },
-      { week: "Wk 16", opp: "@ Arizona Cardinals", date: "Dec 22", status: "Scheduled", type: "normal" },
-      { week: "Wk 17", opp: "@ Tampa Bay Buccaneers", date: "Dec 29", status: "Scheduled", type: "normal" },
-      { week: "Wk 18", opp: "@ New Orleans Saints", date: "Jan 5", status: "Scheduled", type: "normal" }
+    // Official 2026 Carolina Panthers Schedule Data
+    const panthers2026Schedule = [
+      { week: "Wk 1", opp: "vs. Chicago Bears", date: "Sep 13", status: "L 37-59", type: "loss" },
+      { week: "Wk 2", opp: "@ Atlanta Falcons", date: "Sep 20", status: "W 34-3", type: "win" },
+      { week: "Wk 3", opp: "@ Cleveland Browns", date: "Sep 27", status: "L 18-21", type: "loss" },
+      { week: "Wk 4", opp: "vs. Detroit Lions", date: "Oct 4", status: "W 32-26", type: "win" },
+      { week: "Wk 5", opp: "BYE WEEK", date: "Oct 11", status: "BYE", type: "normal" },
+      { week: "Wk 6", opp: "@ Philadelphia Eagles", date: "Oct 18", status: "W 25-14", type: "win" },
+      { week: "Wk 7", opp: "vs. Tampa Bay Buccaneers", date: "Oct 25 (1:00 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 8", opp: "@ Green Bay Packers", date: "Oct 29 (8:15 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 9", opp: "vs. Denver Broncos", date: "Nov 8 (1:00 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 10", opp: "@ New Orleans Saints", date: "Nov 15 (1:00 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 11", opp: "vs. Baltimore Ravens", date: "Nov 22 (1:00 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 12", opp: "@ Tampa Bay Buccaneers", date: "Nov 30 (8:15 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 13", opp: "@ Minnesota Vikings", date: "Dec 6 (4:25 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 14", opp: "vs. New Orleans Saints", date: "Dec 13 (1:00 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 15", opp: "vs. Cincinnati Bengals", date: "Dec 20 (1:00 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 16", opp: "@ Pittsburgh Steelers", date: "Dec 27 (TBD)", status: "Upcoming", type: "normal" },
+      { week: "Wk 17", opp: "vs. Seattle Seahawks", date: "Jan 3 (1:00 PM)", status: "Upcoming", type: "normal" },
+      { week: "Wk 18", opp: "vs. Atlanta Falcons", date: "Jan 10 (TBD)", status: "Upcoming", type: "normal" }
     ];
 
-    function renderScheduleTable(items) {
+    function renderScheduleTable() {
       let tableHTML = `
         <table class="stats-table">
           <thead>
@@ -494,7 +492,7 @@
           <tbody>
       `;
 
-      items.forEach(g => {
+      panthers2026Schedule.forEach(g => {
         let badgeClass = "badge";
         if (g.type === "win") badgeClass = "badge win";
         if (g.type === "loss") badgeClass = "badge loss";
@@ -513,46 +511,7 @@
       document.getElementById("dynamic-schedule").innerHTML = tableHTML;
     }
 
-    async function loadSchedule() {
-      // First load reliable full season schedule
-      renderScheduleTable(fullSeasonSchedule);
-
-      // Attempt live ESPN Scoreboard update for current active week
-      try {
-        const response = await fetch("https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard");
-        if (!response.ok) return;
-
-        const data = await response.json();
-        const panthersGame = data.events?.find(e => 
-          e.competitions[0].competitors.some(c => c.team.id === "29")
-        );
-
-        if (panthersGame) {
-          const comp = panthersGame.competitions[0];
-          const panthersComp = comp.competitors.find(c => c.team.id === "29");
-          const oppComp = comp.competitors.find(c => c.team.id !== "29");
-          const isCompleted = panthersGame.status.type.completed;
-
-          if (isCompleted) {
-            const pScore = panthersComp.score;
-            const oScore = oppComp.score;
-            const won = panthersComp.winner;
-            const currentWeekStr = `Wk ${data.week.number}`;
-
-            const itemIndex = fullSeasonSchedule.findIndex(s => s.week === currentWeekStr);
-            if (itemIndex !== -1) {
-              fullSeasonSchedule[itemIndex].status = `${won ? 'W' : 'L'} ${pScore}-${oScore}`;
-              fullSeasonSchedule[itemIndex].type = won ? "win" : "loss";
-              renderScheduleTable(fullSeasonSchedule);
-            }
-          }
-        }
-      } catch (e) {
-        // Keeps fallback schedule gracefully rendered if fetch blocked
-      }
-    }
-
-    loadSchedule();
+    renderScheduleTable();
   </script>
 
 </body>
