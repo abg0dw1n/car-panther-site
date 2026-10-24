@@ -26,6 +26,7 @@ index.html        The page structure (all eight tabs)
 css/style.css     The few styles Tailwind doesn't cover
 data/             The content. Edit these when scores, rosters or prospects change
   roster.js         Players and the head coach
+  depth.js          The team's depth chart (starter first in each row); sorts the roster and drives the depth badges
   schedule.js       Game results and upcoming games
   playoff.js        NFC South records and remaining divisional games
   draft-prospects.js  The 333 draft prospects in consensus order
@@ -59,6 +60,6 @@ Open `index.html` in a browser, or serve the folder with any static server, for 
 
 Everything that changes lives in `data/`. Each file notes its "as of" date at the top.
 
-- Each week: add the result in `schedule.js`, add that game's leaders and recap to `GAME_LEADERS` and refresh `OPPONENTS` records in `home.js`, update `initialNfcSouth` and `NFC_SOUTH_AS_OF_WEEK` in `playoff.js`, and refresh stats and `ROSTER_AS_OF` in `roster.js`. The record, next-game banner, countdown and Playoff Machine games all derive from these.
+- Each week: copy any depth chart changes from panthers.com/team/depth-chart into `depth.js`; add the result in `schedule.js`, add that game's leaders and recap to `GAME_LEADERS` and refresh `OPPONENTS` records in `home.js`, update `initialNfcSouth` and `NFC_SOUTH_AS_OF_WEEK` in `playoff.js`, and refresh stats and `ROSTER_AS_OF` in `roster.js`. The record, next-game banner, countdown and Playoff Machine games all derive from these.
 - Draft order and prospect rankings are projections (Tankathon) and shift all season.
 - Headshots load from ESPN by player id (`headshotUrl`) and fall back to a silhouette. The images belong to ESPN/the NFL.

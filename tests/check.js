@@ -88,7 +88,7 @@ eval(code + `
     panthersRoster, panthersStaff, panthers2026Schedule, initialNfcSouth, upcomingDivisionalGames, NFC_SOUTH_AS_OF_WEEK,
     draftProspects, draftOrder, NFL_TEAMS, prospectsById,
     headshotUrl, playerCardHtml, seasonStatCells, headshotFailed, fallbackAvatarHtml,
-    renderRosterCards, setRosterStatus, showGroup, openPlayer, closePlayer, stepPlayer, playerModalKeys, fullStatGroups, getPlayerModal: () => playerModal, renderSchedule, renderPlayoffMachine, updateStandings, pickSimGame, resetPlayoffSim,
+    renderRosterCards, setRosterStatus, showGroup, DEPTH_CHART, depthInfo, depthTier, sortByDepth, depthBadgeHtml, depthExtrasText, openPlayer, closePlayer, stepPlayer, playerModalKeys, fullStatGroups, getPlayerModal: () => playerModal, renderSchedule, renderPlayoffMachine, updateStandings, pickSimGame, resetPlayoffSim,
     initDraft, renderDraft, currentSlot, isUserTurn, isDraftComplete, nextUserSlot, availableProspects, cpuChoose, makePick,
     simOnePick, simNextPick, simToMyPick, autoDraftRest, draftProspect, resetDraftSim, setDraftPos, setDraftQuery, showMoreProspects,
     gradePick, gradeClass, getDraftState: () => draftState, getDraftUI: () => draftUI, setRandom: fn => { draftRandom = fn; },
@@ -156,6 +156,27 @@ check('"IR / PUP" filter shows only injured players', els['count-offense'].textC
 t.setRosterStatus('squad');
 check('"Practice squad" filter shows 13 players', (+els['count-offense'].textContent + +els['count-defense'].textContent + +els['count-special'].textContent) === 13);
 t.setRosterStatus('all');
+
+check('every depth-chart name matches a player on the roster', t.DEPTH_CHART.every(r => r.players.every(n => R.some(p => p.name === n))));
+check('every active player except one is on the depth chart', R.filter(p => p.status === 'Active' && !t.depthInfo(p).primary).map(p => p.name).join() === 'Anthony Tyus III');
+const offSorted = t.sortByDepth(R.filter(p => p.side === 'offense'));
+check('offense lists the 11 starters first, QB first', offSorted.slice(0, 11).every(p => t.depthTier(p) === 'starter') && offSorted[0].name === 'Bryce Young' && t.depthTier(offSorted[11]) !== 'starter');
+check('offense starters follow position order QB, RB, WR, WR, WR, TE, LT, LG, C, RG, RT',
+  offSorted.slice(0, 11).map(p => t.depthInfo(p).primary.slot).join() === 'QB,RB,WR,WR,WR,TE,LT,LG,C,RG,RT');
+const defSorted = t.sortByDepth(R.filter(p => p.side === 'defense'));
+check('defense lists 11 starters first', defSorted.slice(0, 11).every(p => t.depthTier(p) === 'starter') && t.depthTier(defSorted[11]) === 'second');
+const tierOrder = ['starter', 'second', 'deep', 'reserve', 'injured', 'squad'];
+check('tiers never go backwards: starters, 2nd, deeper, reserves, IR/PUP, practice squad',
+  [offSorted, defSorted].every(list => list.every((p, i) => i === 0 || tierOrder.indexOf(t.depthTier(list[i - 1])) <= tierOrder.indexOf(t.depthTier(p)))));
+check('Monroe Freeling shows as 2nd string at LT/RT', t.depthInfo(byName('Monroe Freeling')).primary.slot === 'LT/RT' && t.depthInfo(byName('Monroe Freeling')).primary.rank === 2);
+check('David Moore: 2nd-string WR, also starting KR and PR', t.depthInfo(byName('David Moore')).primary.rank === 2 && t.depthExtrasText(byName('David Moore')) === 'Starting KR · Starting PR');
+check('starter badge reads ★ STARTER with dots showing the spot', /★ STARTER · QB/.test(t.depthBadgeHtml(byName('Bryce Young'))) && (t.depthBadgeHtml(byName('Bryce Young')).match(/rounded-full/g) || []).length === 3);
+check('Mitchell Evans shows as 2nd string at TE (5-deep row)', /2ND STRING · TE/.test(t.depthBadgeHtml(byName('Mitchell Evans'))) && (t.depthBadgeHtml(byName('Mitchell Evans')).match(/rounded-full/g) || []).length === 5);
+check('injured and practice-squad players get no depth badge', t.depthBadgeHtml(byName('Jaycee Horn')) === '');
+t.renderRosterCards();
+check('roster groups show section headers (Starters, Second string, Practice squad)',
+  ['Starters', 'Second string', 'Practice squad'].every(x => els['offense-group'].innerHTML.includes(x)));
+check('the first card under Starters is Bryce Young', els['offense-group'].innerHTML.indexOf('Starters') < els['offense-group'].innerHTML.indexOf('Bryce Young') && els['offense-group'].innerHTML.indexOf('Bryce Young') < els['offense-group'].innerHTML.indexOf('Chuba Hubbard'));
 
 t.setRosterStatus('all');
 check('every player card opens the big view when clicked or tapped', t.playerCardHtml(byName('Bryce Young')).includes('onclick="openPlayer(4685720)"') && t.playerCardHtml(byName('Bryce Young')).includes('role="button"'));

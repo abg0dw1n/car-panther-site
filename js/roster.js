@@ -79,6 +79,80 @@ function seasonStatCells(p) {
   return null;
 }
 
+// ---- Depth chart (data/depth.js) -------------------------------------------------------------------------
+
+const DEPTH_TIERS = [
+  { id: 'starter', label: 'Starters' },
+  { id: 'second', label: 'Second string' },
+  { id: 'deep', label: 'Third string & deeper' },
+  { id: 'reserve', label: 'Active reserves (not on the depth chart)' },
+  { id: 'injured', label: 'Injured reserve / PUP' },
+  { id: 'squad', label: 'Practice squad' }
+];
+
+const RANK_WORDS = ['Starter', '2nd string', '3rd string', '4th string', '5th string'];
+
+// Where a player sits on the depth chart: the best spot on his own side, plus roles elsewhere (e.g. KR/PR)
+function depthInfo(p) {
+  const spots = [];
+  DEPTH_CHART.forEach((row, rowIndex) => {
+    const i = row.players.indexOf(p.name);
+    if (i >= 0) spots.push({ side: row.side, slot: row.slot, rank: i + 1, size: row.players.length, rowIndex });
+  });
+  const own = spots.filter(x => x.side === p.side);
+  if (!own.length) return { primary: null, extras: spots };
+  const best = Math.min(...own.map(x => x.rank));
+  const top = own.filter(x => x.rank === best).sort((a, b) => a.rowIndex - b.rowIndex);
+  const slots = [...new Set(top.map(x => x.slot))];
+  const primary = { rank: best, slot: slots.join('/'), size: top[0].size, rowIndex: top[0].rowIndex };
+  const extras = spots.filter(x => !(x.side === p.side && x.rank === best));
+  return { primary, extras };
+}
+
+function depthTier(p) {
+  if (p.status === 'IR' || p.status === 'PUP') return 'injured';
+  if (p.status === 'Practice Squad') return 'squad';
+  const d = depthInfo(p).primary;
+  if (!d) return 'reserve';
+  return d.rank === 1 ? 'starter' : d.rank === 2 ? 'second' : 'deep';
+}
+
+// Starters first (in depth-chart position order), then 2nd string, deeper, reserves, IR, practice squad
+function sortByDepth(list) {
+  const tierIndex = id => DEPTH_TIERS.findIndex(t => t.id === id);
+  return list.slice().sort((a, b) => {
+    const ta = tierIndex(depthTier(a)), tb = tierIndex(depthTier(b));
+    if (ta !== tb) return ta - tb;
+    const da = depthInfo(a).primary, db = depthInfo(b).primary;
+    if (da && db && da.rowIndex !== db.rowIndex) return da.rowIndex - db.rowIndex;
+    if (da && db && da.rank !== db.rank) return da.rank - db.rank;
+    return a.name.localeCompare(b.name);
+  });
+}
+
+// Small dots showing the player's spot in his depth-chart row (filled = him)
+function depthPipsHtml(rank, size) {
+  return `<span class="inline-flex gap-0.5 ml-1" aria-hidden="true">${Array.from({ length: size }, (_, i) =>
+    `<span class="w-1.5 h-1.5 rounded-full ${i + 1 === rank ? 'bg-current' : 'bg-current opacity-25'}"></span>`).join('')}</span>`;
+}
+
+function depthBadgeHtml(p) {
+  const d = depthInfo(p).primary;
+  if (!d || p.status !== 'Active') return '';
+  const tone = d.rank === 1 ? 'bg-amber-400/15 text-amber-300 border-amber-400/50'
+    : d.rank === 2 ? 'bg-panthers-blue/15 text-sky-300 border-panthers-blue/50'
+    : 'bg-slate-700/40 text-slate-300 border-slate-500/50';
+  const word = d.rank === 1 ? '★ STARTER' : (RANK_WORDS[d.rank - 1] || `${d.rank}th string`).toUpperCase();
+  return `<span title="${escapeHtml(RANK_WORDS[d.rank - 1] || '')} at ${escapeHtml(d.slot)} on the depth chart"
+    class="inline-flex items-center text-[9px] font-heading font-bold px-1.5 py-0.5 rounded border leading-none ${tone}">${word} · ${escapeHtml(d.slot)}${depthPipsHtml(d.rank, d.size)}</span>`;
+}
+
+function depthExtrasText(p) {
+  const ex = depthInfo(p).extras;
+  if (!ex.length) return '';
+  return ex.map(x => `${x.rank === 1 ? 'Starting' : RANK_WORDS[x.rank - 1]} ${x.slot}`).join(' · ');
+}
+
 // ---- Cards ---------------------------------------------------------------------------------------------
 
 function statBarHtml(cells) {
@@ -124,6 +198,7 @@ function playerCardHtml(p) {
             ${badgeHtml}
           </div>
           <h3 class="font-heading font-bold text-white text-base mt-1 truncate" title="${escapeHtml(p.name)}">${escapeHtml(p.name)}</h3>
+          ${depthBadgeHtml(p) ? `<div class="mt-0.5 mb-0.5">${depthBadgeHtml(p)}</div>` : ''}
           <p class="text-[10px] text-panthers-silver leading-tight truncate">${escapeHtml(p.college ?? '')}</p>
           <p class="text-[10px] text-slate-500 leading-tight">${escapeHtml(bio)}</p>
         </div>
@@ -197,6 +272,7 @@ function playerModalHtml(p) {
           <span class="text-[10px] uppercase tracking-wider ${badge ? 'text-rose-300' : 'text-emerald-400'} font-bold">● ${escapeHtml(statusText)}</span>
         </div>
         <h2 id="player-modal-title" class="font-heading font-bold text-white text-4xl uppercase tracking-wider mt-1 leading-none">${escapeHtml(p.name)}</h2>
+        ${depthModalHtml(p)}
         <dl class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-4">
           ${bio.map(([k, v]) => `<div class="bg-panthers-black/60 border border-panthers-cardBorder rounded-lg px-3 py-2"><dt class="text-[9px] uppercase tracking-widest text-panthers-silver font-bold">${k}</dt><dd class="text-white text-sm font-semibold truncate">${escapeHtml(String(v))}</dd></div>`).join('')}
         </dl>
@@ -233,10 +309,21 @@ function modalHeadshotFailed(img) {
     ${img.dataset.num ? `<span class="font-heading font-bold text-white text-2xl">#${escapeHtml(img.dataset.num)}</span>` : ''}</div>`;
 }
 
+function depthModalHtml(p) {
+  const info = depthInfo(p);
+  const extras = depthExtrasText(p);
+  if (!info.primary && !extras) {
+    const why = p.status === 'Active' ? 'Active roster, not currently on the depth chart' : 'Not on the depth chart';
+    return `<p class="text-[11px] text-panthers-silver mt-2">${why}.</p>`;
+  }
+  const main = info.primary && p.status === 'Active' ? depthBadgeHtml(p) : '';
+  return `<div class="flex flex-wrap items-center gap-2 mt-2">${main}${extras ? `<span class="text-[11px] text-panthers-silver">Also: ${escapeHtml(extras)}</span>` : ''}</div>`;
+}
+
 function openPlayer(id) {
   const p = panthersRoster.find(x => x.id === id);
   if (!p) return;
-  const visible = panthersRoster.filter(STATUS_FILTERS[activeRosterStatus]).filter(x => x.side === p.side);
+  const visible = sortByDepth(panthersRoster.filter(STATUS_FILTERS[activeRosterStatus]).filter(x => x.side === p.side));
   playerModal.list = visible.some(x => x.id === id) ? visible.map(x => x.id) : [id];
   playerModal.index = playerModal.list.indexOf(id);
   if (document.activeElement && !document.getElementById('player-modal').contains(document.activeElement)) {
@@ -329,9 +416,24 @@ function renderRosterCards() {
   const empty = '<p class="text-xs text-panthers-silver col-span-full">No players in this group for the selected filter.</p>';
 
   ['offense', 'defense', 'special'].forEach(side => {
-    const list = visible.filter(p => p.side === side);
+    const list = sortByDepth(visible.filter(p => p.side === side));
     document.getElementById(`count-${side}`).textContent = list.length;
-    document.getElementById(`${side}-group`).innerHTML = list.length ? list.map(playerCardHtml).join('') : empty;
+    let html = '';
+    let tier = null;
+    list.forEach(p => {
+      const t = depthTier(p);
+      if (t !== tier) {
+        tier = t;
+        const meta = DEPTH_TIERS.find(x => x.id === t);
+        const n = list.filter(x => depthTier(x) === t).length;
+        html += `<div class="col-span-full flex items-center gap-3 ${html ? 'mt-3' : ''}">
+          <span class="font-heading font-bold uppercase tracking-[0.2em] text-xs ${t === 'starter' ? 'text-amber-300' : t === 'second' ? 'text-sky-300' : 'text-panthers-silver'}">${meta.label}</span>
+          <span class="text-[10px] text-slate-500">${n}</span>
+          <span class="flex-1 h-px bg-panthers-cardBorder"></span></div>`;
+      }
+      html += playerCardHtml(p);
+    });
+    document.getElementById(`${side}-group`).innerHTML = list.length ? html : empty;
   });
 
   document.getElementById('count-staff').textContent = panthersStaff.length;
