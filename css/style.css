@@ -110,3 +110,7 @@ body input:focus, body select:focus, body textarea:focus {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* Enlarged player card: pop in */
+@keyframes player-pop { from { opacity: 0; transform: translateY(12px) scale(0.97); } to { opacity: 1; transform: none; } }
+#player-modal.flex .player-pop { animation: player-pop 0.18s ease-out; }

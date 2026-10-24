@@ -68,6 +68,7 @@ function makeEl(id) {
   return el;
 }
 global.document = {
+  body: makeEl('body'),
   getElementById: id => (els[id] ??= makeEl(id)),
   querySelectorAll: () => [],
   createElement: () => makeEl('created'),
@@ -87,7 +88,7 @@ eval(code + `
     panthersRoster, panthersStaff, panthers2026Schedule, initialNfcSouth, upcomingDivisionalGames, NFC_SOUTH_AS_OF_WEEK,
     draftProspects, draftOrder, NFL_TEAMS, prospectsById,
     headshotUrl, playerCardHtml, seasonStatCells, headshotFailed, fallbackAvatarHtml,
-    renderRosterCards, setRosterStatus, showGroup, renderSchedule, renderPlayoffMachine, updateStandings, pickSimGame, resetPlayoffSim,
+    renderRosterCards, setRosterStatus, showGroup, openPlayer, closePlayer, stepPlayer, playerModalKeys, fullStatGroups, getPlayerModal: () => playerModal, renderSchedule, renderPlayoffMachine, updateStandings, pickSimGame, resetPlayoffSim,
     initDraft, renderDraft, currentSlot, isUserTurn, isDraftComplete, nextUserSlot, availableProspects, cpuChoose, makePick,
     simOnePick, simNextPick, simToMyPick, autoDraftRest, draftProspect, resetDraftSim, setDraftPos, setDraftQuery, showMoreProspects,
     gradePick, gradeClass, getDraftState: () => draftState, getDraftUI: () => draftUI, setRandom: fn => { draftRandom = fn; },
@@ -154,6 +155,34 @@ check('"IR / PUP" filter shows only injured players', els['count-offense'].textC
   (+els['count-offense'].textContent + +els['count-defense'].textContent + +els['count-special'].textContent) === 10);
 t.setRosterStatus('squad');
 check('"Practice squad" filter shows 13 players', (+els['count-offense'].textContent + +els['count-defense'].textContent + +els['count-special'].textContent) === 13);
+t.setRosterStatus('all');
+
+t.setRosterStatus('all');
+check('every player card opens the big view when clicked or tapped', t.playerCardHtml(byName('Bryce Young')).includes('onclick="openPlayer(4685720)"') && t.playerCardHtml(byName('Bryce Young')).includes('role="button"'));
+t.openPlayer(4685720);
+const pm = els['player-modal-body'].innerHTML;
+check('big card shows photo, bio and full passing + rushing stats',
+  !els['player-modal'].classList.contains('hidden') && pm.includes('4685720.png') && pm.includes('Alabama') && pm.includes('121/201') && pm.includes('60.2%') && pm.includes('98.5') && /Rushing/.test(pm));
+check('big card links to the ESPN profile', pm.includes('espn.com/nfl/player/_/id/4685720'));
+const offenseCount = R.filter(p => p.side === 'offense').length;
+check('arrows browse the same group as the open card', t.getPlayerModal().list.length === offenseCount && !els['player-next'].classList.contains('hidden'));
+const startIdx = t.getPlayerModal().index;
+t.playerModalKeys({ key: 'ArrowRight' });
+check('→ moves to the next player', t.getPlayerModal().index === (startIdx + 1) % offenseCount);
+t.stepPlayer(-1);
+check('← goes back', t.getPlayerModal().index === startIdx);
+t.playerModalKeys({ key: 'Escape' });
+check('Esc closes the big card', els['player-modal'].classList.contains('hidden') && t.getPlayerModal().index === -1);
+const sam = t.fullStatGroups(byName('Sam Martin'));
+check('punter big card shows punting stats', sam.length === 1 && sam[0].title === 'Punting' && sam[0].cells.some(c => c[0] === 'NET' && c[1] === '42.6'));
+const ps = R.find(p => p.status === 'Practice Squad' && !p.stats);
+if (ps) { t.openPlayer(ps.id); check('players without stats say so on the big card', /No 2026 stats on record/.test(els['player-modal-body'].innerHTML)); t.closePlayer(); }
+t.setRosterStatus('squad');
+const psOne = R.find(p => p.status === 'Practice Squad');
+t.openPlayer(psOne.id);
+check('with the practice-squad filter on, arrows only browse practice-squad players',
+  t.getPlayerModal().list.every(id => R.find(p => p.id === id).status === 'Practice Squad'));
+t.closePlayer();
 t.setRosterStatus('all');
 
 // ---------------------------------------------------------------------------------------------------

@@ -315,7 +315,7 @@
         <div id="staff-group" class="hidden grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3"></div>
 
         <p class="text-[10px] text-slate-500 mt-4">
-          Player photos are provided by ESPN and belong to their owners. Bios come from panthers.com; season stats are from Pro-Football-Reference and NFL.com. IR and practice squad lists change weekly.
+          Tap any player to see the full card. Player photos are provided by ESPN and belong to their owners. Bios come from panthers.com; season stats are from Pro-Football-Reference and NFL.com. IR and practice squad lists change weekly.
         </p>
 
       </div>
@@ -760,6 +760,18 @@
   </footer>
 
   <!-- Data (edit these files to update the site's content) -->
+
+  <!-- ENLARGED PLAYER CARD (opened from the roster) -->
+  <div id="player-modal" class="hidden fixed inset-0 z-[100] items-center justify-center p-3 sm:p-6" role="dialog" aria-modal="true" aria-labelledby="player-modal-title">
+    <div class="absolute inset-0 bg-black/75 backdrop-blur-sm" onclick="closePlayer()"></div>
+    <div class="player-pop relative w-full max-w-4xl max-h-[92vh] overflow-y-auto bg-panthers-cardBg border border-panthers-blue rounded-2xl shadow-[0_30px_80px_-20px_rgba(0,133,202,0.55)]">
+      <button id="player-modal-close" onclick="closePlayer()" aria-label="Close" class="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-black/60 border border-panthers-cardBorder hover:border-panthers-blue text-white text-lg leading-none">✕</button>
+      <div id="player-modal-body"></div>
+    </div>
+    <button id="player-prev" onclick="stepPlayer(-1)" aria-label="Previous player" class="hidden max-sm:!hidden absolute left-1 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/70 border border-panthers-cardBorder hover:border-panthers-blue text-white text-lg">‹</button>
+    <button id="player-next" onclick="stepPlayer(1)" aria-label="Next player" class="hidden max-sm:!hidden absolute right-1 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/70 border border-panthers-cardBorder hover:border-panthers-blue text-white text-lg">›</button>
+  </div>
+
   <script src="data/roster.js"></script>
   <script src="data/schedule.js"></script>
   <script src="data/playoff.js"></script>
