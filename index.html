@@ -51,7 +51,6 @@
 
   <!-- TOP HEADER BANNER -->
   <header class="bg-gradient-to-r from-black via-[#0d1622] to-panthers-blue border-b-4 border-panthers-blue text-white shadow-xl relative overflow-hidden">
-    <!-- Overlay Background Grid Effect -->
     <div class="absolute inset-0 bg-[radial-gradient(#0085CA_1px,transparent_1px)] [background-size:16px_16px] opacity-20 pointer-events-none"></div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 relative z-10 flex flex-col md:flex-row items-center justify-between gap-4">
@@ -109,6 +108,9 @@
       <button onclick="openTab(event, 'playoff-tab')" class="nav-tab px-4 sm:px-5 py-3.5 text-xs sm:text-sm font-heading font-bold uppercase tracking-wider text-panthers-silver hover:text-white border-b-2 border-transparent hover:bg-panthers-blue/10 transition-all whitespace-nowrap flex items-center gap-1.5">
         <span>🏆</span> PLAYOFF MACHINE
       </button>
+      <button onclick="openTab(event, 'draft-tab')" class="nav-tab px-4 sm:px-5 py-3.5 text-xs sm:text-sm font-heading font-bold uppercase tracking-wider text-panthers-silver hover:text-white border-b-2 border-transparent hover:bg-panthers-blue/10 transition-all whitespace-nowrap flex items-center gap-1.5">
+        <span>📋</span> MOCK DRAFT
+      </button>
       <button onclick="openTab(event, 'forum-tab')" class="nav-tab px-4 sm:px-5 py-3.5 text-xs sm:text-sm font-heading font-bold uppercase tracking-wider text-panthers-silver hover:text-white border-b-2 border-transparent hover:bg-panthers-blue/10 transition-all whitespace-nowrap flex items-center gap-1.5">
         <span>💬</span> FAN DISCUSSIONS
       </button>
@@ -124,7 +126,7 @@
     <!-- TAB 1: HOME & HUB -->
     <div id="home-tab" class="tab-content block">
       
-      <!-- FEATURE 2: LIVE GAME DAY COUNTDOWN BANNER -->
+      <!-- LIVE GAME DAY COUNTDOWN BANNER -->
       <div class="bg-gradient-to-r from-panthers-cardBg via-black to-panthers-cardBg border-2 border-panthers-blue rounded-2xl p-6 mb-8 shadow-2xl relative overflow-hidden">
         <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
           <div>
@@ -181,16 +183,16 @@
               WELCOME TO PANTHERS FAN CENTRAL
             </h2>
             <p class="text-panthers-silver text-sm sm:text-base leading-relaxed mb-6">
-              Your interactive headquarters for everything Carolina Football. Explore Bank of America Stadium, check live depth charts, participate in fan forum discussions, track playoff scenarios, and test your knowledge in the Trivia Arcade.
+              Your interactive headquarters for everything Carolina Football. Explore Bank of America Stadium, check live depth charts, run Mock Draft simulations, participate in fan forum discussions, track playoff scenarios, and test your knowledge in the Trivia Arcade.
             </p>
 
             <div class="flex flex-wrap gap-4">
-              <button onclick="openTabByNav('playoff-tab')" class="bg-panthers-blue hover:bg-panthers-blueHover text-white font-heading font-bold px-6 py-3 rounded-lg uppercase tracking-wider shadow-lg shadow-panthers-blue/20 transition-all transform hover:-translate-y-0.5">
-                SIMULATE PLAYOFF SCENARIOS 🏆
+              <button onclick="openTabByNav('draft-tab')" class="bg-panthers-blue hover:bg-panthers-blueHover text-white font-heading font-bold px-6 py-3 rounded-lg uppercase tracking-wider shadow-lg shadow-panthers-blue/20 transition-all transform hover:-translate-y-0.5">
+                RUN MOCK DRAFT SIMULATOR 📋
               </button>
-              <a href="https://my-first-game-opal.vercel.app" target="_blank" class="bg-panthers-cardBorder hover:bg-slate-700 text-white font-heading font-bold px-6 py-3 rounded-lg uppercase tracking-wider transition-all border border-slate-600">
-                LAUNCH TRIVIA CHALLENGE 🔗
-              </a>
+              <button onclick="openTabByNav('playoff-tab')" class="bg-panthers-cardBorder hover:bg-slate-700 text-white font-heading font-bold px-6 py-3 rounded-lg uppercase tracking-wider transition-all border border-slate-600">
+                PLAYOFF MACHINE 🏆
+              </button>
             </div>
           </div>
 
@@ -542,7 +544,7 @@
       </div>
     </div>
 
-    <!-- FEATURE 1: TAB 5 - 2026 PLAYOFF MACHINE & STANDINGS CALCULATOR -->
+    <!-- TAB 5: PLAYOFF MACHINE & STANDINGS CALCULATOR -->
     <div id="playoff-tab" class="tab-content hidden">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
@@ -561,9 +563,7 @@
               </button>
             </div>
 
-            <div class="space-y-4" id="sim-games-container">
-              <!-- Dynamically Populated Game Simulator Rows -->
-            </div>
+            <div class="space-y-4" id="sim-games-container"></div>
           </div>
         </div>
 
@@ -584,9 +584,7 @@
                     <th class="pb-2 text-right">Status</th>
                   </tr>
                 </thead>
-                <tbody id="sim-standings-body" class="divide-y divide-panthers-cardBorder/40 text-sm font-heading">
-                  <!-- Dynamically Updated Standings Rows -->
-                </tbody>
+                <tbody id="sim-standings-body" class="divide-y divide-panthers-cardBorder/40 text-sm font-heading"></tbody>
               </table>
             </div>
 
@@ -600,7 +598,68 @@
       </div>
     </div>
 
-    <!-- TAB 6: FAN DISCUSSIONS FORUM -->
+    <!-- NEW FEATURE: TAB 6 - MOCK DRAFT SIMULATOR -->
+    <div id="draft-tab" class="tab-content hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Prospects Selection List Span 2 -->
+        <div class="lg:col-span-2 space-y-6">
+          <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-6 shadow-xl">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-panthers-cardBorder">
+              <div>
+                <h2 class="text-2xl font-heading font-bold uppercase tracking-wider text-white flex items-center gap-2">
+                  <span>📋</span> CAROLINA PANTHERS MOCK DRAFT SIMULATOR
+                </h2>
+                <p class="text-panthers-silver text-xs mt-0.5">Select top collegiate prospects across core team needs (EDGE, CB, WR, OT, TE):</p>
+              </div>
+              
+              <div class="flex items-center gap-2">
+                <button onclick="autoSimDraft()" class="bg-panthers-blue hover:bg-panthers-blueHover text-white text-xs font-heading font-bold px-3.5 py-2 rounded uppercase tracking-wider shadow-md transition-all">
+                  ⚡ AUTO-SIM CLASS
+                </button>
+                <button onclick="resetDraftSim()" class="bg-panthers-black border border-panthers-cardBorder hover:border-panthers-blue text-panthers-silver text-xs font-heading font-bold px-3 py-2 rounded uppercase tracking-wider transition-colors">
+                  🔄 RESET
+                </button>
+              </div>
+            </div>
+
+            <!-- Active Round Indicator -->
+            <div class="flex items-center gap-3 mb-6 bg-panthers-black/60 border border-panthers-cardBorder p-3 rounded-xl">
+              <span class="text-xs font-heading font-bold uppercase tracking-widest text-panthers-silver">CURRENT ON-THE-CLOCK PICK:</span>
+              <span id="active-round-label" class="bg-panthers-blue text-white text-xs font-heading font-bold px-3 py-1 rounded uppercase tracking-wider">
+                ROUND 1 • PICK #19
+              </span>
+            </div>
+
+            <!-- Prospect Cards Board -->
+            <div id="prospects-board" class="space-y-3"></div>
+          </div>
+        </div>
+
+        <!-- Fan's Draft Class & Grade Card Span 1 -->
+        <div>
+          <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-6 shadow-xl sticky top-20">
+            <h2 class="text-xl font-heading font-bold uppercase tracking-wider text-white mb-4 flex items-center gap-2">
+              <span class="text-panthers-blue">🎓</span> YOUR DRAFT CLASS
+            </h2>
+
+            <div id="user-draft-class" class="space-y-3 mb-6">
+              <p class="text-panthers-silver text-xs italic">No prospects selected yet. Click "Draft Player" on the left board to build your draft class!</p>
+            </div>
+
+            <!-- Calculated Grade Box -->
+            <div class="p-5 rounded-xl bg-panthers-black/80 border border-panthers-cardBorder text-center">
+              <span class="text-[10px] text-panthers-silver uppercase font-bold tracking-widest block mb-1">OVERALL CLASS GRADE</span>
+              <span id="draft-class-grade" class="text-4xl font-heading font-extrabold text-panthers-blue block">--</span>
+              <p id="draft-grade-summary" class="text-xs text-panthers-silver mt-2">Make your selections to evaluate team fit and value.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 7: FAN DISCUSSIONS FORUM -->
     <div id="forum-tab" class="tab-content hidden">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
@@ -676,7 +735,7 @@
       </div>
     </div>
 
-    <!-- TAB 7: ARCADE & TRIVIA -->
+    <!-- TAB 8: ARCADE & TRIVIA -->
     <div id="arcade-tab" class="tab-content hidden">
       <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-8 shadow-xl text-center max-w-2xl mx-auto">
         <h2 class="text-3xl font-heading font-bold uppercase tracking-wider text-white mb-2">
@@ -826,7 +885,7 @@
     }
 
     // -------------------------------------------------------------
-    // PLAYOFF MACHINE & STANDINGS CALCULATOR LOGIC
+    // PLAYOFF MACHINE LOGIC
     // -------------------------------------------------------------
     const initialNfcSouth = [
       { name: "Carolina Panthers", key: "CAR", wins: 3, losses: 2 },
@@ -887,10 +946,8 @@
     }
 
     function updateStandings() {
-      // Deep copy initial standings
       const currentStandings = JSON.parse(JSON.stringify(initialNfcSouth));
 
-      // Calculate picked game outcomes
       upcomingDivisionalGames.forEach(g => {
         if (g.picked === 'CAR') {
           const car = currentStandings.find(t => t.key === 'CAR');
@@ -905,7 +962,6 @@
         }
       });
 
-      // Sort by wins descending
       currentStandings.sort((a, b) => b.wins - a.wins);
 
       const tbody = document.getElementById("sim-standings-body");
@@ -930,7 +986,6 @@
 
       tbody.innerHTML = tableHTML;
 
-      // Update Badge Status
       const panthersRank = currentStandings.findIndex(t => t.key === 'CAR') + 1;
       const statusBadge = document.getElementById("playoff-status-badge");
 
@@ -943,6 +998,148 @@
       } else {
         statusBadge.textContent = "👀 IN THE HUNT (NEEDS DIVISIONS WINS)";
         statusBadge.className = "text-panthers-silver font-bold text-base block";
+      }
+    }
+
+    // -------------------------------------------------------------
+    // MOCK DRAFT SIMULATOR LOGIC
+    // -------------------------------------------------------------
+    let currentDraftRound = 1; // 1: Round 1, 2: Round 2, 3: Round 3
+    let userPicks = [];
+
+    const draftProspects = [
+      // Round 1 Prospects
+      { id: 1, round: 1, name: "Chris Cole", pos: "LB / EDGE", school: "Georgia", desc: "Explosive pass rusher with elite athleticism and closing speed.", gradeVal: 95 },
+      { id: 2, round: 1, name: "Trey'Dez Green", pos: "TE", school: "LSU", desc: "6'7\" massive target with red zone dominance and athletic upside.", gradeVal: 94 },
+      { id: 3, round: 1, name: "Monroe Freeling", pos: "OT", school: "Georgia", desc: "Dominant offensive tackle protector with anchor technique.", gradeVal: 92 },
+      { id: 4, round: 1, name: "Xavier Gilliam", pos: "DT", school: "Penn State", desc: "Interior disruptor capable of plugging gaps and generating pressures.", gradeVal: 90 },
+
+      // Round 2 Prospects
+      { id: 5, round: 2, name: "Sammy Brown", pos: "LB", school: "Clemson", desc: "Sideline-to-sideline tackler with high football IQ.", gradeVal: 88 },
+      { id: 6, round: 2, name: "Lee Hunter", pos: "DL", school: "Texas Tech", desc: "Heavy nose tackle ideal for stopping power running attacks.", gradeVal: 86 },
+      { id: 7, round: 2, name: "Chris Brazzell II", pos: "WR", school: "Tennessee", desc: "Vertical field-stretcher with deep ball speed.", gradeVal: 85 },
+
+      // Round 3 Prospects
+      { id: 8, round: 3, name: "Will Lee III", pos: "CB", school: "Texas A&M", desc: "Press-man cornerback with long arms and ball hawk skills.", gradeVal: 82 },
+      { id: 9, round: 3, name: "Carson Hinzman", pos: "IOL", school: "Ohio State", desc: "Interior guard with high agility and pass protection anchor.", gradeVal: 80 }
+    ];
+
+    function renderDraftBoard() {
+      const board = document.getElementById("prospects-board");
+      const roundLabel = document.getElementById("active-round-label");
+
+      if (currentDraftRound > 3) {
+        roundLabel.textContent = "DRAFT COMPLETE!";
+        roundLabel.className = "bg-emerald-600 text-white text-xs font-heading font-bold px-3 py-1 rounded uppercase tracking-wider";
+        board.innerHTML = `
+          <div class="bg-panthers-black/60 border border-emerald-500/50 p-6 rounded-xl text-center">
+            <h3 class="text-xl font-heading font-bold text-emerald-400 mb-2">🎉 3-ROUND MOCK DRAFT COMPLETE!</h3>
+            <p class="text-panthers-silver text-xs">Review your completed draft class and grade on the right panel.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const pickNumbers = { 1: "PICK #19", 2: "PICK #51", 3: "PICK #83" };
+      roundLabel.textContent = `ROUND ${currentDraftRound} • ${pickNumbers[currentDraftRound]}`;
+      roundLabel.className = "bg-panthers-blue text-white text-xs font-heading font-bold px-3 py-1 rounded uppercase tracking-wider";
+
+      const availableProspects = draftProspects.filter(p => p.round === currentDraftRound && !userPicks.some(up => up.id === p.id));
+
+      let boardHTML = "";
+      availableProspects.forEach(p => {
+        boardHTML += `
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder p-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:border-panthers-blue transition-colors">
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="bg-panthers-blue/20 text-panthers-blue border border-panthers-blue text-[10px] font-heading font-bold px-2 py-0.5 rounded">${p.pos}</span>
+                <span class="text-panthers-silver text-xs font-semibold">${p.school}</span>
+              </div>
+              <h3 class="font-heading font-bold text-white text-lg">${p.name}</h3>
+              <p class="text-panthers-silver text-xs mt-0.5">${p.desc}</p>
+            </div>
+            <button onclick="draftProspect(${p.id})" class="bg-panthers-blue hover:bg-panthers-blueHover text-white font-heading font-bold px-4 py-2 rounded-lg text-xs uppercase tracking-wider shadow-md whitespace-nowrap">
+              DRAFT PLAYER ↗
+            </button>
+          </div>
+        `;
+      });
+
+      board.innerHTML = boardHTML;
+    }
+
+    function draftProspect(prospectId) {
+      const prospect = draftProspects.find(p => p.id === prospectId);
+      if (prospect) {
+        userPicks.push(prospect);
+        currentDraftRound++;
+        renderDraftBoard();
+        updateDraftClassUI();
+      }
+    }
+
+    function autoSimDraft() {
+      userPicks = [
+        draftProspects.find(p => p.round === 1),
+        draftProspects.find(p => p.round === 2),
+        draftProspects.find(p => p.round === 3)
+      ];
+      currentDraftRound = 4;
+      renderDraftBoard();
+      updateDraftClassUI();
+    }
+
+    function resetDraftSim() {
+      userPicks = [];
+      currentDraftRound = 1;
+      renderDraftBoard();
+      updateDraftClassUI();
+    }
+
+    function updateDraftClassUI() {
+      const classContainer = document.getElementById("user-draft-class");
+      const gradeBadge = document.getElementById("draft-class-grade");
+      const gradeSummary = document.getElementById("draft-grade-summary");
+
+      if (userPicks.length === 0) {
+        classContainer.innerHTML = `<p class="text-panthers-silver text-xs italic">No prospects selected yet. Click "Draft Player" on the left board to build your draft class!</p>`;
+        gradeBadge.textContent = "--";
+        gradeSummary.textContent = "Make your selections to evaluate team fit and value.";
+        return;
+      }
+
+      let classHTML = "";
+      let totalGrade = 0;
+
+      userPicks.forEach((p, idx) => {
+        totalGrade += p.gradeVal;
+        classHTML += `
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder p-3 rounded-xl flex justify-between items-center">
+            <div>
+              <span class="text-[10px] text-panthers-blue font-heading font-bold uppercase block">R${idx + 1} PICK • ${p.pos}</span>
+              <h4 class="font-heading font-bold text-white text-sm">${p.name}</h4>
+              <span class="text-[10px] text-panthers-silver block">${p.school}</span>
+            </div>
+            <span class="bg-emerald-950/60 text-emerald-400 border border-emerald-500 font-mono text-xs px-2 py-1 rounded">GRADE: A</span>
+          </div>
+        `;
+      });
+
+      classContainer.innerHTML = classHTML;
+
+      const avgGrade = totalGrade / userPicks.length;
+      if (avgGrade >= 90) {
+        gradeBadge.textContent = "A+";
+        gradeBadge.className = "text-4xl font-heading font-extrabold text-emerald-400 block";
+        gradeSummary.textContent = "Elite draft class! Addressed key team needs with premier talent.";
+      } else if (avgGrade >= 85) {
+        gradeBadge.textContent = "A";
+        gradeBadge.className = "text-4xl font-heading font-extrabold text-panthers-blue block";
+        gradeSummary.textContent = "Solid overall draft class with strong starting potential.";
+      } else {
+        gradeBadge.textContent = "B+";
+        gradeBadge.className = "text-4xl font-heading font-extrabold text-amber-400 block";
+        gradeSummary.textContent = "Decent draft additions for roster depth.";
       }
     }
 
@@ -1107,6 +1304,7 @@
     // Init on page load
     renderSchedule();
     renderPlayoffMachine();
+    renderDraftBoard();
     startCountdown();
     fetchCharlotteWeather();
     fetchPanthersNews();
