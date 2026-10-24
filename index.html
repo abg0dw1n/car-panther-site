@@ -111,7 +111,7 @@
         <span>💬</span> FAN TALK
       </button>
       <button onclick="openTab(event, 'arcade-tab')" class="nav-tab px-3.5 py-2.5 text-xs font-heading font-bold uppercase tracking-wider text-panthers-silver hover:text-white border-b-2 border-transparent hover:bg-panthers-blue/10 transition-all whitespace-nowrap flex items-center gap-1">
-        <span>🎮</span> TRIVIA
+        <span>🎮</span> ARCADE
       </button>
     </div>
   </nav>
@@ -207,7 +207,7 @@
             <span class="text-2xl block">🏆</span><span class="font-heading font-bold text-white text-sm uppercase tracking-wider block mt-1 group-hover:text-panthers-blue">Playoff Machine</span><span class="text-[10px] text-panthers-silver">Play out the South race</span>
           </button>
           <button onclick="openTabByNav('arcade-tab')" class="group text-left bg-panthers-black/60 border border-panthers-cardBorder hover:border-panthers-blue hover:-translate-y-0.5 rounded-xl p-3 transition-all">
-            <span class="text-2xl block">🎮</span><span class="font-heading font-bold text-white text-sm uppercase tracking-wider block mt-1 group-hover:text-panthers-blue">Trivia Arcade</span><span class="text-[10px] text-panthers-silver">Prove your Panthers IQ</span>
+            <span class="text-2xl block">🎮</span><span class="font-heading font-bold text-white text-sm uppercase tracking-wider block mt-1 group-hover:text-panthers-blue">Arcade</span><span class="text-[10px] text-panthers-silver">Trivia: 4 modes, daily challenge</span>
           </button>
         </div>
       </section>
@@ -738,26 +738,44 @@
       <div id="forum-toast" class="hidden" role="status" aria-live="polite"></div>
     </div>
 
-    <!-- TAB 8: ARCADE & TRIVIA -->
+    <!-- TAB 8: ARCADE (games; the trivia game lives in the my-first-game repo and is embedded here) -->
     <div id="arcade-tab" class="tab-content hidden">
-      <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-6 shadow-lg text-center max-w-xl mx-auto">
-        <h2 class="text-2xl font-heading font-bold uppercase tracking-wider text-white mb-1">
-          TRIVIA ARCADE
-        </h2>
-        <p class="text-panthers-silver text-xs mb-5">Think you know Panthers history? Prove it.</p>
-
-        <div class="bg-panthers-black/60 border border-panthers-cardBorder p-6 rounded-xl">
-          <span class="text-4xl mb-3 block">🎮</span>
-          <h3 class="text-xl font-heading font-bold text-panthers-blue uppercase tracking-wider mb-1">
-            PANTHERS TRIVIA GAME
-          </h3>
-          <p class="text-panthers-silver text-xs mb-5">Our standalone trivia game. How far can you get?</p>
-
-          <a href="https://my-first-game-opal.vercel.app" target="_blank" class="inline-block bg-panthers-blue hover:bg-panthers-blueHover text-white font-heading font-bold px-6 py-2.5 rounded-lg text-xs uppercase tracking-wider shadow-md transition-all">
-            🏈 PLAY NOW
-          </a>
+      <section class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-5 shadow-lg">
+        <div class="flex flex-wrap items-end justify-between gap-3 mb-4 pb-3 border-b border-panthers-cardBorder">
+          <div>
+            <h2 class="text-2xl font-heading font-bold uppercase tracking-wider text-white flex items-center gap-2"><span>🎮</span> Arcade</h2>
+            <p class="text-panthers-silver text-[11px] mt-1">Games for Panthers fans. Your scores and streaks are saved on this device.</p>
+          </div>
+          <span class="text-[10px] font-heading font-bold uppercase tracking-widest text-panthers-blue">More games on the way</span>
         </div>
-      </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          <div class="lg:col-span-2">
+            <div class="rounded-xl overflow-hidden border border-panthers-blue/50 bg-[#07090e]">
+              <iframe id="trivia-frame" title="Panthers Trivia game" data-src="https://my-first-game-opal.vercel.app/"
+                      class="w-full h-[820px] sm:h-[760px] block" loading="lazy" allow="clipboard-write; web-share"></iframe>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <div class="bg-panthers-black/60 border border-panthers-cardBorder rounded-xl p-4">
+              <h3 class="font-heading font-bold text-white text-xl uppercase tracking-wider">🏈 Panthers Trivia</h3>
+              <p class="text-panthers-silver text-xs mt-1">67 fact-checked questions on team history, legends, the 2026 squad and the stadium.</p>
+              <ul class="mt-3 space-y-2 text-xs">
+                <li class="flex gap-2"><span>🏈</span><span><strong class="text-white">Classic:</strong> <span class="text-panthers-silver">10 questions, 15 seconds each, with 50/50 and Skip lifelines.</span></span></li>
+                <li class="flex gap-2"><span>⚡</span><span><strong class="text-white">Blitz:</strong> <span class="text-panthers-silver">60 seconds. Rack up as many as you can.</span></span></li>
+                <li class="flex gap-2"><span>💀</span><span><strong class="text-white">Sudden Death:</strong> <span class="text-panthers-silver">gets harder every round. One miss and you're done.</span></span></li>
+                <li class="flex gap-2"><span>📅</span><span><strong class="text-white">Daily Challenge:</strong> <span class="text-panthers-silver">the same 5 questions for every fan, once a day. Share your score.</span></span></li>
+              </ul>
+              <a href="https://my-first-game-opal.vercel.app/" target="_blank" rel="noopener noreferrer"
+                 class="mt-4 inline-block bg-panthers-blue hover:bg-panthers-blueHover text-white font-heading font-bold px-4 py-2 rounded-lg text-[11px] uppercase tracking-wider">Play full screen ↗</a>
+            </div>
+            <div class="bg-panthers-black/60 border border-panthers-cardBorder rounded-xl p-4">
+              <h3 class="font-heading font-bold text-white text-sm uppercase tracking-wider mb-2">How scoring works</h3>
+              <p class="text-panthers-silver text-xs">Every right answer is worth 100, plus up to 50 for speed. Keep a streak going for up to +50% per answer. Ranks run from Practice Squad to Hall of Famer.</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
 
   </main>

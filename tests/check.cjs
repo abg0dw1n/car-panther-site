@@ -99,7 +99,7 @@ eval(code + `
     initDraft, renderDraft, currentSlot, isUserTurn, isDraftComplete, nextUserSlot, availableProspects, cpuChoose, makePick,
     simOnePick, simNextPick, simToMyPick, autoDraftRest, draftProspect, resetDraftSim, setDraftPos, setDraftQuery, showMoreProspects,
     gradePick, gradeClass, getDraftState: () => draftState, getDraftUI: () => draftUI, setRandom: fn => { draftRandom = fn; },
-    renderTeamRecord, renderNextGame, startCountdown,
+    openTab, renderTeamRecord, renderNextGame, startCountdown,
     panthersTeamStats, GAME_LEADERS, OPPONENTS, PANTHERS_HISTORY, HALL_OF_HONOR, FRANCHISE, parseResult, seriesText, gamePhase, seasonSummary,
     historyFor, shiftHistoryDay, renderHome, renderLastGame,
     STADIUM_PINS, STADIUM_TOUR, STADIUM_ZONES, STADIUM_LEVELS, MAP_LAYERS, GAMEDAY_STEPS, TRANSPORT_TIPS, SRC_LABELS, stadiumUI,
@@ -402,6 +402,16 @@ check('snapshot: 2 NFC titles, 7 division titles, 9 playoff trips, 227-273-1',
   t.FRANCHISE.nfcTitles === 2 && t.FRANCHISE.divisionTitles === 7 && t.FRANCHISE.playoffTrips === 9 && els['franchise-snapshot'].innerHTML.includes('227-273-1'));
 check('hype headline matches the real standings and next game', els['hype-headline'].innerHTML.includes('We’re 3-2 and running the South</span> 🔥') && els['hype-sub'].textContent === 'The Buccaneers come to the Bank Sunday. Don’t be late.', els['hype-headline'].innerHTML + ' | ' + els['hype-sub'].textContent);
 check('milestones include the 2025 Wild Card loss to the Rams (34-31)', els['milestones'].innerHTML.includes('34-31'));
+
+// ---------------------------------------------------------------------------------------------------
+section('Arcade');
+// ---------------------------------------------------------------------------------------------------
+check('the tab is called Arcade', /<span>🎮<\/span> ARCADE/.test(html) && !/> TRIVIA\n/.test(html));
+const frameEl = els['trivia-frame'] = Object.assign(makeEl('trivia-frame'), { dataset: { src: 'https://my-first-game-opal.vercel.app/' }, attrs: {} });
+frameEl.getAttribute = k => frameEl.attrs[k] ?? null; frameEl.setAttribute = (k, v) => { frameEl.attrs[k] = v; };
+check('the trivia game does not load until the Arcade is opened', frameEl.getAttribute('src') === null);
+t.openTab(null, 'arcade-tab');
+check('opening the Arcade loads the trivia game', frameEl.getAttribute('src') === 'https://my-first-game-opal.vercel.app/');
 
 // ---------------------------------------------------------------------------------------------------
 section('Stadium Tour');

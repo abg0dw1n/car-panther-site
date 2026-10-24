@@ -13,7 +13,7 @@ A single-page fan portal for the Carolina Panthers, deployed on Vercel.
 - **Playoff Machine:** pick outcomes for the Panthers' remaining divisional games and see the NFC South standings update (all other results are held constant)
 - **Mock Draft:** full 7-round, 257-pick 2027 draft; you pick for the Panthers, the computer picks for the other 31 teams; 333 prospects, search and position filters, pick and class grades
 - **Fan Talk:** a real forum. Topic feed with categories and Hot/New/Top sorting; tap a thread to read and reply (nested replies), upvote, report. Game and post-game threads open automatically from the schedule. Moderator tools behind a password.
-- **Arcade & Trivia:** links to the standalone trivia game
+- **Arcade:** the Panthers Trivia game (4 modes, daily challenge) embedded from the my-first-game repo
 
 ## Tech
 
