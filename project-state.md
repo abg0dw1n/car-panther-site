@@ -1,15 +1,15 @@
 # Project State: my-first-site
 
-- **Current Version:** v2.4 - Added Fan Discussion Forum & Restored WR Hierarchy
+- **Current Version:** v2.8 - Countdown Clock & Playoff Machine
 - **Goal:** Carolina Panthers Official Fan Portal
 - **Status:** Complete / Published on Vercel
 
 ## Recent Actions
-- Added interactive "FAN DISCUSSIONS" forum tab featuring live user thread creation, voting buttons, and fan conversation cards.
-- Preserved Tailwind CSS dark stadium architecture with header, snapshot widgets, and milestones.
-- Verified offense roster section lists Tetairoa McMillan as WR1 and Jalen Coker as WR2.
+- Added a ticking Game Day Countdown Banner on the Home Hub for Week 7 vs. Tampa Bay.
+- Added an interactive 2026 Playoff Machine & Division Standings simulator tab.
+- Retained SVG "CAR" favicon, live Open-Meteo weather widget, clickable ESPN headlines, Fan Forum, and receiver depth chart order.
 
 ## Acceptance Test
 - Open `my-first-site` live Vercel URL.
-- Click "FAN DISCUSSIONS" tab and test submitting a thread title/message.
-- Check "ROSTER & DEPTH" tab to confirm McMillan (WR1) and Coker (WR2).
+- Verify countdown clock ticks down on the Home Hub.
+- Click the "Playoff Machine" tab and toggle game wins/losses to see the NFC South standings table update live.
