@@ -106,6 +106,9 @@
       <button onclick="openTab(event, 'schedule-tab')" class="nav-tab px-4 sm:px-5 py-3.5 text-xs sm:text-sm font-heading font-bold uppercase tracking-wider text-panthers-silver hover:text-white border-b-2 border-transparent hover:bg-panthers-blue/10 transition-all whitespace-nowrap flex items-center gap-1.5">
         <span>📅</span> 2026 SCHEDULE
       </button>
+      <button onclick="openTab(event, 'playoff-tab')" class="nav-tab px-4 sm:px-5 py-3.5 text-xs sm:text-sm font-heading font-bold uppercase tracking-wider text-panthers-silver hover:text-white border-b-2 border-transparent hover:bg-panthers-blue/10 transition-all whitespace-nowrap flex items-center gap-1.5">
+        <span>🏆</span> PLAYOFF MACHINE
+      </button>
       <button onclick="openTab(event, 'forum-tab')" class="nav-tab px-4 sm:px-5 py-3.5 text-xs sm:text-sm font-heading font-bold uppercase tracking-wider text-panthers-silver hover:text-white border-b-2 border-transparent hover:bg-panthers-blue/10 transition-all whitespace-nowrap flex items-center gap-1.5">
         <span>💬</span> FAN DISCUSSIONS
       </button>
@@ -120,6 +123,47 @@
 
     <!-- TAB 1: HOME & HUB -->
     <div id="home-tab" class="tab-content block">
+      
+      <!-- FEATURE 2: LIVE GAME DAY COUNTDOWN BANNER -->
+      <div class="bg-gradient-to-r from-panthers-cardBg via-black to-panthers-cardBg border-2 border-panthers-blue rounded-2xl p-6 mb-8 shadow-2xl relative overflow-hidden">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+          <div>
+            <span class="bg-panthers-blue text-white text-[10px] font-heading font-bold px-2.5 py-0.5 rounded tracking-widest uppercase inline-block mb-2">
+              NEXT MATCHUP • WEEK 7
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-heading font-bold text-white tracking-wider uppercase">
+              CAROLINA PANTHERS VS. TAMPA BAY BUCCANEERS
+            </h2>
+            <p class="text-panthers-silver text-xs sm:text-sm mt-1">
+              📍 Bank of America Stadium, Charlotte NC • Sunday, Oct 25 • 1:00 PM EST (FOX)
+            </p>
+          </div>
+
+          <!-- Countdown Timer Display -->
+          <div class="flex items-center gap-2 sm:gap-4 font-heading text-center">
+            <div class="bg-panthers-black border border-panthers-cardBorder rounded-xl p-2.5 sm:p-3 min-w-[60px] sm:min-w-[72px]">
+              <span id="cd-days" class="text-2xl sm:text-3xl font-bold text-panthers-blue block leading-none">00</span>
+              <span class="text-[9px] sm:text-[10px] text-panthers-silver uppercase tracking-wider mt-1 block">DAYS</span>
+            </div>
+            <span class="text-panthers-blue text-xl font-bold">:</span>
+            <div class="bg-panthers-black border border-panthers-cardBorder rounded-xl p-2.5 sm:p-3 min-w-[60px] sm:min-w-[72px]">
+              <span id="cd-hours" class="text-2xl sm:text-3xl font-bold text-panthers-blue block leading-none">00</span>
+              <span class="text-[9px] sm:text-[10px] text-panthers-silver uppercase tracking-wider mt-1 block">HRS</span>
+            </div>
+            <span class="text-panthers-blue text-xl font-bold">:</span>
+            <div class="bg-panthers-black border border-panthers-cardBorder rounded-xl p-2.5 sm:p-3 min-w-[60px] sm:min-w-[72px]">
+              <span id="cd-mins" class="text-2xl sm:text-3xl font-bold text-panthers-blue block leading-none">00</span>
+              <span class="text-[9px] sm:text-[10px] text-panthers-silver uppercase tracking-wider mt-1 block">MINS</span>
+            </div>
+            <span class="text-panthers-blue text-xl font-bold">:</span>
+            <div class="bg-panthers-black border border-panthers-cardBorder rounded-xl p-2.5 sm:p-3 min-w-[60px] sm:min-w-[72px]">
+              <span id="cd-secs" class="text-2xl sm:text-3xl font-bold text-amber-400 block leading-none">00</span>
+              <span class="text-[9px] sm:text-[10px] text-panthers-silver uppercase tracking-wider mt-1 block">SECS</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         <!-- Left Main Content Span 2 -->
@@ -137,12 +181,12 @@
               WELCOME TO PANTHERS FAN CENTRAL
             </h2>
             <p class="text-panthers-silver text-sm sm:text-base leading-relaxed mb-6">
-              Your interactive headquarters for everything Carolina Football. Explore Bank of America Stadium, check live depth charts, participate in fan forum discussions, and test your knowledge in the Trivia Arcade.
+              Your interactive headquarters for everything Carolina Football. Explore Bank of America Stadium, check live depth charts, participate in fan forum discussions, track playoff scenarios, and test your knowledge in the Trivia Arcade.
             </p>
 
             <div class="flex flex-wrap gap-4">
-              <button onclick="openTabByNav('stadium-tab')" class="bg-panthers-blue hover:bg-panthers-blueHover text-white font-heading font-bold px-6 py-3 rounded-lg uppercase tracking-wider shadow-lg shadow-panthers-blue/20 transition-all transform hover:-translate-y-0.5">
-                EXPLORE STADIUM & TAILGATE MAP
+              <button onclick="openTabByNav('playoff-tab')" class="bg-panthers-blue hover:bg-panthers-blueHover text-white font-heading font-bold px-6 py-3 rounded-lg uppercase tracking-wider shadow-lg shadow-panthers-blue/20 transition-all transform hover:-translate-y-0.5">
+                SIMULATE PLAYOFF SCENARIOS 🏆
               </button>
               <a href="https://my-first-game-opal.vercel.app" target="_blank" class="bg-panthers-cardBorder hover:bg-slate-700 text-white font-heading font-bold px-6 py-3 rounded-lg uppercase tracking-wider transition-all border border-slate-600">
                 LAUNCH TRIVIA CHALLENGE 🔗
@@ -498,7 +542,65 @@
       </div>
     </div>
 
-    <!-- TAB 5: FAN DISCUSSIONS FORUM -->
+    <!-- FEATURE 1: TAB 5 - 2026 PLAYOFF MACHINE & STANDINGS CALCULATOR -->
+    <div id="playoff-tab" class="tab-content hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Interactive Game Selector Span 2 -->
+        <div class="lg:col-span-2 space-y-6">
+          <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-6 shadow-xl">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-panthers-cardBorder">
+              <div>
+                <h2 class="text-2xl font-heading font-bold uppercase tracking-wider text-white flex items-center gap-2">
+                  <span>🏆</span> 2026 PLAYOFF MACHINE
+                </h2>
+                <p class="text-panthers-silver text-xs mt-0.5">Toggle upcoming divisional matchups below to simulate Panthers playoff odds!</p>
+              </div>
+              <button onclick="resetPlayoffSim()" class="bg-panthers-black border border-panthers-cardBorder hover:border-panthers-blue text-panthers-silver text-xs font-heading font-bold px-3 py-1.5 rounded uppercase tracking-wider transition-colors">
+                🔄 RESET
+              </button>
+            </div>
+
+            <div class="space-y-4" id="sim-games-container">
+              <!-- Dynamically Populated Game Simulator Rows -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Real-Time Simulated NFC South Standings Table Span 1 -->
+        <div>
+          <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-6 shadow-xl sticky top-20">
+            <h2 class="text-xl font-heading font-bold uppercase tracking-wider text-white mb-4 flex items-center gap-2">
+              <span class="text-panthers-blue">📊</span> NFC SOUTH STANDINGS
+            </h2>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="border-b border-panthers-cardBorder text-panthers-silver font-heading text-xs uppercase">
+                    <th class="pb-2">Team</th>
+                    <th class="pb-2 text-center">W</th>
+                    <th class="pb-2 text-center">L</th>
+                    <th class="pb-2 text-right">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="sim-standings-body" class="divide-y divide-panthers-cardBorder/40 text-sm font-heading">
+                  <!-- Dynamically Updated Standings Rows -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="mt-6 p-4 rounded-xl bg-panthers-black/60 border border-panthers-cardBorder text-center">
+              <span class="text-[10px] text-panthers-silver uppercase font-bold tracking-widest block mb-1">PROJECTED POSTSEASON STATUS</span>
+              <span id="playoff-status-badge" class="text-emerald-400 font-bold text-lg block">IN THE HUNT</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 6: FAN DISCUSSIONS FORUM -->
     <div id="forum-tab" class="tab-content hidden">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
@@ -574,7 +676,7 @@
       </div>
     </div>
 
-    <!-- TAB 6: ARCADE & TRIVIA -->
+    <!-- TAB 7: ARCADE & TRIVIA -->
     <div id="arcade-tab" class="tab-content hidden">
       <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-2xl p-8 shadow-xl text-center max-w-2xl mx-auto">
         <h2 class="text-3xl font-heading font-bold uppercase tracking-wider text-white mb-2">
@@ -692,6 +794,156 @@
       let count = parseInt(countSpan.textContent);
       countSpan.textContent = count + 1;
       btn.classList.add('text-panthers-blue');
+    }
+
+    // -------------------------------------------------------------
+    // COUNTDOWN TIMER LOGIC (Kickoff: Sunday, Oct 25, 2026 @ 1:00 PM EST)
+    // -------------------------------------------------------------
+    function startCountdown() {
+      const targetDate = new Date("October 25, 2026 13:00:00 EST").getTime();
+
+      setInterval(() => {
+        const now = new Date().getTime();
+        const diff = targetDate - now;
+
+        if (diff > 0) {
+          const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+          document.getElementById("cd-days").textContent = String(days).padStart(2, '0');
+          document.getElementById("cd-hours").textContent = String(hours).padStart(2, '0');
+          document.getElementById("cd-mins").textContent = String(mins).padStart(2, '0');
+          document.getElementById("cd-secs").textContent = String(secs).padStart(2, '0');
+        } else {
+          document.getElementById("cd-days").textContent = "00";
+          document.getElementById("cd-hours").textContent = "00";
+          document.getElementById("cd-mins").textContent = "00";
+          document.getElementById("cd-secs").textContent = "00";
+        }
+      }, 1000);
+    }
+
+    // -------------------------------------------------------------
+    // PLAYOFF MACHINE & STANDINGS CALCULATOR LOGIC
+    // -------------------------------------------------------------
+    const initialNfcSouth = [
+      { name: "Carolina Panthers", key: "CAR", wins: 3, losses: 2 },
+      { name: "Tampa Bay Buccaneers", key: "TB", wins: 3, losses: 2 },
+      { name: "Atlanta Falcons", key: "ATL", wins: 2, losses: 3 },
+      { name: "New Orleans Saints", key: "NO", wins: 1, losses: 4 }
+    ];
+
+    const upcomingDivisionalGames = [
+      { id: 1, week: "Wk 7", teamA: "CAR", teamB: "TB", label: "vs. Tampa Bay Buccaneers", picked: null },
+      { id: 2, week: "Wk 10", teamA: "CAR", teamB: "NO", label: "@ New Orleans Saints", picked: null },
+      { id: 3, week: "Wk 12", teamA: "CAR", teamB: "TB", label: "@ Tampa Bay Buccaneers", picked: null },
+      { id: 4, week: "Wk 14", teamA: "CAR", teamB: "NO", label: "vs. New Orleans Saints", picked: null },
+      { id: 5, week: "Wk 18", teamA: "CAR", teamB: "ATL", label: "vs. Atlanta Falcons", picked: null }
+    ];
+
+    function renderPlayoffMachine() {
+      const container = document.getElementById("sim-games-container");
+      let gamesHTML = "";
+
+      upcomingDivisionalGames.forEach(g => {
+        const isCarWin = g.picked === 'CAR';
+        const isCarLoss = g.picked === 'OPP';
+
+        gamesHTML += `
+          <div class="bg-panthers-black/60 border border-panthers-cardBorder p-4 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+              <span class="text-panthers-blue text-xs font-heading font-bold uppercase tracking-wider">${g.week} Divisional Matchup</span>
+              <h4 class="text-base font-heading font-bold text-white">Carolina Panthers ${g.label}</h4>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="pickSimGame(${g.id}, 'CAR')" class="px-4 py-2 rounded font-heading text-xs uppercase font-bold transition-all ${isCarWin ? 'bg-emerald-600 text-white border border-emerald-400' : 'bg-panthers-black text-panthers-silver border border-panthers-cardBorder hover:text-white'}">
+                Panthers Win
+              </button>
+              <button onclick="pickSimGame(${g.id}, 'OPP')" class="px-4 py-2 rounded font-heading text-xs uppercase font-bold transition-all ${isCarLoss ? 'bg-rose-600 text-white border border-rose-400' : 'bg-panthers-black text-panthers-silver border border-panthers-cardBorder hover:text-white'}">
+                Panthers Loss
+              </button>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = gamesHTML;
+      updateStandings();
+    }
+
+    function pickSimGame(gameId, pick) {
+      const game = upcomingDivisionalGames.find(g => g.id === gameId);
+      if (game) {
+        game.picked = game.picked === pick ? null : pick;
+      }
+      renderPlayoffMachine();
+    }
+
+    function resetPlayoffSim() {
+      upcomingDivisionalGames.forEach(g => g.picked = null);
+      renderPlayoffMachine();
+    }
+
+    function updateStandings() {
+      // Deep copy initial standings
+      const currentStandings = JSON.parse(JSON.stringify(initialNfcSouth));
+
+      // Calculate picked game outcomes
+      upcomingDivisionalGames.forEach(g => {
+        if (g.picked === 'CAR') {
+          const car = currentStandings.find(t => t.key === 'CAR');
+          const opp = currentStandings.find(t => t.key === g.teamB);
+          if (car) car.wins++;
+          if (opp) opp.losses++;
+        } else if (g.picked === 'OPP') {
+          const car = currentStandings.find(t => t.key === 'CAR');
+          const opp = currentStandings.find(t => t.key === g.teamB);
+          if (car) car.losses++;
+          if (opp) opp.wins++;
+        }
+      });
+
+      // Sort by wins descending
+      currentStandings.sort((a, b) => b.wins - a.wins);
+
+      const tbody = document.getElementById("sim-standings-body");
+      let tableHTML = "";
+
+      currentStandings.forEach((t, idx) => {
+        const isPanthers = t.key === "CAR";
+        tableHTML += `
+          <tr class="${isPanthers ? 'text-panthers-blue font-bold bg-panthers-blue/10' : 'text-panthers-silver'}">
+            <td class="py-2.5 flex items-center gap-2">
+              <span class="text-xs text-slate-500 font-mono">#${idx + 1}</span>
+              ${t.name}
+            </td>
+            <td class="py-2.5 text-center font-mono">${t.wins}</td>
+            <td class="py-2.5 text-center font-mono">${t.losses}</td>
+            <td class="py-2.5 text-right">
+              ${idx === 0 ? '<span class="text-emerald-400 text-xs">Division Leader</span>' : '<span class="text-slate-500 text-xs">Contender</span>'}
+            </td>
+          </tr>
+        `;
+      });
+
+      tbody.innerHTML = tableHTML;
+
+      // Update Badge Status
+      const panthersRank = currentStandings.findIndex(t => t.key === 'CAR') + 1;
+      const statusBadge = document.getElementById("playoff-status-badge");
+
+      if (panthersRank === 1) {
+        statusBadge.textContent = "🥇 DIVISION CHAMPIONS (HOSTING PLAYOFFS)";
+        statusBadge.className = "text-emerald-400 font-bold text-base block animate-bounce";
+      } else if (panthersRank === 2) {
+        statusBadge.textContent = "🎟️ WILD CARD SEED (IN THE PLAYOFFS)";
+        statusBadge.className = "text-amber-400 font-bold text-base block";
+      } else {
+        statusBadge.textContent = "👀 IN THE HUNT (NEEDS DIVISIONS WINS)";
+        statusBadge.className = "text-panthers-silver font-bold text-base block";
+      }
     }
 
     // -------------------------------------------------------------
@@ -854,6 +1106,8 @@
 
     // Init on page load
     renderSchedule();
+    renderPlayoffMachine();
+    startCountdown();
     fetchCharlotteWeather();
     fetchPanthersNews();
   </script>
