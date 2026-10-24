@@ -1,0 +1,18 @@
+/* Styles that Tailwind classes don't cover. */
+
+/* Height of the sticky tab bar; sidebars stick just below it */
+:root { --nav-h: 2.5rem; }
+
+@media (min-width: 1024px) {
+  .sticky-side { position: sticky; top: calc(var(--nav-h) + 0.75rem); }
+}
+
+/* Hide scrollbar on the horizontally scrolling tab bar */
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Custom Field Turf Pattern */
+.field-pattern {
+  background-color: #14532d;
+  background-image: repeating-linear-gradient(90deg, #15803d, #15803d 40px, #166534 40px, #166534 80px);
+}
