@@ -31,9 +31,12 @@ function createNewPost() {
   document.getElementById('post-body').value = '';
 }
 
+// One like per button: click again to take it back
 function upvotePost(btn) {
   const countSpan = btn.querySelector('.vote-count');
-  let count = parseInt(countSpan.textContent);
-  countSpan.textContent = count + 1;
-  btn.classList.add('text-panthers-blue');
+  const count = parseInt(countSpan.textContent, 10);
+  const liked = btn.dataset.liked === '1';
+  countSpan.textContent = liked ? count - 1 : count + 1;
+  btn.dataset.liked = liked ? '0' : '1';
+  btn.classList.toggle('text-panthers-blue', !liked);
 }

@@ -58,7 +58,7 @@
               Carolina Panthers
             </h1>
             <span class="bg-panthers-blue text-[10px] font-heading font-bold px-2 py-0.5 rounded tracking-widest uppercase hidden sm:inline-block border border-blue-400">
-              OFFICIAL FAN PORTAL
+              UNOFFICIAL FAN SITE
             </span>
           </div>
           <p class="text-panthers-silver text-xs font-semibold tracking-widest uppercase">
@@ -71,7 +71,7 @@
       <div class="flex items-center gap-3 bg-panthers-cardBg/90 border border-panthers-cardBorder px-3.5 py-1.5 rounded-lg text-xs">
         <div class="flex flex-col items-end">
           <span class="text-panthers-silver uppercase font-semibold text-[9px] tracking-widest">2026 Record</span>
-          <span class="text-emerald-400 font-bold font-heading text-base leading-none">3 - 2</span>
+          <span id="team-record" class="text-emerald-400 font-bold font-heading text-base leading-none">-</span>
         </div>
         <div class="h-6 w-[1px] bg-panthers-cardBorder"></div>
         
@@ -124,15 +124,13 @@
       <div class="bg-gradient-to-r from-panthers-cardBg via-black to-panthers-cardBg border border-panthers-blue rounded-xl p-4 mb-5 shadow-xl relative overflow-hidden">
         <div class="flex flex-col md:flex-row items-center justify-between gap-4 relative z-10">
           <div>
-            <span class="bg-panthers-blue text-white text-[9px] font-heading font-bold px-2 py-0.5 rounded tracking-widest uppercase inline-block mb-1">
-              NEXT MATCHUP • WEEK 7
+            <span id="next-game-label" class="bg-panthers-blue text-white text-[9px] font-heading font-bold px-2 py-0.5 rounded tracking-widest uppercase inline-block mb-1">
+              NEXT MATCHUP
             </span>
-            <h2 class="text-xl sm:text-2xl font-heading font-bold text-white tracking-wider uppercase leading-tight">
-              CAROLINA PANTHERS VS. TAMPA BAY BUCCANEERS
+            <h2 id="next-game-title" class="text-xl sm:text-2xl font-heading font-bold text-white tracking-wider uppercase leading-tight">
+              LOADING...
             </h2>
-            <p class="text-panthers-silver text-xs mt-0.5">
-              📍 Bank of America Stadium, Charlotte NC • Sunday, Oct 25 • 1:00 PM ET (FOX)
-            </p>
+            <p id="next-game-details" class="text-panthers-silver text-xs mt-0.5"></p>
           </div>
 
           <!-- Countdown Timer Display -->
@@ -175,7 +173,7 @@
               WELCOME TO PANTHERS FAN CENTRAL
             </h2>
             <p class="text-panthers-silver text-xs leading-relaxed mb-4">
-              Your interactive headquarters for everything Carolina Football. Explore Bank of America Stadium, check live depth charts, run Mock Draft simulations, participate in fan forum discussions, track playoff scenarios, and test your knowledge in the Trivia Arcade.
+              Your interactive headquarters for everything Carolina Football. Meet the 2026 roster, explore Bank of America Stadium, follow the schedule, run a full 7-round Mock Draft, track the NFC South race, and test your knowledge in the Trivia Arcade. A fan-made site, not affiliated with the team or the NFL.
             </p>
 
             <div class="flex flex-wrap gap-3">
@@ -215,7 +213,7 @@
               <div class="bg-panthers-black/50 border border-panthers-cardBorder p-3 rounded-lg border-l-4 border-l-panthers-blue">
                 <h3 class="font-heading font-bold text-base text-white mb-0.5 flex items-center gap-2">
                   <span class="bg-panthers-blue text-[10px] text-white px-1.5 py-0.5 rounded font-mono">95</span>
-                  1995: Inaugural Season & Dominance
+                  1995: Inaugural Season
                 </h3>
                 <p class="text-panthers-silver text-xs">
                   Founded as the NFL's 29th franchise. Dom Capers led Carolina to a 7-9 inaugural record—the most wins by an expansion team in NFL history at the time.
@@ -228,7 +226,7 @@
                   2003: "Cardiac Cats" & Super Bowl XXXVIII
                 </h3>
                 <p class="text-panthers-silver text-xs">
-                  Behind Jake Delhomme, Stephen Davis, and Steve Smith Sr., the Panthers executed thrilling comeback victories, capturing the NFC Championship.
+                  Behind Jake Delhomme, Stephen Davis, and Steve Smith Sr., the Panthers executed thrilling comeback victories and won the NFC Championship, then fell to the New England Patriots 32-29 in Super Bowl XXXVIII.
                 </p>
               </div>
 
@@ -238,7 +236,17 @@
                   2015: 15-1 Season & MVP Cam Newton
                 </h3>
                 <p class="text-panthers-silver text-xs">
-                  Historic 15-1 regular season led by League MVP Cam Newton and Luke Kuechly, securing Carolina's second NFC Title.
+                  Historic 15-1 regular season led by League MVP Cam Newton and Luke Kuechly (Pro Football Hall of Fame, Class of 2026), securing Carolina's second NFC Title. The Panthers lost Super Bowl 50 to the Denver Broncos, 24-10.
+                </p>
+              </div>
+
+              <div class="bg-panthers-black/50 border border-panthers-cardBorder p-3 rounded-lg border-l-4 border-l-panthers-blue">
+                <h3 class="font-heading font-bold text-base text-white mb-0.5 flex items-center gap-2">
+                  <span class="bg-panthers-blue text-[10px] text-white px-1.5 py-0.5 rounded font-mono">25</span>
+                  2025: NFC South Champions
+                </h3>
+                <p class="text-panthers-silver text-xs">
+                  In Dave Canales' second season, Carolina won the NFC South at 8-9 and returned to the playoffs, falling to the Rams in the wild-card round.
                 </p>
               </div>
             </div>
@@ -265,7 +273,7 @@
                 <span class="text-[9px] text-panthers-silver uppercase tracking-wider block mt-0.5">NFC TITLES</span>
               </div>
               <div class="bg-panthers-black/60 border border-panthers-cardBorder p-2.5 rounded-lg text-center">
-                <h4 class="text-xl font-heading font-bold text-panthers-blue">74,867</h4>
+                <h4 class="text-xl font-heading font-bold text-panthers-blue">75,037</h4>
                 <span class="text-[9px] text-panthers-silver uppercase tracking-wider block mt-0.5">CAPACITY</span>
               </div>
               <div class="bg-panthers-black/60 border border-panthers-cardBorder p-2.5 rounded-lg text-center">
@@ -285,7 +293,7 @@
               <div class="bg-panthers-black/50 border border-panthers-cardBorder p-2.5 rounded-lg flex justify-between items-center">
                 <div>
                   <h3 class="font-heading font-bold text-white text-sm">Sam Mills</h3>
-                  <p class="text-[11px] text-panthers-silver">Franchise cornerstone, Keep Pounding founder.</p>
+                  <p class="text-[11px] text-panthers-silver">His 2003 "Keep Pounding" speech became the team's motto. Pro Football Hall of Fame (2022); #51 retired.</p>
                 </div>
                 <span class="bg-panthers-blue/20 text-panthers-blue border border-panthers-blue font-heading text-[10px] font-bold px-1.5 py-0.5 rounded">#51 LB</span>
               </div>
@@ -293,7 +301,7 @@
               <div class="bg-panthers-black/50 border border-panthers-cardBorder p-2.5 rounded-lg flex justify-between items-center">
                 <div>
                   <h3 class="font-heading font-bold text-white text-sm">Steve Smith Sr.</h3>
-                  <p class="text-[11px] text-panthers-silver">2005 Triple Crown Winner & receiving leader.</p>
+                  <p class="text-[11px] text-panthers-silver">2005 receiving Triple Crown: 103 catches, 1,563 yards, 12 TDs.</p>
                 </div>
                 <span class="bg-panthers-blue/20 text-panthers-blue border border-panthers-blue font-heading text-[10px] font-bold px-1.5 py-0.5 rounded">#89 WR</span>
               </div>
@@ -301,7 +309,7 @@
               <div class="bg-panthers-black/50 border border-panthers-cardBorder p-2.5 rounded-lg flex justify-between items-center">
                 <div>
                   <h3 class="font-heading font-bold text-white text-sm">Julius Peppers</h3>
-                  <p class="text-[11px] text-panthers-silver">Hall of Fame inductee, franchise sack leader.</p>
+                  <p class="text-[11px] text-panthers-silver">Pro Football Hall of Fame (2024); Panthers' all-time sack leader with 97.</p>
                 </div>
                 <span class="bg-panthers-blue/20 text-panthers-blue border border-panthers-blue font-heading text-[10px] font-bold px-1.5 py-0.5 rounded">#90 DE</span>
               </div>
@@ -309,7 +317,7 @@
               <div class="bg-panthers-black/50 border border-panthers-cardBorder p-2.5 rounded-lg flex justify-between items-center">
                 <div>
                   <h3 class="font-heading font-bold text-white text-sm">Jake Delhomme</h3>
-                  <p class="text-[11px] text-panthers-silver">Led 2003 Super Bowl XXXVIII Cardiac Cats run.</p>
+                  <p class="text-[11px] text-panthers-silver">Quarterback of the 2003 "Cardiac Cats" Super Bowl XXXVIII team.</p>
                 </div>
                 <span class="bg-panthers-blue/20 text-panthers-blue border border-panthers-blue font-heading text-[10px] font-bold px-1.5 py-0.5 rounded">#17 QB</span>
               </div>
@@ -321,16 +329,26 @@
       </div>
     </div>
 
-    <!-- TAB 2: ROSTER (FULL 50+ PLAYER ROSTER WITH POSITIONAL AVATARS & STATS) -->
+    <!-- TAB 2: ROSTER (player cards with headshots and verified season stats) -->
     <div id="roster-tab" class="tab-content hidden">
       <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-5 shadow-lg">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 pb-3 border-b border-panthers-cardBorder">
           <div>
             <h2 class="text-2xl font-heading font-bold uppercase tracking-wider text-white">
-              2026 CAROLINA PANTHERS FULL ACTIVE ROSTER
+              2026 CAROLINA PANTHERS ROSTER
             </h2>
-            <p id="roster-summary" class="text-panthers-silver text-xs">Complete roster categorized by Offense, Defense, and Special Teams</p>
+            <p id="roster-summary" class="text-panthers-silver text-xs">Loading roster...</p>
           </div>
+
+          <label class="flex items-center gap-2 text-[10px] font-heading font-bold uppercase tracking-widest text-panthers-silver">
+            Show
+            <select id="roster-status" onchange="setRosterStatus(this.value)" class="bg-panthers-black border border-panthers-cardBorder text-white text-xs rounded px-2 py-1.5 focus:outline-none focus:border-panthers-blue normal-case tracking-normal font-body">
+              <option value="all">Entire roster</option>
+              <option value="active">Active roster</option>
+              <option value="injured">Injured reserve / PUP</option>
+              <option value="squad">Practice squad</option>
+            </select>
+          </label>
         </div>
 
         <!-- Depth Group Filter Buttons -->
@@ -342,7 +360,10 @@
             Defense (<span id="count-defense">0</span>)
           </button>
           <button onclick="showGroup('special', this)" class="depth-btn bg-panthers-black/80 text-panthers-silver border border-panthers-cardBorder font-heading font-bold px-3 py-1.5 rounded text-xs uppercase tracking-wider transition-all hover:text-white">
-            Special Teams & Staff (<span id="count-special">0</span>)
+            Special Teams (<span id="count-special">0</span>)
+          </button>
+          <button onclick="showGroup('staff', this)" class="depth-btn bg-panthers-black/80 text-panthers-silver border border-panthers-cardBorder font-heading font-bold px-3 py-1.5 rounded text-xs uppercase tracking-wider transition-all hover:text-white">
+            Coaches (<span id="count-staff">0</span>)
           </button>
         </div>
 
@@ -354,6 +375,13 @@
 
         <!-- SPECIAL TEAMS GROUP CONTAINER -->
         <div id="special-group" class="hidden grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3"></div>
+
+        <!-- COACHING STAFF CONTAINER -->
+        <div id="staff-group" class="hidden grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3"></div>
+
+        <p class="text-[10px] text-slate-500 mt-4">
+          Player photos are provided by ESPN and belong to their owners. Bios come from panthers.com; season stats are from Pro-Football-Reference and NFL.com. IR and practice squad lists change weekly.
+        </p>
 
       </div>
     </div>
@@ -373,7 +401,7 @@
               🏟️ BANK OF AMERICA STADIUM
             </h3>
             <p class="text-[11px] font-heading font-bold text-panthers-silver tracking-widest uppercase mt-0.5">
-              CHARLOTTE, NC • CAPACITY: 74,867
+              CHARLOTTE, NC • CAPACITY: 75,037
             </p>
             <div class="mt-3 inline-block bg-panthers-blue text-white font-heading font-bold px-4 py-1.5 rounded-full uppercase tracking-widest text-xs shadow-md">
               KEEP POUNDING FIELD 🏈
@@ -389,18 +417,23 @@
 
           <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-3 rounded-lg">
             <h3 class="font-heading font-bold text-panthers-blue text-sm mb-0.5">🥁 Drum Tradition</h3>
-            <p class="text-panthers-silver text-xs">The 6-foot Keep Pounding Drum is banged 30 mins before kickoff!</p>
+            <p class="text-panthers-silver text-xs">A guest drummer strikes the Keep Pounding drum just before kickoff of every home game, a tradition born from Sam Mills' 2003 "Keep Pounding" speech.</p>
           </div>
 
           <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-3 rounded-lg">
             <h3 class="font-heading font-bold text-panthers-blue text-sm mb-0.5">🍔 Tailgating</h3>
-            <p class="text-panthers-silver text-xs">Prime tailgates along Mint, Morehead, and Graham Street lots.</p>
+            <p class="text-panthers-silver text-xs">Fans arrange and pre-pay their own parking (30,000+ spaces within a 10-15 minute walk). Keep grills 25 ft from buildings and 10 ft from vehicles, never leave them unattended, and note the Mint Street Lot doesn't allow alcohol or grilling.</p>
           </div>
 
           <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-3 rounded-lg">
             <h3 class="font-heading font-bold text-panthers-blue text-sm mb-0.5">🎒 Clear Bag Policy</h3>
-            <p class="text-panthers-silver text-xs">NFL Clear Bag Policy enforced. Standard clear bags up to 12" x 6" x 12".</p>
+            <p class="text-panthers-silver text-xs">NFL Clear Bag Policy enforced: clear bags up to 12" x 6" x 12", or a one-gallon clear freezer bag. A small clutch (up to 4.5" x 6.5") is also allowed.</p>
           </div>
+        </div>
+
+        <div class="mt-3 bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-amber-400 p-3 rounded-lg">
+          <h3 class="font-heading font-bold text-amber-400 text-sm mb-0.5">🏗️ Renovation Coming</h3>
+          <p class="text-panthers-silver text-xs">A $1.3 billion stadium renovation is planned. Only behind-the-scenes work happens during the 2026 season, fan-facing construction begins in 2027, and completion is targeted for 2030. The stadium stays open for games, and the final capacity hasn't been set.</p>
         </div>
       </div>
     </div>
@@ -411,14 +444,17 @@
         <h2 class="text-2xl font-heading font-bold uppercase tracking-wider text-white mb-1">
           2026 SEASON SCHEDULE & RESULTS
         </h2>
-        <p class="text-panthers-silver text-xs mb-4">Current Regular Season Record: <strong class="text-white">3–2</strong></p>
+        <p class="text-panthers-silver text-xs mb-4">Current Regular Season Record: <strong id="schedule-record" class="text-white">-</strong></p>
 
-        <div class="flex gap-2 mb-4">
+        <div class="flex flex-wrap gap-2 mb-4">
           <button onclick="filterSchedule('all', this)" class="sched-btn active bg-panthers-blue text-white font-heading font-bold px-3 py-1.5 rounded text-xs uppercase tracking-wider transition-all">
             All Games
           </button>
           <button onclick="filterSchedule('win', this)" class="sched-btn bg-panthers-black/80 text-panthers-silver border border-panthers-cardBorder font-heading font-bold px-3 py-1.5 rounded text-xs uppercase tracking-wider transition-all hover:text-white">
             Wins Only
+          </button>
+          <button onclick="filterSchedule('upcoming', this)" class="sched-btn bg-panthers-black/80 text-panthers-silver border border-panthers-cardBorder font-heading font-bold px-3 py-1.5 rounded text-xs uppercase tracking-wider transition-all hover:text-white">
+            Upcoming
           </button>
         </div>
 
@@ -480,61 +516,82 @@
       </div>
     </div>
 
-    <!-- TAB 6: MOCK DRAFT -->
+    <!-- TAB 6: MOCK DRAFT (full 7-round, 257-pick 2027 NFL Draft) -->
     <div id="draft-tab" class="tab-content hidden">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        
-        <!-- Prospects Selection List Span 2 -->
+
+        <!-- Draft board: Span 2 -->
         <div class="lg:col-span-2 space-y-4">
           <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-5 shadow-lg">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 pb-2 border-b border-panthers-cardBorder">
-              <div>
-                <h2 class="text-xl font-heading font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
-                  <span>📋</span> CAROLINA PANTHERS MOCK DRAFT SIMULATOR
-                </h2>
-                <p class="text-panthers-silver text-[11px] mt-0.5">Select top collegiate prospects across core team needs:</p>
-              </div>
-              
-              <div class="flex items-center gap-2">
-                <button onclick="autoSimDraft()" class="bg-panthers-blue hover:bg-panthers-blueHover text-white text-[10px] font-heading font-bold px-3 py-1.5 rounded uppercase tracking-wider shadow-md transition-all">
-                  ⚡ AUTO-SIM CLASS
-                </button>
-                <button onclick="resetDraftSim()" class="bg-panthers-black border border-panthers-cardBorder hover:border-panthers-blue text-panthers-silver text-[10px] font-heading font-bold px-2.5 py-1.5 rounded uppercase tracking-wider transition-colors">
-                  🔄 RESET
-                </button>
-              </div>
+            <div class="mb-3 pb-2 border-b border-panthers-cardBorder">
+              <h2 class="text-xl font-heading font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
+                <span>📋</span> 2027 NFL MOCK DRAFT: FULL 7 ROUNDS
+              </h2>
+              <p id="draft-pool-note" class="text-panthers-silver text-[11px] mt-0.5"></p>
+              <p class="text-[10px] text-slate-500 mt-1">
+                You make the Panthers' picks and the computer picks for the other 31 teams. The pick order (with trades) is projected from current records and will change as the season goes on. Players are ranked by Tankathon's big board; prospects it doesn't list are ordered using position rankings. Computer teams take roughly the best player available and don't consider team needs.
+              </p>
             </div>
 
-            <!-- Active Round Indicator -->
-            <div class="flex items-center gap-2 mb-4 bg-panthers-black/60 border border-panthers-cardBorder p-2.5 rounded-lg">
-              <span class="text-[10px] font-heading font-bold uppercase tracking-widest text-panthers-silver">CURRENT ON-THE-CLOCK PICK:</span>
-              <span id="active-round-label" class="bg-panthers-blue text-white text-[10px] font-heading font-bold px-2.5 py-0.5 rounded uppercase tracking-wider">
-                ROUND 1 • PICK #19
-              </span>
+            <!-- Controls -->
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+              <button id="draft-sim-btn" onclick="simToMyPick()" class="bg-panthers-blue hover:bg-panthers-blueHover text-white text-[10px] font-heading font-bold px-3 py-1.5 rounded uppercase tracking-wider shadow-md transition-all">
+                ▶ Sim to My Pick
+              </button>
+              <button id="draft-one-btn" onclick="simNextPick()" class="bg-panthers-black border border-panthers-cardBorder hover:border-panthers-blue text-panthers-silver hover:text-white text-[10px] font-heading font-bold px-3 py-1.5 rounded uppercase tracking-wider transition-colors">
+                ⏭ Sim 1 Pick
+              </button>
+              <button id="draft-auto-btn" onclick="autoDraftRest()" class="bg-panthers-black border border-panthers-cardBorder hover:border-panthers-blue text-panthers-silver hover:text-white text-[10px] font-heading font-bold px-3 py-1.5 rounded uppercase tracking-wider transition-colors">
+                ⚡ Auto-Draft the Rest
+              </button>
+              <button onclick="resetDraftSim()" class="bg-panthers-black border border-panthers-cardBorder hover:border-panthers-blue text-panthers-silver hover:text-white text-[10px] font-heading font-bold px-3 py-1.5 rounded uppercase tracking-wider transition-colors">
+                🔄 Reset
+              </button>
+              <span id="draft-progress" class="text-[10px] text-panthers-silver ml-auto font-mono"></span>
             </div>
 
-            <!-- Prospect Cards Board -->
-            <div id="prospects-board" class="space-y-2.5"></div>
+            <!-- On the clock -->
+            <div id="draft-status" class="bg-panthers-black/60 border border-panthers-cardBorder p-3 rounded-lg mb-4"></div>
+
+            <!-- Search and position filters -->
+            <div class="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+              <input id="draft-search" type="search" oninput="setDraftQuery(this.value)" placeholder="Search players or schools..." aria-label="Search available players"
+                     class="flex-1 bg-panthers-black border border-panthers-cardBorder px-3 py-1.5 rounded text-xs text-white focus:outline-none focus:border-panthers-blue">
+              <span id="draft-available-count" class="text-[10px] text-panthers-silver whitespace-nowrap"></span>
+            </div>
+            <div id="draft-pos-filters" class="flex flex-wrap gap-1.5 mb-3"></div>
+
+            <!-- Available players -->
+            <div id="prospects-board" class="space-y-2"></div>
+            <div id="prospects-more" class="mt-3"></div>
           </div>
         </div>
 
-        <!-- Fan's Draft Class & Grade Card Span 1 -->
-        <div>
-          <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-4 shadow-lg sticky-side">
-            <h2 class="text-lg font-heading font-bold uppercase tracking-wider text-white mb-3 flex items-center gap-1.5">
+        <!-- Your class and the draft log: Span 1 -->
+        <div class="space-y-4">
+          <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-4 shadow-lg">
+            <h2 class="text-lg font-heading font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
               <span class="text-panthers-blue">🎓</span> YOUR DRAFT CLASS
             </h2>
+            <p id="draft-class-count" class="text-[10px] text-panthers-silver mb-3"></p>
 
-            <div id="user-draft-class" class="space-y-2.5 mb-4">
-              <p class="text-panthers-silver text-xs italic">No prospects selected yet. Click "Draft Player" on the left board to build your draft class!</p>
-            </div>
+            <div id="user-draft-class" class="space-y-2 mb-4"></div>
 
             <!-- Calculated Grade Box -->
             <div class="p-4 rounded-lg bg-panthers-black/80 border border-panthers-cardBorder text-center">
               <span class="text-[9px] text-panthers-silver uppercase font-bold tracking-widest block mb-0.5">OVERALL CLASS GRADE</span>
               <span id="draft-class-grade" class="text-3xl font-heading font-extrabold text-panthers-blue block">--</span>
-              <p id="draft-grade-summary" class="text-[11px] text-panthers-silver mt-1">Make your selections to evaluate team fit and value.</p>
+              <p id="draft-grade-summary" class="text-[11px] text-panthers-silver mt-1">Make your selections to evaluate value against the consensus board.</p>
+              <p class="text-[9px] text-slate-500 mt-2">Grades compare each pick to the player's consensus rank. Team needs aren't factored in.</p>
             </div>
+          </div>
+
+          <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-4 shadow-lg">
+            <h2 class="text-lg font-heading font-bold uppercase tracking-wider text-white mb-2 flex items-center gap-1.5">
+              <span class="text-panthers-blue">📜</span> DRAFT LOG
+            </h2>
+            <div id="draft-log-tabs" class="flex flex-wrap gap-1.5 mb-2"></div>
+            <div id="draft-log" class="max-h-96 overflow-y-auto pr-1"></div>
           </div>
         </div>
 
@@ -552,8 +609,9 @@
               <h2 class="text-xl font-heading font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
                 <span>💬</span> PANTHERS FAN FORUM
               </h2>
-              <span class="text-[10px] font-heading text-panthers-blue uppercase tracking-widest font-bold">LIVE BOARD</span>
+              <span class="text-[10px] font-heading text-amber-400 uppercase tracking-widest font-bold">DEMO BOARD</span>
             </div>
+            <p class="text-[11px] text-panthers-silver -mt-2 mb-4">This is a demo: threads you post appear only in your own browser and disappear when you refresh. The two threads below are examples.</p>
 
             <!-- Post Input Box -->
             <div class="bg-panthers-black/60 border border-panthers-cardBorder p-3 rounded-lg mb-4">
@@ -577,21 +635,21 @@
                 </div>
                 <p class="text-panthers-silver text-xs mb-2">Coker's route running on third downs has given Bryce a steady safety valve alongside TMac on the outside.</p>
                 <div class="flex items-center gap-3 text-[10px] text-panthers-silver pt-1.5 border-t border-panthers-cardBorder/50">
-                  <span>Posted by <strong class="text-white">PantherPride704</strong></span>
-                  <span>• 25 mins ago</span>
+                  <span><strong class="text-white">Example thread</strong></span>
+                  <span>• sample post</span>
                   <button onclick="upvotePost(this)" class="hover:text-panthers-blue font-heading font-bold uppercase tracking-wider ml-auto">▲ <span class="vote-count">14</span> Likes</button>
                 </div>
               </div>
 
               <div class="bg-panthers-black/50 border border-panthers-cardBorder p-3 rounded-lg">
                 <div class="flex justify-between items-start mb-1">
-                  <h3 class="font-heading font-bold text-white text-base">Best tailgate spots for Week 7 vs. Tampa Bay?</h3>
+                  <h3 class="font-heading font-bold text-white text-base">Parking and pregame tips for Week 7 vs. Tampa Bay?</h3>
                   <span class="text-[9px] bg-emerald-950/60 text-emerald-400 border border-emerald-500 px-1.5 py-0.5 rounded font-heading font-bold">GAMEDAY GUIDE</span>
                 </div>
-                <p class="text-panthers-silver text-xs mb-2">Heading to Charlotte with family for the Tampa game. Is Graham Street or Mint Street better for early morning tailgating?</p>
+                <p class="text-panthers-silver text-xs mb-2">Heading to Charlotte with family for the Tampa game. Where do you like to park and what time do you get to Uptown?</p>
                 <div class="flex items-center gap-3 text-[10px] text-panthers-silver pt-1.5 border-t border-panthers-cardBorder/50">
-                  <span>Posted by <strong class="text-white">QueenCityCat</strong></span>
-                  <span>• 2 hours ago</span>
+                  <span><strong class="text-white">Example thread</strong></span>
+                  <span>• sample post</span>
                   <button onclick="upvotePost(this)" class="hover:text-panthers-blue font-heading font-bold uppercase tracking-wider ml-auto">▲ <span class="vote-count">8</span> Likes</button>
                 </div>
               </div>
@@ -644,13 +702,15 @@
   <!-- FOOTER -->
   <footer class="bg-black border-t border-panthers-cardBorder py-4 text-center text-panthers-silver text-xs">
     <p>&copy; 2026 Carolina Panthers Fan Site. Designed by a Panthers Fan.</p>
+    <p class="text-[10px] text-slate-500 mt-1 px-4">Unofficial fan site, not affiliated with or endorsed by the Carolina Panthers or the NFL. Team names, logos and player photos belong to their owners.</p>
   </footer>
 
   <!-- Data (edit these files to update the site's content) -->
   <script src="data/roster.js"></script>
   <script src="data/schedule.js"></script>
   <script src="data/playoff.js"></script>
-  <script src="data/draft.js"></script>
+  <script src="data/draft-prospects.js"></script>
+  <script src="data/draft-order.js"></script>
 
   <!-- Code (order matters: helpers first, main.js last) -->
   <script src="js/helpers.js"></script>

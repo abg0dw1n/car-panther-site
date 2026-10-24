@@ -1,15 +1,46 @@
-// Home tab and header: kickoff countdown, Charlotte weather, ESPN news.
+// Header and Home tab: team record, next-game banner and countdown, Charlotte weather, ESPN news.
+
+// ---- Record and next game (both come from data/schedule.js) ---------------------------------------------
+
+function renderTeamRecord() {
+  const record = getRecord();
+  document.getElementById('team-record').textContent = formatRecord(record, true);
+  document.getElementById('schedule-record').textContent = formatRecord(record).replace('-', '–');
+}
+
+function renderNextGame() {
+  const g = getNextGame();
+  const label = document.getElementById('next-game-label');
+  const title = document.getElementById('next-game-title');
+  const details = document.getElementById('next-game-details');
+
+  if (!g) {
+    label.textContent = 'SEASON COMPLETE';
+    title.textContent = 'THANKS FOR A GREAT SEASON, KEEP POUNDING!';
+    details.textContent = '';
+    return;
+  }
+
+  const day = new Date(g.kickoff).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', timeZone: 'America/New_York' });
+  const place = g.home ? 'Bank of America Stadium, Charlotte NC' : 'Away game';
+  const time = g.tentative ? `${g.time} (tentative)` : g.time;
+  const tv = g.tv && g.tv !== 'TBD' ? ` (${g.tv})` : '';
+
+  label.textContent = `NEXT MATCHUP • WEEK ${g.week}`;
+  title.textContent = `CAROLINA PANTHERS ${g.home ? 'VS.' : 'AT'} ${g.team.toUpperCase()}`;
+  details.textContent = `📍 ${place} • ${day} • ${time}${tv}`;
+}
+
+// ---- Countdown to the next game's kickoff ---------------------------------------------------------------
 
 function startCountdown() {
-  // Explicit -04:00 offset = Eastern Daylight Time (DST runs until Nov 1, 2026),
-  // so this is correct for every visitor regardless of their time zone.
-  const targetDate = new Date("2026-10-25T13:00:00-04:00").getTime();
+  const next = getNextGame();
+  const target = next ? new Date(next.kickoff).getTime() : 0;
   const pad = n => String(n).padStart(2, '0');
   const setText = (id, value) => { document.getElementById(id).textContent = value; };
 
   function tick() {
-    const diff = Math.max(0, targetDate - Date.now());
-
+    const diff = Math.max(0, target - Date.now());
     setText("cd-days", pad(Math.floor(diff / 86400000)));
     setText("cd-hours", pad(Math.floor((diff % 86400000) / 3600000)));
     setText("cd-mins", pad(Math.floor((diff % 3600000) / 60000)));
@@ -20,86 +51,76 @@ function startCountdown() {
   setInterval(tick, 1000);
 }
 
+// ---- Charlotte weather (Open-Meteo, no API key needed) --------------------------------------------------
+
+// WMO weather codes -> emoji
+const WEATHER_ICONS = {
+  0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️', 45: '🌫️', 48: '🌫️',
+  51: '🌦️', 53: '🌦️', 55: '🌦️', 56: '🌧️', 57: '🌧️', 61: '🌧️', 63: '🌧️', 65: '🌧️', 66: '🌧️', 67: '🌧️',
+  71: '❄️', 73: '❄️', 75: '❄️', 77: '❄️', 80: '🌦️', 81: '🌦️', 82: '⛈️', 85: '❄️', 86: '❄️',
+  95: '⛈️', 96: '⛈️', 99: '⛈️'
+};
+
 async function fetchCharlotteWeather() {
+  const box = document.getElementById('charlotte-weather');
+  const heading = `<span class="text-panthers-silver uppercase font-semibold text-[9px] tracking-widest">Charlotte Weather</span>`;
   try {
     const lat = 35.2258;
     const lon = -80.8528;
-    const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=fahrenheit`);
+    const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=fahrenheit&windspeed_unit=mph`);
     const data = await response.json();
-    
-    if (data && data.current_weather) {
-      const temp = Math.round(data.current_weather.temperature);
-      const wind = Math.round(data.current_weather.windspeed);
-      
-      document.getElementById('charlotte-weather').innerHTML = `
-        <span class="text-panthers-silver uppercase font-semibold text-[9px] tracking-widest">Charlotte Weather</span>
-        <span class="text-amber-400 font-bold font-heading text-xs leading-none">🌤️ ${temp}°F • Wind ${wind}mph</span>
-      `;
-    }
+    if (!data || !data.current_weather) throw new Error('no weather data');
+
+    const w = data.current_weather;
+    const icon = WEATHER_ICONS[w.weathercode] || '🌡️';
+    box.innerHTML = `${heading}
+      <span class="text-amber-400 font-bold font-heading text-xs leading-none">${icon} ${Math.round(w.temperature)}°F • Wind ${Math.round(w.windspeed)}mph</span>`;
   } catch (err) {
-    document.getElementById('charlotte-weather').innerHTML = `
-      <span class="text-panthers-silver uppercase font-semibold text-[9px] tracking-widest">Charlotte Weather</span>
-      <span class="text-panthers-blue font-bold font-heading text-xs leading-none">72°F • Clear</span>
-    `;
+    // Show that it's unavailable rather than inventing a temperature
+    box.innerHTML = `${heading}
+      <span class="text-panthers-silver font-bold font-heading text-xs leading-none">Unavailable</span>`;
   }
 }
+
+// ---- Live Panthers headlines (ESPN) ---------------------------------------------------------------------
 
 async function fetchPanthersNews() {
   const container = document.getElementById('espn-news-container');
   try {
-    const response = await fetch('https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Fnfl%2Fnews');
+    const response = await fetch('https://site.api.espn.com/apis/site/v2/sports/football/nfl/news?team=29');
     const data = await response.json();
+    const articles = ((data && data.articles) || []).filter(a => a.headline).slice(0, 4);
+    if (!articles.length) throw new Error('no articles');
 
-    if (data && data.items && data.items.length > 0) {
-      const panthersNews = data.items.filter(item => 
-        item.title.toLowerCase().includes('panthers') || 
-        item.description.toLowerCase().includes('panthers') ||
-        item.description.toLowerCase().includes('carolina')
-      );
-
-      const articlesToDisplay = panthersNews.length > 0 ? panthersNews.slice(0, 3) : data.items.slice(0, 3);
-
-      let newsHTML = '';
-      articlesToDisplay.forEach(article => {
-        const cleanDesc = article.description ? article.description.replace(/<[^>]*>?/gm, '') : '';
-        const link = safeUrl(article.link);
-        newsHTML += `
-          <div class="bg-panthers-black/50 border border-panthers-cardBorder p-3 rounded-lg flex flex-col justify-between hover:border-panthers-blue transition-colors">
-            <div>
-              <h3 class="font-heading font-bold text-white text-sm mb-1">
-                <a href="${link}" target="_blank" rel="noopener noreferrer" class="hover:text-panthers-blue hover:underline transition-colors">${escapeHtml(article.title)}</a>
-              </h3>
-              <p class="text-panthers-silver text-xs line-clamp-2">${escapeHtml(cleanDesc)}</p>
-            </div>
-            <div class="mt-2 pt-1.5 border-t border-panthers-cardBorder/40 flex justify-between items-center text-[10px]">
-              <span class="text-panthers-silver">Source: ESPN Feed</span>
-              <a href="${link}" target="_blank" rel="noopener noreferrer" class="text-panthers-blue font-heading font-bold uppercase tracking-wider hover:underline">Read Story ↗</a>
-            </div>
+    container.innerHTML = articles.map(a => {
+      const link = safeUrl(a.links && a.links.web && a.links.web.href);
+      const date = a.published ? new Date(a.published) : null;
+      const dateText = date && !isNaN(date) ? date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      return `
+        <div class="bg-panthers-black/50 border border-panthers-cardBorder p-3 rounded-lg flex flex-col justify-between hover:border-panthers-blue transition-colors">
+          <div>
+            <h3 class="font-heading font-bold text-white text-sm mb-1">
+              <a href="${link}" target="_blank" rel="noopener noreferrer" class="hover:text-panthers-blue hover:underline transition-colors">${escapeHtml(a.headline)}</a>
+            </h3>
+            <p class="text-panthers-silver text-xs line-clamp-2">${escapeHtml(a.description || '')}</p>
           </div>
-        `;
-      });
-      container.innerHTML = newsHTML;
-    } else {
-      showFallbackNews(container);
-    }
+          <div class="mt-2 pt-1.5 border-t border-panthers-cardBorder/40 flex justify-between items-center text-[10px]">
+            <span class="text-panthers-silver">ESPN${dateText ? ' • ' + escapeHtml(dateText) : ''}</span>
+            <a href="${link}" target="_blank" rel="noopener noreferrer" class="text-panthers-blue font-heading font-bold uppercase tracking-wider hover:underline">Read Story ↗</a>
+          </div>
+        </div>`;
+    }).join('');
   } catch (err) {
-    showFallbackNews(container);
+    showNewsUnavailable(container);
   }
 }
 
-function showFallbackNews(container) {
+// No made-up headlines: just a link to the real source
+function showNewsUnavailable(container) {
   container.innerHTML = `
     <div class="bg-panthers-black/50 border border-panthers-cardBorder p-3 rounded-lg">
-      <h3 class="font-heading font-bold text-white text-sm mb-0.5">
-        <a href="https://www.espn.com/nfl/team/_/name/car/carolina-panthers" target="_blank" class="hover:text-panthers-blue hover:underline">Panthers Gear Up for NFC South Matchups</a>
-      </h3>
-      <p class="text-panthers-silver text-xs">Dave Canales and Bryce Young continue building rhythm on offense as division competition intensifies.</p>
-    </div>
-    <div class="bg-panthers-black/50 border border-panthers-cardBorder p-3 rounded-lg">
-      <h3 class="font-heading font-bold text-white text-sm mb-0.5">
-        <a href="https://www.espn.com/nfl/team/_/name/car/carolina-panthers" target="_blank" class="hover:text-panthers-blue hover:underline">Keep Pounding Defense Showing Grit</a>
-      </h3>
-      <p class="text-panthers-silver text-xs">Derrick Brown and Jaycee Horn leading the physical defensive effort in Uptown Charlotte.</p>
-    </div>
-  `;
+      <p class="text-panthers-silver text-xs">Live headlines couldn't be loaded right now.
+        <a href="https://www.espn.com/nfl/team/_/name/car/carolina-panthers" target="_blank" rel="noopener noreferrer" class="text-panthers-blue font-heading font-bold hover:underline">See the latest Panthers news on ESPN ↗</a>
+      </p>
+    </div>`;
 }

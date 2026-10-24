@@ -1,4 +1,12 @@
 // Playoff Machine tab.
+//
+// It simulates the Panthers' remaining NFC South games (the ones after NFC_SOUTH_AS_OF_WEEK in
+// data/playoff.js). Every other result is held constant, so this is a simplified division picture,
+// not a full playoff-seeding calculation.
+
+const upcomingDivisionalGames = panthers2026Schedule
+  .filter(g => g.div && g.week > NFC_SOUTH_AS_OF_WEEK)
+  .map((g, i) => ({ id: i + 1, week: `Wk ${g.week}`, teamA: 'CAR', teamB: g.abbr, label: g.opp, picked: null }));
 
 function renderPlayoffMachine() {
   const container = document.getElementById("sim-games-container");
@@ -103,7 +111,7 @@ function updateStandings() {
     statusBadge.className = "text-amber-400 font-bold text-sm block";
   } else if (panthersRank === 1) {
     statusBadge.textContent = "🥇 DIVISION LEADERS";
-    statusBadge.className = "text-emerald-400 font-bold text-sm block animate-bounce";
+    statusBadge.className = "text-emerald-400 font-bold text-sm block";
   } else if (panthersRank === 2) {
     statusBadge.textContent = "🎟️ WILD CARD CONTENDER";
     statusBadge.className = "text-amber-400 font-bold text-sm block";
