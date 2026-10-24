@@ -11,5 +11,6 @@ setupDraftControls();
 initDraft();
 renderDraft();
 renderStadium();
+initForum();
 fetchCharlotteWeather();
 fetchPanthersNews();

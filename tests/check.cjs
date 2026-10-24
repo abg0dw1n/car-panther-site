@@ -1,4 +1,4 @@
-// Checks for the Panthers fan site. Run from the repo root with:  node tests/check.js
+// Checks for the Panthers fan site. Run from the repo root with:  node tests/check.cjs
 //
 // It loads the page's real scripts (in the order index.html loads them) against a stand-in for the browser
 // page, then checks the data, the page wiring and the behavior of each tab. It can't check how the page
@@ -40,6 +40,8 @@ check(`all ${called.size} inline handlers call a defined function`, undef.length
 const ids = new Set([...code.matchAll(/getElementById\(\s*(?:'([^']+)'|"([^"]+)")\s*\)/g)].map(m => m[1] || m[2]));
 ['offense', 'defense', 'special'].forEach(g => { ids.add(`count-${g}`); ids.add(`${g}-group`); });
 ids.add('count-staff'); ids.add('staff-group');
+// built on the fly inside the forum's reply box
+['reply-name', 'reply-body', 'reply-error', 'reply-submit'].forEach(id => ids.delete(id));
 const missingIds = [...ids].filter(id => !new RegExp(`id="${id}"`).test(html));
 check(`all ${ids.size} element ids used by the scripts exist in index.html`, missingIds.length === 0, missingIds.join(', '));
 
@@ -74,6 +76,11 @@ global.document = {
   createElement: () => makeEl('created'),
 };
 global.alert = () => {};
+const memStore = () => { const m = new Map(); return { getItem: k => (m.has(k) ? m.get(k) : null), setItem: (k, v) => m.set(k, String(v)), removeItem: k => m.delete(k) }; };
+global.window = { localStorage: memStore(), sessionStorage: memStore(), prompt: () => null, crypto: globalThis.crypto };
+global.location = { hash: '', pathname: '/', search: '', origin: 'https://example.test' };
+global.history = { replaceState: (a, b, url) => { global.location.hash = String(url).includes('#') ? String(url).slice(String(url).indexOf('#')) : ''; } };
+global.navigator = {};
 let fetchLog = [];
 let fetchHandler = () => Promise.reject(new Error('offline'));
 global.fetch = (url, ...rest) => { fetchLog.push(String(url)); return fetchHandler(String(url), ...rest); };
@@ -97,7 +104,8 @@ eval(code + `
     historyFor, shiftHistoryDay, renderHome, renderLastGame,
     STADIUM_PINS, STADIUM_TOUR, STADIUM_ZONES, STADIUM_LEVELS, MAP_LAYERS, GAMEDAY_STEPS, TRANSPORT_TIPS, SRC_LABELS, stadiumUI,
     selectPin, toggleMapLayer, toggleTour, tourStep, setSeatZone, setSeatLevel, seatCamera, buildSeatScene, lookupSection,
-    homeGames, buildPlan, setPlanTransport, setPlanGoal, setPlanGame, evaluateBag, showStadiumPanel, fetchCharlotteWeather, fetchPanthersNews, createNewPost, upvotePost, WEATHER_ICONS };
+    homeGames, buildPlan, setPlanTransport, setPlanGoal, setPlanGame, evaluateBag, showStadiumPanel, fetchCharlotteWeather, fetchPanthersNews, WEATHER_ICONS,
+    forumUI, loadForum, openThread, closeThread, submitThread, submitComment, setReplyTo, voteThread, toggleCollapse, setForumCat, setForumSort, formatPost, hotScore, sortedThreads, commentTree, timeAgo, toggleComposer, threadIdFromHash };
 `);
 const t = global.__t;
 
@@ -505,20 +513,83 @@ check('ordinal() gets 1st, 2nd, 3rd, 11th right', [1, 2, 3, 11, 21].map(t.ordina
   await t.fetchPanthersNews();
   check('news failure shows a link to ESPN, not invented headlines', els['espn-news-container'].innerHTML.includes('espn.com/nfl/team') && !/Gear Up|Showing Grit/.test(els['espn-news-container'].innerHTML));
 
-  els['post-title'] = Object.assign(makeEl('post-title'), { value: '<script>alert(1)</script>' });
-  els['post-body'] = Object.assign(makeEl('post-body'), { value: '<b onmouseover=x>hi</b>' });
-  let created = null;
-  global.document.createElement = () => (created = makeEl('thread'));
-  t.createNewPost();
-  check('forum post is escaped', created && !/<script>/.test(created.innerHTML) && !/<b onmouseover/.test(created.innerHTML) && /&lt;script&gt;/.test(created.innerHTML));
+  // ---- Fan Talk forum (API mocked)
+  const now = Date.now();
+  const iso = h => new Date(now - h * 3600e3).toISOString();
+  const apiThreads = [
+    { id: 'old1', title: 'Old but popular', cat: 'roster', author: 'A', createdAt: iso(72), lastActivity: iso(70), replies: 30, score: 40, preview: 'x', pinned: false, locked: false },
+    { id: 'new1', title: 'Fresh take <b>bold</b>', cat: 'draft', author: 'B', createdAt: iso(1), lastActivity: iso(0.5), replies: 2, score: 3, preview: '<img src=x onerror=alert(1)>', pinned: false, locked: false },
+    { id: 'game-w7', title: '🏈 Game Thread: Panthers vs. Buccaneers (Week 7)', cat: 'gameday', author: 'Fan Central', createdAt: iso(3), lastActivity: iso(3), replies: 0, score: 0, preview: '', pinned: true, locked: false, kind: 'game' }
+  ];
+  const apiThread = { id: 'new1', title: 'Fresh take', cat: 'draft', author: 'B', body: 'Check https://example.com/x?a=1&b=2 and javascript:alert(1)', createdAt: iso(1), lastActivity: iso(0.5), score: 3, pinned: false, locked: false, voted: false,
+    comments: [
+      { id: 'c1', parentId: null, author: 'C', body: 'top level', createdAt: iso(0.9), score: 1, removed: null, voted: false },
+      { id: 'c2', parentId: 'c1', author: 'B', body: 'OP reply <script>x</script>', createdAt: iso(0.8), score: 0, removed: null, voted: true },
+      { id: 'c3', parentId: 'c2', author: 'D', body: 'deeper', createdAt: iso(0.7), score: 0, removed: null, voted: false },
+      { id: 'c4', parentId: null, author: '[removed]', body: '', createdAt: iso(0.6), score: 0, removed: 'auto', voted: false }
+    ] };
+  let calls = [];
+  fetchHandler = (url, opts = {}) => {
+    calls.push({ url, opts });
+    const json = (status, data) => Promise.resolve({ ok: status < 400, status, json: () => Promise.resolve(data) });
+    if (url.includes('action=list')) return json(200, { threads: apiThreads, categories: [] });
+    if (url.includes('action=thread')) return json(200, JSON.parse(JSON.stringify(apiThread)));
+    if (url.includes('action=whoami')) return json(200, { admin: false });
+    if (url.includes('action=create')) return json(201, { id: 'made1' });
+    if (url.includes('action=comment')) { const b = JSON.parse(opts.body); return b.body.length ? json(201, { id: 'cNew' }) : json(400, { error: 'Comment can’t be empty.' }); }
+    if (url.includes('action=vote')) return json(200, { voted: true, score: 4 });
+    return json(400, { error: 'unknown' });
+  };
+  await t.loadForum();
+  const feed = els['forum-feed'].innerHTML;
+  check('forum feed loads threads from the API with a fan id header', calls[0].url.startsWith('/api/forum?action=list') && /^fan-[0-9a-f]{24}$/.test(calls[0].opts.headers['X-Fan-Id']));
+  check('pinned game thread is listed first', feed.indexOf('Game Thread') < feed.indexOf('Fresh take') && feed.includes('📌 Pinned'));
+  check('hot sort favors the fresh thread over the old popular one', feed.indexOf('Fresh take') < feed.indexOf('Old but popular'));
+  check('thread titles and previews are escaped', !/<b>bold<\/b>/.test(feed) && feed.includes('&lt;b&gt;bold') && !/<img src=x/.test(feed));
+  t.setForumSort('top');
+  check('Top sort puts the most upvoted first (after pinned)', els['forum-feed'].innerHTML.indexOf('Old but popular') < els['forum-feed'].innerHTML.indexOf('Fresh take'));
+  t.setForumCat('draft');
+  check('category filter shows only that category', els['forum-feed'].innerHTML.includes('Fresh take') && !els['forum-feed'].innerHTML.includes('Old but popular'));
+  t.setForumCat('all'); t.setForumSort('hot');
 
-  const btn = makeEl('btn');
-  btn.querySelector = () => btn.__count;
-  btn.__count = { textContent: '14' };
-  t.upvotePost(btn);
-  const afterLike = String(btn.__count.textContent);
-  t.upvotePost(btn);
-  check('a like can be given once and taken back', afterLike === '15' && String(btn.__count.textContent) === '14', afterLike + ' / ' + btn.__count.textContent);
+  await t.openThread('new1');
+  const tv = els['forum-thread'].innerHTML;
+  check('opening a thread shows it and updates the link (#thread=new1)', !els['forum-thread-view'].classList.contains('hidden') && els['forum-feed-view'].classList.contains('hidden') && location.hash === '#thread=new1');
+  check('links in posts become safe new-tab links; javascript: stays plain text',
+    tv.includes('href="https://example.com/x?a=1&amp;b=2"') && tv.includes('rel="noopener noreferrer nofollow ugc"') && !/href="javascript/.test(tv));
+  check('comments render as a nested tree (reply inside its parent)', tv.indexOf('id="c-c2"') > tv.indexOf('id="c-c1"') && tv.indexOf('id="c-c3"') > tv.indexOf('id="c-c2"') && tv.indexOf('id="c-c3"') < tv.indexOf('id="c-c4"'));
+  check('comment text is escaped', !tv.includes('<script>x</script>') && tv.includes('&lt;script&gt;'));
+  check('the original poster gets an OP tag on their replies', /id="c-c2"[\s\S]*?OP<\/span>/.test(tv));
+  check('removed comments show a placeholder', tv.includes('This comment was removed.'));
+  check('your earlier upvotes are highlighted', /voteComment\('c2'\)" aria-pressed="true"/.test(tv));
+  t.toggleCollapse('c1');
+  check('collapsing a comment hides its replies and says how many', !els['forum-thread'].innerHTML.includes('id="c-c2"') && els['forum-thread'].innerHTML.includes('2 more replies hidden'));
+  t.toggleCollapse('c1');
+  t.setReplyTo('c2');
+  check('reply opens a box under that comment', els['forum-thread'].innerHTML.indexOf('id="reply-body"') > els['forum-thread'].innerHTML.indexOf('id="c-c2"'));
+  els['reply-name'] = Object.assign(makeEl('reply-name'), { value: 'Tester' });
+  els['reply-body'] = Object.assign(makeEl('reply-body'), { value: 'Great point' });
+  calls = [];
+  await t.submitComment();
+  const sent = calls.find(c => c.url.includes('action=comment'));
+  check('posting a reply sends thread, parent, name and text', sent && JSON.parse(sent.opts.body).parentId === 'c2' && JSON.parse(sent.opts.body).author === 'Tester' && JSON.parse(sent.opts.body).threadId === 'new1');
+  check('your fan name is remembered for next time', window.localStorage.getItem('fanName') === 'Tester');
+  t.setReplyTo(null);
+  els['reply-body'] = Object.assign(makeEl('reply-body'), { value: '' });
+  await t.submitComment();
+  check('server errors are shown next to the reply box', els['reply-error'].textContent === 'Comment can’t be empty.');
+  await t.voteThread('new1');
+  check('upvoting updates the count right away', t.forumUI.thread.score === 4 && /▲ 4 upvotes/.test(els['forum-thread'].innerHTML));
+  t.closeThread();
+  check('back button returns to the feed and clears the link', els['forum-thread-view'].classList.contains('hidden') && location.hash === '');
+  check('the share link format is recognized on load', (location.hash = '#thread=abc_123', t.threadIdFromHash() === 'abc_123') && (location.hash = '#thread=<x>', t.threadIdFromHash() === null));
+  location.hash = '';
+  await new Promise(r => setTimeout(r, 0)); // let the feed refresh started by closeThread finish
+  fetchHandler = () => Promise.reject(new Error('offline'));
+  t.forumUI.loaded = false;
+  await t.loadForum();
+  check('if the forum can’t be reached, it says so with a retry button', /Can’t reach the forum/.test(els['forum-feed'].innerHTML) && els['forum-feed'].innerHTML.includes('Try again'));
+  check('time-ago labels read naturally', t.timeAgo(iso(0.001)) === 'just now' && t.timeAgo(iso(2)) === '2h ago' && t.timeAgo(iso(49)) === '2d ago');
 
   Date.now = realNow;
   console.log(`\n${passed} passed, ${failed} failed`);

@@ -1,0 +1,8 @@
+{
+  "functions": {
+    "api/forum.js": {
+      "includeFiles": "data/schedule.js",
+      "maxDuration": 10
+    }
+  }
+}

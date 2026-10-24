@@ -1,0 +1,12 @@
+{
+  "name": "car-panther-site",
+  "private": true,
+  "type": "module",
+  "description": "Unofficial Carolina Panthers fan site. Static pages plus a small forum API (api/forum.js).",
+  "scripts": {
+    "test": "node tests/check.cjs && node tests/forum-api.js"
+  },
+  "dependencies": {
+    "@vercel/blob": "latest"
+  }
+}

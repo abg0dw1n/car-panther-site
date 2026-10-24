@@ -12,7 +12,7 @@ A single-page fan portal for the Carolina Panthers, deployed on Vercel.
 - **2026 Schedule:** results and upcoming games, with a "wins only" filter
 - **Playoff Machine:** pick outcomes for the Panthers' remaining divisional games and see the NFC South standings update (all other results are held constant)
 - **Mock Draft:** full 7-round, 257-pick 2027 draft; you pick for the Panthers, the computer picks for the other 31 teams; 333 prospects, search and position filters, pick and class grades
-- **Fan Discussions:** a forum demo (posts live only in your browser and disappear on refresh)
+- **Fan Talk:** a real forum. Topic feed with categories and Hot/New/Top sorting; tap a thread to read and reply (nested replies), upvote, report. Game and post-game threads open automatically from the schedule. Moderator tools behind a password.
 - **Arcade & Trivia:** links to the standalone trivia game
 
 ## Tech
@@ -48,9 +48,18 @@ js/               The behavior, one file per area
 
 The scripts are plain `<script>` tags that share one global scope, so **the order of the tags at the bottom of `index.html` matters**: data first, then `helpers.js`, then the tab files, and `main.js` last.
 
+## Forum (server side)
+
+The forum is the only part of the site with a server: `api/forum.js` is a Vercel Function, with its logic in `api/_forum/`. Posts are stored as JSON files in a private **Vercel Blob** store named `panthers-forum`, connected to the project (Vercel provides `BLOB_READ_WRITE_TOKEN`).
+
+- **Moderator password:** the `FORUM_ADMIN_KEY` environment variable in the Vercel project settings. Use "Moderator login" under House rules on the Fan Talk tab.
+- **Safety:** slurs are rejected, swear words are masked, there are posting rate limits, and anything with 3 reports is hidden until a moderator reviews it.
+- **Limits:** the free Vercel Blob tier allows a limited number of operations per month, which is plenty for a fan site. Check usage in the Vercel dashboard under Storage.
+- **Local preview with a working forum:** run the preview server in `tests/` (see the comment at its top), then open http://localhost:3000. Posts are kept in memory.
+
 ## Tests
 
-`node tests/check.js` loads the real scripts against a stand-in page and checks the data, wiring and each tab's behavior. It can't check how the page looks.
+`npm test` runs both test files. `node tests/check.cjs` loads the real scripts against a stand-in page and checks the data, wiring and each tab's behavior. It can't check how the page looks. `node tests/forum-api.js` tests the forum server with an in-memory store.
 
 ## Run locally
 

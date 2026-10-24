@@ -652,81 +652,90 @@
       </div>
     </div>
 
-    <!-- TAB 7: FAN DISCUSSIONS -->
+    <!-- TAB 7: FAN TALK (real forum; logic in js/forum.js, server in api/forum.js) -->
     <div id="forum-tab" class="tab-content hidden">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        
-        <!-- Main Discussion Threads Span 2 -->
+
+        <!-- Main column -->
         <div class="lg:col-span-2 space-y-4">
-          <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-5 shadow-lg">
-            <div class="flex justify-between items-center mb-4 pb-2 border-b border-panthers-cardBorder">
-              <h2 class="text-xl font-heading font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
-                <span>💬</span> FAN TALK
-              </h2>
-              <span class="text-[10px] font-heading text-amber-400 uppercase tracking-widest font-bold">DEMO BOARD</span>
-            </div>
-            <p class="text-[11px] text-panthers-silver -mt-2 mb-4">Heads up: this board is a demo. Threads you post show up only in your browser and vanish on refresh. The two below are examples.</p>
+          <section class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-5 shadow-lg">
 
-            <!-- Post Input Box -->
-            <div class="bg-panthers-black/60 border border-panthers-cardBorder p-3 rounded-lg mb-4">
-              <h3 class="font-heading font-bold text-white text-sm mb-1.5">Start a thread</h3>
-              <input type="text" id="post-title" placeholder="Thread Title (e.g., Thoughts on Bryce's recent performances?)" class="w-full bg-panthers-cardBg border border-panthers-cardBorder px-3 py-1.5 rounded text-xs text-white mb-2 focus:outline-none focus:border-panthers-blue">
-              <textarea id="post-body" rows="2" placeholder="Share your thoughts with Keep Pounding nation..." class="w-full bg-panthers-cardBg border border-panthers-cardBorder p-2.5 rounded text-xs text-white focus:outline-none focus:border-panthers-blue"></textarea>
-              <div class="flex justify-end mt-2">
-                <button onclick="createNewPost()" class="bg-panthers-blue hover:bg-panthers-blueHover text-white font-heading font-bold px-4 py-1.5 rounded text-xs uppercase tracking-wider shadow-md">
-                  POST IT
-                </button>
-              </div>
-            </div>
-
-            <!-- Discussion Thread List -->
-            <div id="forum-threads-list" class="space-y-3">
-              
-              <div class="bg-panthers-black/50 border border-panthers-cardBorder p-3 rounded-lg">
-                <div class="flex justify-between items-start mb-1">
-                  <h3 class="font-heading font-bold text-white text-base">Bryce Young & Jalen Coker chemistry looking sharp!</h3>
-                  <span class="text-[9px] bg-panthers-blue/20 text-panthers-blue border border-panthers-blue px-1.5 py-0.5 rounded font-heading font-bold">GAME FILM</span>
+            <!-- Feed view -->
+            <div id="forum-feed-view">
+              <div class="flex flex-wrap items-end justify-between gap-3 mb-3 pb-3 border-b border-panthers-cardBorder">
+                <div>
+                  <h2 class="text-2xl font-heading font-bold uppercase tracking-wider text-white flex items-center gap-2"><span>💬</span> Fan Talk</h2>
+                  <p class="text-panthers-silver text-[11px] mt-1">The Panthers fan forum. <span id="forum-count"></span></p>
                 </div>
-                <p class="text-panthers-silver text-xs mb-2">Coker's route running on third downs has given Bryce a steady safety valve alongside TMac on the outside.</p>
-                <div class="flex items-center gap-3 text-[10px] text-panthers-silver pt-1.5 border-t border-panthers-cardBorder/50">
-                  <span><strong class="text-white">Example thread</strong></span>
-                  <span>• sample post</span>
-                  <button onclick="upvotePost(this)" class="hover:text-panthers-blue font-heading font-bold uppercase tracking-wider ml-auto">▲ <span class="vote-count">14</span> Likes</button>
+                <div class="flex items-center gap-2">
+                  <button onclick="loadForum()" class="text-[10px] font-heading font-bold uppercase tracking-wider text-panthers-silver hover:text-white border border-panthers-cardBorder hover:border-panthers-blue px-2.5 py-1.5 rounded" aria-label="Refresh threads">↻ Refresh</button>
+                  <button onclick="toggleComposer()" class="bg-panthers-blue hover:bg-panthers-blueHover text-white text-[11px] font-heading font-bold px-4 py-1.5 rounded uppercase tracking-wider">+ Start a thread</button>
                 </div>
               </div>
 
-              <div class="bg-panthers-black/50 border border-panthers-cardBorder p-3 rounded-lg">
-                <div class="flex justify-between items-start mb-1">
-                  <h3 class="font-heading font-bold text-white text-base">Parking and pregame tips for Week 7 vs. Tampa Bay?</h3>
-                  <span class="text-[9px] bg-emerald-950/60 text-emerald-400 border border-emerald-500 px-1.5 py-0.5 rounded font-heading font-bold">GAMEDAY GUIDE</span>
+              <!-- New thread form -->
+              <div id="forum-composer" class="hidden mb-4 bg-panthers-black/60 border border-panthers-blue/60 rounded-xl p-4">
+                <h3 class="font-heading font-bold text-white uppercase tracking-wider text-sm mb-2">Start a thread</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <input id="compose-name" maxlength="24" placeholder="Your fan name (shown on posts)" aria-label="Your fan name" class="bg-panthers-black border border-panthers-cardBorder px-3 py-2 rounded text-xs text-white focus:outline-none focus:border-panthers-blue">
+                  <select id="compose-cat" aria-label="Category" class="bg-panthers-black border border-panthers-cardBorder px-3 py-2 rounded text-xs text-white focus:outline-none focus:border-panthers-blue">
+                    <option value="gameday">🏈 Game Day</option>
+                    <option value="roster">🐾 Roster &amp; Trades</option>
+                    <option value="draft">📋 Draft</option>
+                    <option value="stadium">🏟️ Stadium &amp; Tailgating</option>
+                    <option value="offtopic">💬 Off-Topic</option>
+                  </select>
                 </div>
-                <p class="text-panthers-silver text-xs mb-2">Heading to Charlotte with family for the Tampa game. Where do you like to park and what time do you get to Uptown?</p>
-                <div class="flex items-center gap-3 text-[10px] text-panthers-silver pt-1.5 border-t border-panthers-cardBorder/50">
-                  <span><strong class="text-white">Example thread</strong></span>
-                  <span>• sample post</span>
-                  <button onclick="upvotePost(this)" class="hover:text-panthers-blue font-heading font-bold uppercase tracking-wider ml-auto">▲ <span class="vote-count">8</span> Likes</button>
+                <input id="compose-title" maxlength="120" placeholder="Title: what do you want to talk about?" aria-label="Thread title" class="w-full mt-2 bg-panthers-black border border-panthers-cardBorder px-3 py-2 rounded text-sm text-white focus:outline-none focus:border-panthers-blue">
+                <textarea id="compose-body" rows="4" maxlength="5000" placeholder="Say more (optional). Links are OK." aria-label="Post text" class="w-full mt-2 bg-panthers-black border border-panthers-cardBorder px-3 py-2 rounded text-xs text-white focus:outline-none focus:border-panthers-blue resize-y"></textarea>
+                <div class="flex flex-wrap items-center gap-3 mt-2">
+                  <button id="compose-submit" onclick="submitThread()" class="bg-panthers-blue hover:bg-panthers-blueHover text-white text-[11px] font-heading font-bold px-4 py-1.5 rounded uppercase tracking-wider">Post it</button>
+                  <button onclick="toggleComposer(false)" class="text-[11px] text-panthers-silver hover:text-white">Cancel</button>
+                  <span id="compose-error" class="text-[11px] text-rose-300"></span>
                 </div>
+                <p class="text-[10px] text-slate-500 mt-2">Posts are public. No logins: your name is remembered on this device only.</p>
               </div>
 
+              <div id="forum-cats" class="flex flex-wrap gap-1.5 mb-2"></div>
+              <div id="forum-sorts" class="flex gap-1 mb-3 border-b border-panthers-cardBorder pb-2"></div>
+              <div id="forum-feed" class="space-y-2.5"></div>
+              <div id="forum-more" class="mt-3"></div>
             </div>
-          </div>
+
+            <!-- Thread view -->
+            <div id="forum-thread-view" class="hidden">
+              <button onclick="closeThread()" class="text-[11px] font-heading font-bold uppercase tracking-wider text-panthers-silver hover:text-white mb-3">← All threads</button>
+              <div id="forum-thread"></div>
+            </div>
+          </section>
         </div>
 
-        <!-- Forum Guidelines Sidebar -->
+        <!-- Side column -->
         <div class="space-y-4">
-          <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-4 shadow-lg">
-            <span class="text-[10px] font-heading font-bold uppercase tracking-widest text-panthers-blue block mb-2">
-              COMMUNITY RULES
-            </span>
-            <ul class="text-xs text-panthers-silver space-y-1.5 list-disc list-inside">
-              <li>Keep it respectful and about Carolina football.</li>
-              <li>No spam, no duplicate threads.</li>
-              <li><strong>Keep Pounding.</strong> Always.</li>
+          <section class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-4 shadow-lg">
+            <h2 class="text-lg font-heading font-bold uppercase tracking-wider text-white mb-2">How it works</h2>
+            <ul class="space-y-1.5 text-xs text-panthers-silver">
+              <li class="flex gap-1.5"><span class="text-panthers-blue">▸</span><span>Tap any thread to open the full conversation.</span></li>
+              <li class="flex gap-1.5"><span class="text-panthers-blue">▸</span><span>Reply to the thread or to a specific comment. ▲ to upvote.</span></li>
+              <li class="flex gap-1.5"><span class="text-panthers-blue">▸</span><span>A Game Thread pins itself the day before every game, and a Post-Game Thread opens after.</span></li>
+              <li class="flex gap-1.5"><span class="text-panthers-blue">▸</span><span>No sign-up. Pick a fan name when you post.</span></li>
             </ul>
-          </div>
+          </section>
+          <section class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-4 shadow-lg">
+            <h2 class="text-lg font-heading font-bold uppercase tracking-wider text-white mb-2">House rules</h2>
+            <ul class="space-y-1.5 text-xs text-panthers-silver">
+              <li class="flex gap-1.5"><span class="text-panthers-blue">1.</span><span>Keep it respectful. Trash-talk the other team, not each other.</span></li>
+              <li class="flex gap-1.5"><span class="text-panthers-blue">2.</span><span>No hate speech, harassment or personal info. Slurs are blocked automatically.</span></li>
+              <li class="flex gap-1.5"><span class="text-panthers-blue">3.</span><span>No spam or duplicate threads.</span></li>
+              <li class="flex gap-1.5"><span class="text-panthers-blue">4.</span><span>See something bad? Hit ⚑ Report. Posts with 3 reports are hidden for review.</span></li>
+              <li class="flex gap-1.5"><span class="text-panthers-blue">5.</span><span><strong class="text-white">Keep Pounding.</strong> Always.</span></li>
+            </ul>
+            <button id="mod-login" onclick="moderatorLogin()" class="mt-3 text-[10px] text-slate-500 hover:text-white underline">Moderator login</button>
+          </section>
+          <section id="mod-panel" class="hidden bg-panthers-cardBg border border-rose-500/40 rounded-xl p-4 shadow-lg"></section>
         </div>
-
       </div>
+      <div id="forum-toast" class="hidden" role="status" aria-live="polite"></div>
     </div>
 
     <!-- TAB 8: ARCADE & TRIVIA -->
