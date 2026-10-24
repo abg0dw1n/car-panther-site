@@ -12,7 +12,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { timingSafeEqual } from 'node:crypto';
-import { getStore } from './_forum/store.js';
+import { getStore, update, ConflictError } from './_forum/store.js';
 import * as forum from './_forum/core.js';
 
 let schedule = null;
@@ -57,6 +57,20 @@ async function handle(request, method) {
       return json(200, await forum.reportQueue(store));
     }
     if (action === 'whoami') return json(200, { admin });
+    if (action === 'health') {
+      // Self-check of the storage layer: create/update with locking, and stale-write detection
+      forum.rateLimit(clientIp(request), 'report');
+      const before = await store.read('health');
+      const n = await update(store, 'health', () => ({ n: 0 }), d => { d.n += 1; d.at = new Date().toISOString(); return d.n; });
+      const fresh = await store.read('health');
+      let staleRejected = null;
+      if (before) {
+        try { await store.write('health', { n: -1 }, { etag: before.etag }); staleRejected = false; }
+        catch (e) { staleRejected = e instanceof ConflictError; }
+      }
+      const after = await store.read('health');
+      return json(200, { ok: !!fresh && fresh.data.n === n && (staleRejected !== false) && after.data.n === n, store: store.kind, writes: n, staleRejected });
+    }
     return json(400, { error: 'Unknown action.' });
   }
 
