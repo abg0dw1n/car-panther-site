@@ -12,5 +12,6 @@ initDraft();
 renderDraft();
 renderStadium();
 initForum();
+initArcade();
 fetchCharlotteWeather();
 fetchPanthersNews();

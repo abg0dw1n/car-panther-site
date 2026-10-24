@@ -99,7 +99,7 @@ eval(code + `
     initDraft, renderDraft, currentSlot, isUserTurn, isDraftComplete, nextUserSlot, availableProspects, cpuChoose, makePick,
     simOnePick, simNextPick, simToMyPick, autoDraftRest, draftProspect, resetDraftSim, setDraftPos, setDraftQuery, showMoreProspects,
     gradePick, gradeClass, getDraftState: () => draftState, getDraftUI: () => draftUI, setRandom: fn => { draftRandom = fn; },
-    openTab, renderTeamRecord, renderNextGame, startCountdown,
+    openTab, selectArcadeGame, ARCADE_GAMES, renderTeamRecord, renderNextGame, startCountdown,
     panthersTeamStats, GAME_LEADERS, OPPONENTS, PANTHERS_HISTORY, HALL_OF_HONOR, FRANCHISE, parseResult, seriesText, gamePhase, seasonSummary,
     historyFor, shiftHistoryDay, renderHome, renderLastGame,
     STADIUM_PINS, STADIUM_TOUR, STADIUM_ZONES, STADIUM_LEVELS, MAP_LAYERS, GAMEDAY_STEPS, TRANSPORT_TIPS, SRC_LABELS, stadiumUI,
@@ -407,11 +407,18 @@ check('milestones include the 2025 Wild Card loss to the Rams (34-31)', els['mil
 section('Arcade');
 // ---------------------------------------------------------------------------------------------------
 check('the tab is called Arcade', /<span>🎮<\/span> ARCADE/.test(html) && !/> TRIVIA\n/.test(html));
-const frameEl = els['trivia-frame'] = Object.assign(makeEl('trivia-frame'), { dataset: { src: 'https://my-first-game-opal.vercel.app/' }, attrs: {} });
+const frameEl = els['arcade-frame'] = Object.assign(makeEl('arcade-frame'), { attrs: {} });
 frameEl.getAttribute = k => frameEl.attrs[k] ?? null; frameEl.setAttribute = (k, v) => { frameEl.attrs[k] = v; };
-check('the trivia game does not load until the Arcade is opened', frameEl.getAttribute('src') === null);
+check('the Arcade has three games, and each game file exists', Object.keys(t.ARCADE_GAMES).length === 3 &&
+  Object.values(t.ARCADE_GAMES).filter(g => !g.url.startsWith('http')).every(g => fs.existsSync(path.join(repo, g.url))));
+check('no game loads until the Arcade is opened', frameEl.getAttribute('src') === null);
 t.openTab(null, 'arcade-tab');
-check('opening the Arcade loads the trivia game', frameEl.getAttribute('src') === 'https://my-first-game-opal.vercel.app/');
+check('opening the Arcade loads the trivia game first', frameEl.getAttribute('src') === 'https://my-first-game-opal.vercel.app/');
+t.selectArcadeGame('drill');
+check('picking a game switches the frame and the info panel', frameEl.getAttribute('src') === 'games/two-minute-drill.html' && els['arcade-info'].innerHTML.includes('Two-Minute Drill') && /aria-pressed="true"[\s\S]*Two-Minute Drill/.test(els['arcade-picker'].innerHTML));
+t.selectArcadeGame('nope');
+check('an unknown game name is ignored', frameEl.getAttribute('src') === 'games/two-minute-drill.html');
+t.selectArcadeGame('trivia');
 
 // ---------------------------------------------------------------------------------------------------
 section('Stadium Tour');

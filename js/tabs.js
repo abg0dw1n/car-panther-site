@@ -12,11 +12,8 @@ function openTab(evt, tabId) {
 
   document.getElementById(tabId).classList.remove('hidden');
 
-  // Load the embedded trivia game only when the Arcade is opened
-  if (tabId === 'arcade-tab') {
-    const frame = document.getElementById('trivia-frame');
-    if (frame && !frame.getAttribute('src')) frame.setAttribute('src', frame.dataset.src);
-  }
+  // Games load only when the Arcade is opened
+  if (tabId === 'arcade-tab' && typeof loadArcadeGame === 'function') loadArcadeGame();
 
   if (evt && evt.currentTarget) {
     evt.currentTarget.classList.add('active', 'border-panthers-blue', 'text-white', 'bg-panthers-blue/20');

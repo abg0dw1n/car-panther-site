@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Field Goal Kicker | Panthers Arcade</title>
+  <meta name="theme-color" content="#0085CA">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue: #0085CA; --silver: #A5ACAF; --gold: #fbbf24; --edge: rgba(0,133,202,.3); }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: #07090e; color: #fff; font-family: 'Montserrat', system-ui, sans-serif; }
+    body { display: flex; justify-content: center; padding: 12px; }
+    .wrap { width: 100%; max-width: 760px; }
+    .card { background: linear-gradient(160deg, rgba(26,39,58,.85), rgba(10,14,22,.9)); border: 1px solid var(--edge); border-radius: 18px; padding: 14px; box-shadow: 0 0 40px -18px rgba(0,133,202,.6); }
+    .display { font-family: 'Bebas Neue', Impact, sans-serif; letter-spacing: .05em; font-weight: 400; line-height: 1; }
+    .top { display: flex; justify-content: space-between; align-items: flex-end; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+    h1 { margin: 0; font-size: 2.2rem; background: linear-gradient(92deg, #fff, #bfe7ff 45%, #36b3f2); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hud { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 10px; }
+    .stat { background: rgba(0,0,0,.4); border: 1px solid var(--edge); border-radius: 12px; padding: 6px 8px; text-align: center; }
+    .stat span { display: block; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: var(--silver); }
+    .stat b { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: .05em; font-weight: 400; }
+    .canvas-wrap { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid var(--edge); touch-action: manipulation; cursor: pointer; user-select: none; -webkit-user-select: none; }
+    canvas { display: block; width: 100%; height: auto; }
+    .controls { display: flex; gap: 8px; margin-top: 10px; align-items: center; flex-wrap: wrap; }
+    .btn { background: var(--blue); color: #fff; border: 0; border-radius: 10px; padding: 12px 20px; font-family: 'Bebas Neue', sans-serif; font-size: 1.35rem; letter-spacing: .08em; cursor: pointer; box-shadow: 0 8px 22px -8px rgba(0,133,202,.8); flex: 1; min-width: 160px; }
+    .btn:hover { background: #006093; }
+    .btn.ghost { background: transparent; border: 1px solid var(--edge); color: var(--silver); box-shadow: none; flex: none; min-width: auto; font-size: 1.05rem; white-space: nowrap; }
+    .btn:focus-visible { outline: 3px solid #7fd3ff; outline-offset: 2px; }
+    .tip { font-size: 11px; color: var(--silver); margin-top: 8px; line-height: 1.5; }
+    .muted { color: var(--silver); font-size: 11px; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <div class="top">
+      <div>
+        <div class="muted" style="letter-spacing:.14em;text-transform:uppercase;font-weight:700;font-size:10px">🐾 Panthers Arcade</div>
+        <h1 class="display">Field Goal Kicker</h1>
+      </div>
+      <div class="muted" id="best-line"></div>
+    </div>
+    <div class="hud">
+      <div class="stat"><span>Distance</span><b id="hud-dist">20 yd</b></div>
+      <div class="stat"><span>Wind</span><b id="hud-wind">—</b></div>
+      <div class="stat"><span>Score</span><b id="hud-score">0</b></div>
+      <div class="stat"><span>Misses left</span><b id="hud-lives">🏈🏈🏈</b></div>
+    </div>
+    <div class="canvas-wrap" id="pitch" role="button" tabindex="0" aria-label="Kick area. Tap or press space to set aim, then power.">
+      <canvas id="cv" width="720" height="440"></canvas>
+    </div>
+    <div class="controls">
+      <button class="btn" id="action" onclick="act()">Start kicking</button>
+      <button class="btn ghost" onclick="newGame()" title="Start over">↻ Restart</button>
+    </div>
+    <p class="tip"><b>How to play:</b> tap once to lock your <b>aim</b> as the arrow swings, then again to lock your <b>power</b>. The bar marks how much leg you need. Wind pushes the ball, so aim into it. Every make moves you back 5 yards, and three misses ends your day. Tap, click or press Space.</p>
+  </div>
+</div>
+
+<script>
+// ===================================================================================================
+// Physics (pure functions, easy to test)
+// ===================================================================================================
+const POST_HALF = 3.08;      // half the distance between the uprights, in yards (18'6" apart)
+const UPRIGHT_HIT = 0.4;     // how close to an upright counts as hitting it, in yards
+const MAX_CARRY = 72;        // yards a perfect kick travels
+const AIM_MAX_DEG = 7;       // aim meter at full left/right = 7 degrees off center
+const WIND_PUSH = 0.006;     // yards of drift per mph per yard of distance
+
+function requiredPower(distance) { return Math.min(1, distance / MAX_CARRY); }
+
+// aim: -1 (far left) .. 1 (far right); power: 0..1; wind: mph, + blows to the right
+function kickResult({ distance, aim, power, wind }) {
+  const carry = power * MAX_CARRY;
+  const aimDrift = distance * Math.tan((aim * AIM_MAX_DEG) * Math.PI / 180);
+  const windDrift = wind * distance * WIND_PUSH;
+  const lateral = aimDrift + windDrift;
+  const side = lateral < 0 ? 'left' : 'right';
+  const off = Math.abs(lateral);
+  let reason;
+  if (off >= POST_HALF - UPRIGHT_HIT / 2 && off <= POST_HALF + UPRIGHT_HIT / 2) reason = 'doink-' + side;
+  else if (off > POST_HALF) reason = 'wide-' + side;
+  else if (carry < distance) reason = 'short';
+  else reason = 'good';
+  return { made: reason === 'good', reason, lateral, carry, aimDrift, windDrift };
+}
+
+function windFor(distance, rand = Math.random) {
+  const maxWind = Math.min(4 + (distance - 20) * 0.35, 18);
+  return Math.round((rand() * 2 - 1) * maxWind);
+}
+
+// Meter speeds get quicker as kicks get longer
+function aimSpeed(distance) { return 2.2 * (1 + (distance - 20) / 55); }
+function powerSpeed(distance) { return 0.9 * (1 + (distance - 20) / 70); }
+function aimAt(t, distance) { return Math.sin(t * aimSpeed(distance)); }
+function powerAt(t, distance) { const p = (t * powerSpeed(distance)) % 2; return p <= 1 ? p : 2 - p; }
+
+const MESSAGES = {
+  good: ['IT’S GOOD!', 'Right down the middle.'],
+  short: ['SHORT!', 'Not enough leg on that one.'],
+  'wide-left': ['WIDE LEFT', 'Pulled it.'],
+  'wide-right': ['WIDE RIGHT', 'Pushed it.'],
+  'doink-left': ['DOINK!', 'Off the left upright.'],
+  'doink-right': ['DOINK!', 'Off the right upright.']
+};
+
+// ===================================================================================================
+// Game state
+// ===================================================================================================
+const START_DIST = 20, STEP = 5, MAX_DIST = 65, LIVES = 3;
+const best = { score: load('fg-best', 0), long: load('fg-long', 0) };
+let S = null;
+function load(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } }
+function store(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* ignore */ } }
+
+function newGame() {
+  S = { phase: 'ready', distance: START_DIST, wind: windFor(START_DIST), score: 0, makes: 0, lives: LIVES, aim: 0, power: 0, t0: performance.now(), result: null, flight: 0, longest: 0, newBest: false };
+  hud();
+}
+
+function act() {
+  const now = performance.now();
+  const t = (now - S.t0) / 1000;
+  if (S.phase === 'ready') { S.phase = 'aim'; S.t0 = now; }
+  else if (S.phase === 'aim') { S.aim = aimAt(t, S.distance); S.phase = 'power'; S.t0 = now; }
+  else if (S.phase === 'power') {
+    S.power = powerAt(t, S.distance);
+    S.result = kickResult({ distance: S.distance, aim: S.aim, power: S.power, wind: S.wind });
+    S.phase = 'flight';
+    S.t0 = now;
+  } else if (S.phase === 'result') nextKick();
+  else if (S.phase === 'over') newGame();
+  hud();
+}
+
+function settle() {
+  const r = S.result;
+  if (r.made) {
+    S.score += S.distance;
+    S.makes++;
+    S.longest = Math.max(S.longest, S.distance);
+  } else {
+    S.lives--;
+  }
+  if (S.score > best.score) { best.score = S.score; store('fg-best', best.score); S.newBest = true; }
+  if (S.longest > best.long) { best.long = S.longest; store('fg-long', best.long); }
+  S.phase = S.lives <= 0 ? 'over' : 'result';
+  hud();
+}
+
+function nextKick() {
+  if (S.result && S.result.made) S.distance = Math.min(MAX_DIST, S.distance + STEP);
+  S.wind = windFor(S.distance);
+  S.phase = 'ready';
+  S.result = null;
+  S.t0 = performance.now();
+}
+
+function hud() {
+  document.getElementById('hud-dist').textContent = `${S.distance} yd`;
+  document.getElementById('hud-wind').textContent = S.wind === 0 ? 'Calm' : `${Math.abs(S.wind)} ${S.wind < 0 ? '←' : '→'}`;
+  document.getElementById('hud-score').textContent = S.score;
+  document.getElementById('hud-lives').textContent = '🏈'.repeat(Math.max(0, S.lives)) + '·'.repeat(LIVES - Math.max(0, S.lives));
+  document.getElementById('best-line').textContent = `Best score ${best.score} · Longest ${best.long ? best.long + ' yd' : '—'}`;
+  const label = { ready: 'Line it up ▶', aim: 'Lock aim', power: 'KICK!', flight: '…', result: 'Next kick ▶', over: 'Play again ↻' }[S.phase];
+  document.getElementById('action').textContent = label;
+}
+
+// ===================================================================================================
+// Drawing
+// ===================================================================================================
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const W = 720, H = 440, HORIZON = 170, CX = W / 2, PPY = 64, K = 7;
+function fitCanvas() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = W * dpr; cv.height = H * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+const scaleAt = z => K / (K + z);
+const groundY = z => HORIZON + (H - HORIZON) * scaleAt(z);
+const toScreen = (x, z, h = 0) => { const s = scaleAt(z); return [CX + x * PPY * s, groundY(z) - h * PPY * s * 0.9, s]; };
+
+function drawScene() {
+  // sky and stadium
+  const sky = ctx.createLinearGradient(0, 0, 0, HORIZON);
+  sky.addColorStop(0, '#050b16'); sky.addColorStop(1, '#16314d');
+  ctx.fillStyle = sky; ctx.fillRect(0, 0, W, HORIZON);
+  ctx.fillStyle = '#0b1522';
+  ctx.beginPath(); ctx.moveTo(0, HORIZON); ctx.lineTo(0, 92); ctx.quadraticCurveTo(CX, 40, W, 92); ctx.lineTo(W, HORIZON); ctx.fill();
+  for (let i = 0; i < 160; i++) { // crowd lights (fixed pattern)
+    const x = (i * 97) % W, y = 70 + ((i * 53) % 80);
+    if (y < HORIZON - 6 && y > 48 + Math.abs(x - CX) * -0.0 + 30 * Math.pow((x - CX) / CX, 2)) {
+      ctx.fillStyle = i % 5 === 0 ? 'rgba(255,255,255,.55)' : i % 3 === 0 ? 'rgba(0,133,202,.7)' : 'rgba(165,172,175,.35)';
+      ctx.fillRect(x, y, 2, 2);
+    }
+  }
+  // light towers glow
+  [[90, 60], [W - 90, 60]].forEach(([x, y]) => { const g = ctx.createRadialGradient(x, y, 2, x, y, 70); g.addColorStop(0, 'rgba(255,255,255,.55)'); g.addColorStop(1, 'rgba(255,255,255,0)'); ctx.fillStyle = g; ctx.fillRect(x - 70, y - 70, 140, 140); });
+
+  // field with stripes every 5 yards
+  const far = S.distance + 12;
+  for (let z = 0; z < far; z += 5) {
+    const [xl1, y1] = toScreen(-30, z), [xr1] = toScreen(30, z);
+    const [xl2, y2] = toScreen(-30, z + 5), [xr2] = toScreen(30, z + 5);
+    ctx.fillStyle = (Math.floor(z / 5) % 2) ? '#15803d' : '#166534';
+    ctx.beginPath(); ctx.moveTo(xl1, y1); ctx.lineTo(xr1, y1); ctx.lineTo(xr2, y2); ctx.lineTo(xl2, y2); ctx.fill();
+  }
+  // end zone past the posts
+  { const [xl1, y1] = toScreen(-30, S.distance), [xr1] = toScreen(30, S.distance), [xl2, y2] = toScreen(-30, far), [xr2] = toScreen(30, far);
+    ctx.fillStyle = '#0a6fa8'; ctx.beginPath(); ctx.moveTo(xl1, y1); ctx.lineTo(xr1, y1); ctx.lineTo(xr2, y2); ctx.lineTo(xl2, y2); ctx.fill(); }
+  // yard lines and hash marks
+  ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = 1.5;
+  for (let z = 0; z <= S.distance; z += 5) {
+    const [xl, y] = toScreen(-30, z), [xr] = toScreen(30, z);
+    ctx.beginPath(); ctx.moveTo(xl, y); ctx.lineTo(xr, y); ctx.stroke();
+  }
+  ctx.fillStyle = 'rgba(255,255,255,.7)';
+  for (let z = 1; z < S.distance; z++) { [-3.1, 3.1].forEach(x => { const [sx, sy, s] = toScreen(x, z); ctx.fillRect(sx - 3 * s, sy, 6 * s, 1.2); }); }
+}
+
+function drawPosts() {
+  const D = S.distance;
+  const [bx, by, s] = toScreen(0, D, 0);
+  const [, barY] = toScreen(0, D, 3.33);
+  const [lx] = toScreen(-POST_HALF, D), [rx] = toScreen(POST_HALF, D);
+  const [, topY] = toScreen(0, D, 9.5);
+  ctx.strokeStyle = '#facc15'; ctx.lineCap = 'round';
+  ctx.lineWidth = Math.max(2, 7 * s); ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(bx, barY); ctx.stroke();
+  ctx.lineWidth = Math.max(2, 5 * s); ctx.beginPath(); ctx.moveTo(lx, barY); ctx.lineTo(rx, barY); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(lx, barY); ctx.lineTo(lx, topY); ctx.moveTo(rx, barY); ctx.lineTo(rx, topY); ctx.stroke();
+  // wind ribbons on top of the uprights
+  const flag = Math.max(-1, Math.min(1, S.wind / 15));
+  ctx.strokeStyle = '#ef4444'; ctx.lineWidth = Math.max(1.5, 3 * s);
+  [lx, rx].forEach(x => { ctx.beginPath(); ctx.moveTo(x, topY); ctx.quadraticCurveTo(x + flag * 14 * s * 6, topY + 4, x + flag * 26 * s * 6, topY + 10 * Math.max(.2, 1 - Math.abs(flag))); ctx.stroke(); });
+}
+
+// Where the ball is during the flight (t: 0..1)
+function ballAt(t) {
+  const r = S.result, D = S.distance;
+  const endZ = r.reason === 'short' ? r.carry : D + 6;
+  const z = endZ * t;
+  const f = z / D;
+  const x = r.aimDrift * f + r.windDrift * f * f;
+  const apex = 4 + 10 * S.power;
+  let h = apex * 4 * t * (1 - t) + (r.reason === 'short' ? 0 : 3.6 * t);
+  if (r.reason.startsWith('doink') && z > D) { h = Math.max(0, h - (z - D) * 2); }
+  return { x, z, h };
+}
+
+function drawBall(x, z, h, spin) {
+  const [sx, sy, s] = toScreen(x, z, h);
+  const [, gy] = toScreen(x, z, 0);
+  ctx.fillStyle = 'rgba(0,0,0,.28)';
+  ctx.beginPath(); ctx.ellipse(sx, gy, 14 * s + 2, 4 * s + 1, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.save(); ctx.translate(sx, sy); ctx.rotate(spin);
+  ctx.fillStyle = '#7c3f17';
+  ctx.beginPath(); ctx.ellipse(0, 0, 13 * s + 2.5, 8 * s + 1.5, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = Math.max(1, 1.5 * s);
+  ctx.beginPath(); ctx.moveTo(-5 * s, 0); ctx.lineTo(5 * s, 0); ctx.stroke();
+  ctx.restore();
+}
+
+function drawAimMeter(aim) {
+  // arc arrow from the ball toward the posts
+  const [bx, by] = toScreen(0, 0.6);
+  const ang = aim * AIM_MAX_DEG * 3 * Math.PI / 180;
+  const len = 120;
+  const ex = bx + Math.sin(ang) * len, ey = by - Math.cos(ang) * len;
+  ctx.strokeStyle = 'rgba(255,255,255,.25)'; ctx.lineWidth = 2; ctx.setLineDash([4, 6]);
+  ctx.beginPath(); ctx.arc(bx, by, len, -Math.PI / 2 - AIM_MAX_DEG * 3 * Math.PI / 180, -Math.PI / 2 + AIM_MAX_DEG * 3 * Math.PI / 180); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.strokeStyle = '#7fd3ff'; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.moveTo(bx, by - 18); ctx.lineTo(ex, ey); ctx.stroke();
+  ctx.fillStyle = '#7fd3ff';
+  ctx.beginPath(); ctx.arc(ex, ey, 6, 0, Math.PI * 2); ctx.fill();
+}
+
+function drawPowerMeter(p) {
+  const x = W - 46, y = 120, h = 260, w = 22;
+  ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.fillRect(x - 4, y - 4, w + 8, h + 8);
+  const g = ctx.createLinearGradient(0, y + h, 0, y);
+  g.addColorStop(0, '#22c55e'); g.addColorStop(.6, '#facc15'); g.addColorStop(1, '#ef4444');
+  ctx.fillStyle = g; ctx.fillRect(x, y + h * (1 - p), w, h * p);
+  const need = requiredPower(S.distance);
+  ctx.fillStyle = '#fff'; ctx.fillRect(x - 8, y + h * (1 - need) - 1.5, w + 16, 3);
+  ctx.font = '700 10px Montserrat, sans-serif'; ctx.textAlign = 'right';
+  ctx.fillText('NEED', x - 10, y + h * (1 - need) + 3.5);
+  ctx.textAlign = 'center'; ctx.fillText('POWER', x + w / 2, y + h + 18);
+}
+
+function drawWindArrow() {
+  const x = 70, y = 32;
+  ctx.fillStyle = 'rgba(0,0,0,.5)'; ctx.fillRect(x - 56, y - 20, 112, 40);
+  ctx.fillStyle = '#fff'; ctx.font = '700 11px Montserrat, sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText(S.wind === 0 ? 'CALM' : `WIND ${Math.abs(S.wind)} MPH`, x, y - 4);
+  if (S.wind !== 0) {
+    const dir = Math.sign(S.wind), len = 14 + Math.abs(S.wind) * 1.8;
+    ctx.strokeStyle = '#7fd3ff'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(x - dir * len / 2, y + 9); ctx.lineTo(x + dir * len / 2, y + 9); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x + dir * len / 2, y + 9); ctx.lineTo(x + dir * (len / 2 - 6), y + 4); ctx.lineTo(x + dir * (len / 2 - 6), y + 14); ctx.fillStyle = '#7fd3ff'; ctx.fill();
+  }
+}
+
+function banner(big, small, color) {
+  ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.fillRect(0, 86, W, 92);
+  ctx.textAlign = 'center';
+  ctx.fillStyle = color; ctx.font = '400 60px "Bebas Neue", Impact, sans-serif'; ctx.fillText(big, CX, 145);
+  ctx.fillStyle = '#e2e8f0'; ctx.font = '600 14px Montserrat, sans-serif'; ctx.fillText(small, CX, 168);
+}
+
+function frame(now) {
+  if (!S) { requestAnimationFrame(frame); return; }
+  const t = (now - S.t0) / 1000;
+  ctx.clearRect(0, 0, W, H);
+  drawScene();
+  drawPosts();
+  drawWindArrow();
+  if (S.phase === 'flight' || S.phase === 'result' || S.phase === 'over') {
+    const ft = S.phase === 'flight' ? Math.min(1, t / 1.25) : 1;
+    const b = ballAt(ft);
+    if (b.z > S.distance) { drawBall(b.x, b.z, b.h, ft * 18); }
+    else { drawBall(b.x, b.z, b.h, ft * 18); }
+    if (S.phase === 'flight' && ft >= 1) settle();
+  } else {
+    drawBall(0, 0.6, 0, 0);
+  }
+  if (S.phase === 'aim') drawAimMeter(aimAt(t, S.distance));
+  if (S.phase === 'power') { drawAimMeter(S.aim); drawPowerMeter(powerAt(t, S.distance)); }
+  if (S.phase === 'ready') banner(`${S.distance}-YARD ATTEMPT`, 'Tap to line it up', '#ffffff');
+  if (S.phase === 'result') { const [a, b] = MESSAGES[S.result.reason]; banner(a, S.result.made ? `${b} +${S.distance} points` : b, S.result.made ? '#4ade80' : '#f87171'); }
+  if (S.phase === 'over') banner('FINAL: ' + S.score + ' PTS', `${S.makes} makes · longest ${S.longest || 0} yd${S.newBest ? ' · NEW PERSONAL BEST!' : ''} · tap to play again`, '#fbbf24');
+  requestAnimationFrame(frame);
+}
+
+// Input: tap/click the field, press Space, or use the button
+const pitch = document.getElementById('pitch');
+pitch.addEventListener('pointerdown', e => { e.preventDefault(); act(); });
+document.addEventListener('keydown', e => { if (e.code === 'Space' || e.key === ' ' || e.key === 'Enter') { if (e.target.tagName === 'BUTTON' && e.key === 'Enter') return; e.preventDefault(); act(); } });
+
+fitCanvas();
+window.addEventListener('resize', fitCanvas);
+newGame();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
