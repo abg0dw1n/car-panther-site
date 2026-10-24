@@ -1,10 +1,11 @@
 # Project State: car-panther-site
 
-- **Current Version:** v5.2 - Home page rebuild
+- **Current Version:** v5.3 - Bold & hype restyle
 - **Goal:** Carolina Panthers fan portal (unofficial)
 - **Status:** Published on Vercel (https://my-first-site-mauve-iota.vercel.app/)
 
 ## Recent Actions
+- v5.3: restyled for an 18-28 audience: glassy cards, blue glow, Bebas Neue headlines (theme layer at the bottom of css/style.css); rewrote headings and buttons across all tabs in a punchier voice (facts unchanged); data-driven hype headline on Home; Home rows rebalanced, Hall of Honor now a full-width grid.
 - v5.2: Home page rebuilt: smarter next-game banner with game-day/live states, last-game recap, season at a glance, quick links, this day in history (119 dates), full Hall of Honor (8), corrected franchise facts. Content in data/home.js.
 - v5.1: rebuilt the Stadium Tour tab: schematic clickable map (gates, fan zones, transit/parking, services) with a 9-stop guided walkthrough; canvas 3D seat-view for 8 seating areas x 3 levels; section lookup; game-day planner driven by the schedule; clear-bag checker; rules, accessibility, facts and history. Content in data/stadium.js, rated official / fan-guide / approximate.
 - v5.0: audited all content and fixed errors (stadium capacity, unsupported claims, NFC South baseline, stats, wind units, fake weather/news fallbacks, "Official" label). Record, next game, countdown and playoff games now derive from the schedule data. Roster rebuilt (76 players) with ESPN headshots. Mock draft is now the full 257-pick, 7-round draft with 333 prospects. Added `tests/check.js`.

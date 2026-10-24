@@ -307,10 +307,10 @@ function renderYourClass() {
   document.getElementById('draft-class-count').textContent = `${made.length} of ${slots.length} picks made`;
 
   if (!made.length) {
-    container.innerHTML = `<p class="text-panthers-silver text-xs italic">No picks yet. Sim to your first pick (#${slots[0].pick}) to get started.</p>`;
+    container.innerHTML = `<p class="text-panthers-silver text-xs italic">You’re on the clock soon. Hit Sim to My Pick to jump to #${slots[0].pick}.</p>`;
     gradeBadge.textContent = '--';
     gradeBadge.className = 'text-3xl font-heading font-extrabold text-panthers-blue block';
-    gradeSummary.textContent = 'Make your selections to evaluate value against the consensus board.';
+    gradeSummary.textContent = 'Make your picks and we’ll grade them against the big board.';
     return;
   }
 

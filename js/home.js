@@ -54,7 +54,7 @@ function renderNextGame() {
   const time = g.tentative ? `${g.time} (tentative)` : g.time;
   const tv = g.tv && g.tv !== 'TBD' ? ` (${g.tv})` : '';
 
-  label.textContent = `NEXT MATCHUP • WEEK ${g.week}`;
+  label.textContent = `UP NEXT • WEEK ${g.week}`;
   title.textContent = `CAROLINA PANTHERS ${g.home ? 'VS.' : 'AT'} ${g.team.toUpperCase()}`;
   details.textContent = `📍 ${place} • ${day} • ${time}${tv}`;
 
@@ -313,16 +313,50 @@ function renderFranchise() {
     <p class="text-[9px] text-slate-500 mt-2">Awarded in ${F.awarded}. Totals through the 2025 season.</p>`;
 
   document.getElementById('hall-of-honor').innerHTML = HALL_OF_HONOR.map(m => `
-    <li class="bg-panthers-black/50 border border-panthers-cardBorder p-2.5 rounded-lg">
+    <li class="bg-panthers-black/50 border border-panthers-cardBorder hover:border-panthers-blue transition-colors p-3 rounded-lg flex flex-col">
       <div class="flex justify-between items-center gap-2">
         <h3 class="font-heading font-bold text-white text-sm">${escapeHtml(m.name)}</h3>
         <span class="shrink-0 bg-panthers-blue/20 text-panthers-blue border border-panthers-blue font-heading text-[10px] font-bold px-1.5 py-0.5 rounded">${escapeHtml(m.tag)}</span>
       </div>
-      <p class="text-[11px] text-panthers-silver">${escapeHtml(m.blurb)} <span class="text-slate-500">Inducted ${m.year}.</span></p>
+      <p class="text-[11px] text-panthers-silver mt-1 flex-1">${escapeHtml(m.blurb)}</p>
+      <span class="text-[9px] uppercase tracking-widest text-slate-500 mt-2">Inducted ${m.year}</span>
     </li>`).join('');
 }
 
+// The big headline in the welcome card: built from the real record and standings, so it never overhypes
+function hypeLines() {
+  const s = seasonSummary();
+  const rec = formatRecord(getRecord());
+  let headline, emoji = '';
+  if (!s.played) headline = 'The season starts soon. Lock in.';
+  else if (s.place === '1st') headline = `We’re ${rec} and running the South`;
+  else if (s.place === 'T-1st') headline = `We’re ${rec} and tied for the South lead`;
+  else headline = `${rec}, ${s.place} in the South. Plenty of football left.`;
+  if (s.place === '1st' && s.played) emoji = '🔥';
+
+  const g = getNextGame();
+  let sub = '';
+  if (g) {
+    const kick = new Date(g.kickoff).getTime();
+    const days = (kick - Date.now()) / 86400000;
+    const when = new Date(kick).toLocaleDateString('en-US', days < 6 ? { weekday: 'long', timeZone: 'America/New_York' } : { month: 'short', day: 'numeric', timeZone: 'America/New_York' });
+    const them = teamNickname(g.team);
+    sub = g.home
+      ? `The ${them} come to the Bank ${days < 6 ? '' : 'on '}${when}. Don’t be late.`
+      : `Road game at the ${them} ${days < 6 ? '' : 'on '}${when}${g.tv && g.tv !== 'TBD' ? `. Catch it on ${g.tv.split(' · ')[0]}` : ''}.`;
+  }
+  return { headline, emoji, sub };
+}
+
+function renderHype() {
+  const { headline, emoji, sub } = hypeLines();
+  // the emoji sits outside the gradient text so it keeps its own colors
+  document.getElementById('hype-headline').innerHTML = `<span class="text-hype">${escapeHtml(headline)}</span>${emoji ? ' ' + emoji : ''}`;
+  document.getElementById('hype-sub').textContent = sub;
+}
+
 function renderHome() {
+  renderHype();
   renderLastGame();
   renderSeasonGlance();
   renderThisDay();
@@ -397,7 +431,7 @@ async function fetchPanthersNews() {
 function showNewsUnavailable(container) {
   container.innerHTML = `
     <div class="md:col-span-2 bg-panthers-black/50 border border-panthers-cardBorder p-3 rounded-lg">
-      <p class="text-panthers-silver text-xs">Live headlines couldn't be loaded right now.
+      <p class="text-panthers-silver text-xs">Headlines aren’t loading right now.
         <a href="https://www.espn.com/nfl/team/_/name/car/carolina-panthers" target="_blank" rel="noopener noreferrer" class="text-panthers-blue font-heading font-bold hover:underline">See the latest Panthers news on ESPN ↗</a>
       </p>
     </div>`;

@@ -169,7 +169,7 @@ const next = t.getNextGame();
 check('next game is Week 7 vs. Tampa Bay on Oct 25 at 1:00 PM ET', next.week === 7 && next.abbr === 'TB' && next.home === true && next.kickoff === '2026-10-25T13:00:00-04:00' && next.tv === 'FOX');
 t.renderNextGame();
 check('banner text is built from the schedule',
-  els['next-game-label'].textContent === 'NEXT MATCHUP • WEEK 7' && els['next-game-title'].textContent === 'CAROLINA PANTHERS VS. TAMPA BAY BUCCANEERS' &&
+  els['next-game-label'].textContent === 'UP NEXT • WEEK 7' && els['next-game-title'].textContent === 'CAROLINA PANTHERS VS. TAMPA BAY BUCCANEERS' &&
   els['next-game-details'].textContent === '📍 Bank of America Stadium, Charlotte NC • Sunday, Oct 25 • 1:00 PM ET (FOX)', els['next-game-details'].textContent);
 check('kickoff times use the right Eastern offset (EDT before Nov 1, EST after)',
   S.filter(g => g.kickoff).every(g => g.kickoff.endsWith(g.kickoff < '2026-11-01' ? '-04:00' : '-05:00')));
@@ -342,6 +342,7 @@ check('Hall of Honor lists all 8 members including McCormack, Gross, Muhammad',
   t.HALL_OF_HONOR.length === 8 && ['Mike McCormack', 'Jordan Gross', 'Muhsin Muhammad', 'Wesley Walls'].every(n => els['hall-of-honor'].innerHTML.includes(n)));
 check('snapshot: 2 NFC titles, 7 division titles, 9 playoff trips, 227-273-1',
   t.FRANCHISE.nfcTitles === 2 && t.FRANCHISE.divisionTitles === 7 && t.FRANCHISE.playoffTrips === 9 && els['franchise-snapshot'].innerHTML.includes('227-273-1'));
+check('hype headline matches the real standings and next game', els['hype-headline'].innerHTML.includes('We’re 3-2 and running the South</span> 🔥') && els['hype-sub'].textContent === 'The Buccaneers come to the Bank Sunday. Don’t be late.', els['hype-headline'].innerHTML + ' | ' + els['hype-sub'].textContent);
 check('milestones include the 2025 Wild Card loss to the Rams (34-31)', els['milestones'].innerHTML.includes('34-31'));
 
 // ---------------------------------------------------------------------------------------------------
