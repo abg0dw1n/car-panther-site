@@ -182,12 +182,13 @@ function playerModalHtml(p) {
 
   return `
     <div class="grid grid-cols-1 md:grid-cols-[260px_1fr]">
-      <div class="relative bg-gradient-to-b from-[#0a3a5c] via-[#0b1d2e] to-[#07090e] overflow-hidden flex items-end justify-center min-h-[220px] md:min-h-[360px]">
-        <span class="absolute -top-4 -left-2 font-heading font-bold text-[150px] leading-none text-white/[0.06] select-none" aria-hidden="true">${escapeHtml(p.num ?? '')}</span>
-        <div class="relative w-48 h-48 md:w-56 md:h-56">
+      <div class="relative bg-gradient-to-b from-[#0a3a5c] via-[#0b1d2e] to-[#07090e] overflow-hidden flex flex-col items-center justify-center gap-3 py-8 md:py-0 min-h-[260px] md:min-h-[360px]">
+        <span class="absolute inset-0 flex items-center justify-center font-heading font-bold text-[220px] leading-none text-white/[0.05] select-none" aria-hidden="true">${escapeHtml(p.num ?? '')}</span>
+        <div class="relative w-44 h-44 md:w-52 md:h-52 rounded-full overflow-hidden bg-gradient-to-b from-[#123d5e] to-[#0b1724] ring-4 ring-panthers-blue shadow-[0_0_45px_-5px_rgba(0,133,202,0.7)]">
           <img src="${headshotUrl(p.id)}" alt="${escapeHtml(p.name)}" data-num="${escapeHtml(p.num ?? '')}" referrerpolicy="no-referrer"
-               class="w-full h-full object-contain object-bottom drop-shadow-[0_10px_25px_rgba(0,133,202,0.45)]" onerror="modalHeadshotFailed(this)">
+               class="w-full h-full object-cover object-top scale-110 translate-y-2" onerror="modalHeadshotFailed(this)">
         </div>
+        <span class="relative font-heading font-bold text-panthers-silver text-sm uppercase tracking-[0.25em]">${escapeHtml(p.pos)}${p.num ? ' · #' + escapeHtml(p.num) : ''}</span>
       </div>
       <div class="p-5 md:p-6 min-w-0">
         <div class="flex items-center gap-2 flex-wrap">
@@ -227,8 +228,8 @@ function playerModalHtml(p) {
 
 // Big silhouette + number if the large photo can't load
 function modalHeadshotFailed(img) {
-  img.parentElement.innerHTML = `<div class="w-full h-full flex flex-col items-center justify-end pb-6">
-    <svg class="w-32 h-32 text-panthers-blue/70" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+  img.parentElement.innerHTML = `<div class="w-full h-full flex flex-col items-center justify-center">
+    <svg class="w-24 h-24 text-panthers-blue/70" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
     ${img.dataset.num ? `<span class="font-heading font-bold text-white text-2xl">#${escapeHtml(img.dataset.num)}</span>` : ''}</div>`;
 }
 
