@@ -117,215 +117,149 @@
   <!-- MAIN APP CONTAINER (COMPACTED PADDING) -->
   <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5">
 
-    <!-- TAB 1: HOME -->
-    <div id="home-tab" class="tab-content block">
-      
-      <!-- LIVE GAME DAY COUNTDOWN BANNER (COMPACTED) -->
-      <div class="bg-gradient-to-r from-panthers-cardBg via-black to-panthers-cardBg border border-panthers-blue rounded-xl p-4 mb-5 shadow-xl relative overflow-hidden">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-4 relative z-10">
-          <div>
-            <span id="next-game-label" class="bg-panthers-blue text-white text-[9px] font-heading font-bold px-2 py-0.5 rounded tracking-widest uppercase inline-block mb-1">
-              NEXT MATCHUP
-            </span>
-            <h2 id="next-game-title" class="text-xl sm:text-2xl font-heading font-bold text-white tracking-wider uppercase leading-tight">
-              LOADING...
-            </h2>
-            <p id="next-game-details" class="text-panthers-silver text-xs mt-0.5"></p>
+    <!-- TAB 1: HOME (content in data/home.js; logic in js/home.js) -->
+    <div id="home-tab" class="tab-content block space-y-5">
+
+      <!-- NEXT GAME BANNER: matchup, TV, series, countdown (switches to game-day / live states) -->
+      <section class="relative overflow-hidden rounded-2xl border border-panthers-blue shadow-2xl bg-gradient-to-br from-[#0a2740] via-panthers-black to-[#06121d]">
+        <div class="absolute inset-0 opacity-[0.07] field-pattern" aria-hidden="true"></div>
+        <div class="absolute -right-24 -top-24 w-72 h-72 rounded-full bg-panthers-blue/25 blur-3xl" aria-hidden="true"></div>
+        <div class="relative z-10 p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+          <div class="min-w-0">
+            <div class="flex flex-wrap items-center gap-2 mb-1.5">
+              <span id="next-game-label" class="bg-panthers-blue text-white text-[9px] font-heading font-bold px-2 py-0.5 rounded tracking-widest uppercase">NEXT MATCHUP</span>
+              <span id="gameday-badge" class="hidden bg-amber-400 text-black text-[9px] font-heading font-bold px-2 py-0.5 rounded tracking-widest uppercase animate-pulse">🏈 It's game day!</span>
+            </div>
+            <h2 id="next-game-title" class="text-2xl sm:text-3xl font-heading font-bold text-white tracking-wider uppercase leading-tight">LOADING...</h2>
+            <p id="next-game-details" class="text-panthers-silver text-xs mt-1"></p>
+            <div id="next-game-chips" class="flex flex-wrap gap-1.5 mt-3"></div>
+            <div id="next-game-actions" class="flex flex-wrap gap-2 mt-3"></div>
           </div>
 
-          <!-- Countdown Timer Display -->
-          <div class="flex items-center gap-2 font-heading text-center">
-            <div class="bg-panthers-black border border-panthers-cardBorder rounded-lg p-2 min-w-[54px]">
-              <span id="cd-days" class="text-xl sm:text-2xl font-bold text-panthers-blue block leading-none">00</span>
-              <span class="text-[8px] text-panthers-silver uppercase tracking-wider mt-0.5 block">DAYS</span>
+          <div class="shrink-0">
+            <div id="countdown-clock" class="flex items-center gap-1.5 sm:gap-2 font-heading text-center" aria-label="Countdown to kickoff">
+              <div class="bg-panthers-black/80 border border-panthers-cardBorder rounded-xl p-2 sm:p-3 min-w-[58px] sm:min-w-[68px] shadow-inner">
+                <span id="cd-days" class="text-2xl sm:text-3xl font-bold text-panthers-blue block leading-none">00</span>
+                <span class="text-[8px] text-panthers-silver uppercase tracking-wider mt-1 block">DAYS</span>
+              </div>
+              <span class="text-panthers-blue text-xl font-bold">:</span>
+              <div class="bg-panthers-black/80 border border-panthers-cardBorder rounded-xl p-2 sm:p-3 min-w-[58px] sm:min-w-[68px] shadow-inner">
+                <span id="cd-hours" class="text-2xl sm:text-3xl font-bold text-panthers-blue block leading-none">00</span>
+                <span class="text-[8px] text-panthers-silver uppercase tracking-wider mt-1 block">HRS</span>
+              </div>
+              <span class="text-panthers-blue text-xl font-bold">:</span>
+              <div class="bg-panthers-black/80 border border-panthers-cardBorder rounded-xl p-2 sm:p-3 min-w-[58px] sm:min-w-[68px] shadow-inner">
+                <span id="cd-mins" class="text-2xl sm:text-3xl font-bold text-panthers-blue block leading-none">00</span>
+                <span class="text-[8px] text-panthers-silver uppercase tracking-wider mt-1 block">MINS</span>
+              </div>
+              <span class="text-panthers-blue text-xl font-bold">:</span>
+              <div class="bg-panthers-black/80 border border-panthers-cardBorder rounded-xl p-2 sm:p-3 min-w-[58px] sm:min-w-[68px] shadow-inner">
+                <span id="cd-secs" class="text-2xl sm:text-3xl font-bold text-amber-400 block leading-none">00</span>
+                <span class="text-[8px] text-panthers-silver uppercase tracking-wider mt-1 block">SECS</span>
+              </div>
             </div>
-            <span class="text-panthers-blue text-lg font-bold">:</span>
-            <div class="bg-panthers-black border border-panthers-cardBorder rounded-lg p-2 min-w-[54px]">
-              <span id="cd-hours" class="text-xl sm:text-2xl font-bold text-panthers-blue block leading-none">00</span>
-              <span class="text-[8px] text-panthers-silver uppercase tracking-wider mt-0.5 block">HRS</span>
-            </div>
-            <span class="text-panthers-blue text-lg font-bold">:</span>
-            <div class="bg-panthers-black border border-panthers-cardBorder rounded-lg p-2 min-w-[54px]">
-              <span id="cd-mins" class="text-xl sm:text-2xl font-bold text-panthers-blue block leading-none">00</span>
-              <span class="text-[8px] text-panthers-silver uppercase tracking-wider mt-0.5 block">MINS</span>
-            </div>
-            <span class="text-panthers-blue text-lg font-bold">:</span>
-            <div class="bg-panthers-black border border-panthers-cardBorder rounded-lg p-2 min-w-[54px]">
-              <span id="cd-secs" class="text-xl sm:text-2xl font-bold text-amber-400 block leading-none">00</span>
-              <span class="text-[8px] text-panthers-silver uppercase tracking-wider mt-0.5 block">SECS</span>
-            </div>
+            <div id="game-status" class="hidden text-center lg:text-right" aria-live="polite"></div>
           </div>
         </div>
+      </section>
+
+      <!-- LAST GAME + SEASON AT A GLANCE -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <section class="lg:col-span-2 bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-5 shadow-lg">
+          <div class="flex items-center justify-between mb-3 pb-2 border-b border-panthers-cardBorder">
+            <h2 class="text-xl font-heading font-bold uppercase tracking-wider text-white flex items-center gap-2"><span>🏁</span> Last Game</h2>
+            <button onclick="openTabByNav('schedule-tab')" class="text-[10px] text-panthers-blue font-heading font-bold uppercase tracking-wider hover:underline">All results →</button>
+          </div>
+          <div id="last-game"></div>
+        </section>
+        <section class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-5 shadow-lg">
+          <h2 class="text-xl font-heading font-bold uppercase tracking-wider text-white flex items-center gap-2 mb-3 pb-2 border-b border-panthers-cardBorder"><span>📈</span> Season at a Glance</h2>
+          <div id="season-glance"></div>
+        </section>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        
-        <!-- Left Main Content Span 2 -->
-        <div class="lg:col-span-2 space-y-5">
-          
-          <!-- Hero Card -->
-          <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-5 shadow-lg relative overflow-hidden">
-            <span class="inline-block bg-panthers-blue/20 text-panthers-blue border border-panthers-blue px-2.5 py-0.5 rounded text-[10px] font-heading font-bold tracking-widest uppercase mb-2">
-              ◆ KEEP POUNDING NATION
-            </span>
-            
-            <h2 class="text-2xl sm:text-3xl font-heading font-bold uppercase tracking-wider text-white mb-2">
-              WELCOME TO PANTHERS FAN CENTRAL
-            </h2>
-            <p class="text-panthers-silver text-xs leading-relaxed mb-4">
-              Your interactive headquarters for everything Carolina Football. Meet the 2026 roster, explore Bank of America Stadium, follow the schedule, run a full 7-round Mock Draft, track the NFC South race, and test your knowledge in the Trivia Arcade. A fan-made site, not affiliated with the team or the NFL.
-            </p>
-
-            <div class="flex flex-wrap gap-3">
-              <button onclick="openTabByNav('draft-tab')" class="bg-panthers-blue hover:bg-panthers-blueHover text-white font-heading font-bold px-4 py-2 rounded-lg text-xs uppercase tracking-wider shadow-md transition-all">
-                RUN MOCK DRAFT SIMULATOR 📋
-              </button>
-              <button onclick="openTabByNav('playoff-tab')" class="bg-panthers-cardBorder hover:bg-slate-700 text-white font-heading font-bold px-4 py-2 rounded-lg text-xs uppercase tracking-wider transition-all border border-slate-600">
-                PLAYOFF MACHINE 🏆
-              </button>
-            </div>
+      <!-- WELCOME + QUICK LINKS -->
+      <section class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-5 shadow-lg">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-2 mb-4">
+          <div>
+            <span class="inline-block bg-panthers-blue/20 text-panthers-blue border border-panthers-blue px-2.5 py-0.5 rounded text-[10px] font-heading font-bold tracking-widest uppercase mb-1.5">◆ Keep Pounding Nation</span>
+            <h2 class="text-2xl font-heading font-bold uppercase tracking-wider text-white">Welcome to Panthers Fan Central</h2>
           </div>
+          <p class="text-panthers-silver text-[11px] md:max-w-xs md:text-right">A fan-made site, not affiliated with the team or the NFL.</p>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+          <button onclick="openTabByNav('roster-tab')" class="group text-left bg-panthers-black/60 border border-panthers-cardBorder hover:border-panthers-blue hover:-translate-y-0.5 rounded-xl p-3 transition-all">
+            <span class="text-2xl block">🐾</span><span class="font-heading font-bold text-white text-sm uppercase tracking-wider block mt-1 group-hover:text-panthers-blue">Roster</span><span class="text-[10px] text-panthers-silver">Players, photos &amp; stats</span>
+          </button>
+          <button onclick="openTabByNav('schedule-tab')" class="group text-left bg-panthers-black/60 border border-panthers-cardBorder hover:border-panthers-blue hover:-translate-y-0.5 rounded-xl p-3 transition-all">
+            <span class="text-2xl block">📅</span><span class="font-heading font-bold text-white text-sm uppercase tracking-wider block mt-1 group-hover:text-panthers-blue">Schedule</span><span class="text-[10px] text-panthers-silver">Results &amp; kickoff times</span>
+          </button>
+          <button onclick="openTabByNav('stadium-tab')" class="group text-left bg-panthers-black/60 border border-panthers-cardBorder hover:border-panthers-blue hover:-translate-y-0.5 rounded-xl p-3 transition-all">
+            <span class="text-2xl block">🏟️</span><span class="font-heading font-bold text-white text-sm uppercase tracking-wider block mt-1 group-hover:text-panthers-blue">Stadium</span><span class="text-[10px] text-panthers-silver">Map, seats &amp; planner</span>
+          </button>
+          <button onclick="openTabByNav('draft-tab')" class="group text-left bg-panthers-black/60 border border-panthers-cardBorder hover:border-panthers-blue hover:-translate-y-0.5 rounded-xl p-3 transition-all">
+            <span class="text-2xl block">📋</span><span class="font-heading font-bold text-white text-sm uppercase tracking-wider block mt-1 group-hover:text-panthers-blue">Mock Draft</span><span class="text-[10px] text-panthers-silver">All 7 rounds</span>
+          </button>
+          <button onclick="openTabByNav('playoff-tab')" class="group text-left bg-panthers-black/60 border border-panthers-cardBorder hover:border-panthers-blue hover:-translate-y-0.5 rounded-xl p-3 transition-all">
+            <span class="text-2xl block">🏆</span><span class="font-heading font-bold text-white text-sm uppercase tracking-wider block mt-1 group-hover:text-panthers-blue">Playoff Machine</span><span class="text-[10px] text-panthers-silver">Simulate the NFC South</span>
+          </button>
+          <button onclick="openTabByNav('arcade-tab')" class="group text-left bg-panthers-black/60 border border-panthers-cardBorder hover:border-panthers-blue hover:-translate-y-0.5 rounded-xl p-3 transition-all">
+            <span class="text-2xl block">🎮</span><span class="font-heading font-bold text-white text-sm uppercase tracking-wider block mt-1 group-hover:text-panthers-blue">Trivia Arcade</span><span class="text-[10px] text-panthers-silver">Test your knowledge</span>
+          </button>
+        </div>
+      </section>
 
-          <!-- Live ESPN Panthers News Feed -->
-          <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-5 shadow-lg">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+        <!-- Left: news + milestones -->
+        <div class="lg:col-span-2 space-y-5">
+          <section class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-5 shadow-lg">
             <div class="flex items-center justify-between mb-4 pb-2 border-b border-panthers-cardBorder">
-              <h2 class="text-xl font-heading font-bold uppercase tracking-wider text-white flex items-center gap-2">
-                <span>📰</span> LIVE PANTHERS HEADLINES
-              </h2>
-              <span class="text-[9px] bg-panthers-blue/20 text-panthers-blue border border-panthers-blue px-2 py-0.5 rounded font-heading font-bold">ESPN API</span>
+              <h2 class="text-xl font-heading font-bold uppercase tracking-wider text-white flex items-center gap-2"><span>📰</span> Live Panthers Headlines</h2>
+              <span class="text-[9px] bg-panthers-blue/20 text-panthers-blue border border-panthers-blue px-2 py-0.5 rounded font-heading font-bold">ESPN</span>
             </div>
-
-            <div id="espn-news-container" class="space-y-2.5">
+            <div id="espn-news-container" class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
               <p class="text-panthers-silver text-xs animate-pulse">Fetching latest team news...</p>
             </div>
-          </div>
+          </section>
 
-          <!-- Milestones Card -->
-          <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-5 shadow-lg">
+          <section class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-5 shadow-lg">
             <div class="flex items-center justify-between mb-4 pb-2 border-b border-panthers-cardBorder">
-              <h2 class="text-xl font-heading font-bold uppercase tracking-wider text-white flex items-center gap-2">
-                <span>⏱</span> HISTORIC FRANCHISE MILESTONES
-              </h2>
-              <span class="text-[10px] font-heading text-panthers-silver uppercase tracking-widest">1995 - PRESENT</span>
+              <h2 class="text-xl font-heading font-bold uppercase tracking-wider text-white flex items-center gap-2"><span>⏱</span> Franchise Milestones</h2>
+              <span class="text-[10px] font-heading text-panthers-silver uppercase tracking-widest">1995 – present</span>
             </div>
-
-            <div class="space-y-3">
-              <div class="bg-panthers-black/50 border border-panthers-cardBorder p-3 rounded-lg border-l-4 border-l-panthers-blue">
-                <h3 class="font-heading font-bold text-base text-white mb-0.5 flex items-center gap-2">
-                  <span class="bg-panthers-blue text-[10px] text-white px-1.5 py-0.5 rounded font-mono">95</span>
-                  1995: Inaugural Season
-                </h3>
-                <p class="text-panthers-silver text-xs">
-                  Founded as the NFL's 29th franchise. Dom Capers led Carolina to a 7-9 inaugural record—the most wins by an expansion team in NFL history at the time.
-                </p>
-              </div>
-
-              <div class="bg-panthers-black/50 border border-panthers-cardBorder p-3 rounded-lg border-l-4 border-l-panthers-blue">
-                <h3 class="font-heading font-bold text-base text-white mb-0.5 flex items-center gap-2">
-                  <span class="bg-panthers-blue text-[10px] text-white px-1.5 py-0.5 rounded font-mono">03</span>
-                  2003: "Cardiac Cats" & Super Bowl XXXVIII
-                </h3>
-                <p class="text-panthers-silver text-xs">
-                  Behind Jake Delhomme, Stephen Davis, and Steve Smith Sr., the Panthers executed thrilling comeback victories and won the NFC Championship, then fell to the New England Patriots 32-29 in Super Bowl XXXVIII.
-                </p>
-              </div>
-
-              <div class="bg-panthers-black/50 border border-panthers-cardBorder p-3 rounded-lg border-l-4 border-l-panthers-blue">
-                <h3 class="font-heading font-bold text-base text-white mb-0.5 flex items-center gap-2">
-                  <span class="bg-panthers-blue text-[10px] text-white px-1.5 py-0.5 rounded font-mono">15</span>
-                  2015: 15-1 Season & MVP Cam Newton
-                </h3>
-                <p class="text-panthers-silver text-xs">
-                  Historic 15-1 regular season led by League MVP Cam Newton and Luke Kuechly (Pro Football Hall of Fame, Class of 2026), securing Carolina's second NFC Title. The Panthers lost Super Bowl 50 to the Denver Broncos, 24-10.
-                </p>
-              </div>
-
-              <div class="bg-panthers-black/50 border border-panthers-cardBorder p-3 rounded-lg border-l-4 border-l-panthers-blue">
-                <h3 class="font-heading font-bold text-base text-white mb-0.5 flex items-center gap-2">
-                  <span class="bg-panthers-blue text-[10px] text-white px-1.5 py-0.5 rounded font-mono">25</span>
-                  2025: NFC South Champions
-                </h3>
-                <p class="text-panthers-silver text-xs">
-                  In Dave Canales' second season, Carolina won the NFC South at 8-9 and returned to the playoffs, falling to the Rams in the wild-card round.
-                </p>
-              </div>
-            </div>
-          </div>
-
+            <ol id="milestones" class="space-y-4 border-l border-panthers-cardBorder ml-1.5 pl-0"></ol>
+          </section>
         </div>
 
-        <!-- Right Side Widgets Span 1 -->
+        <!-- Right: this day in history, snapshot, Hall of Honor -->
         <div class="space-y-5">
-          
-          <!-- Snapshot Widget -->
-          <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-4 shadow-lg">
-            <span class="text-[10px] font-heading font-bold uppercase tracking-widest text-panthers-blue block mb-3">
-              FRANCHISE SNAPSHOT
-            </span>
-
-            <div class="grid grid-cols-2 gap-2.5">
-              <div class="bg-panthers-black/60 border border-panthers-cardBorder p-2.5 rounded-lg text-center">
-                <h4 class="text-xl font-heading font-bold text-panthers-blue">1995</h4>
-                <span class="text-[9px] text-panthers-silver uppercase tracking-wider block mt-0.5">INAUGURAL YEAR</span>
-              </div>
-              <div class="bg-panthers-black/60 border border-panthers-cardBorder p-2.5 rounded-lg text-center">
-                <h4 class="text-xl font-heading font-bold text-panthers-blue">2</h4>
-                <span class="text-[9px] text-panthers-silver uppercase tracking-wider block mt-0.5">NFC TITLES</span>
-              </div>
-              <div class="bg-panthers-black/60 border border-panthers-cardBorder p-2.5 rounded-lg text-center">
-                <h4 class="text-xl font-heading font-bold text-panthers-blue">75,037</h4>
-                <span class="text-[9px] text-panthers-silver uppercase tracking-wider block mt-0.5">CAPACITY</span>
-              </div>
-              <div class="bg-panthers-black/60 border border-panthers-cardBorder p-2.5 rounded-lg text-center">
-                <h4 class="text-xl font-heading font-bold text-panthers-blue">#51</h4>
-                <span class="text-[9px] text-panthers-silver uppercase tracking-wider block mt-0.5">SAM MILLS</span>
-              </div>
+          <section class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-4 shadow-lg">
+            <div class="flex items-center justify-between mb-1">
+              <h2 class="text-lg font-heading font-bold uppercase tracking-wider text-white flex items-center gap-1.5"><span class="text-amber-400">📆</span> This Day in Panthers History</h2>
             </div>
-          </div>
-
-          <!-- Hall of Honor Legends Widget -->
-          <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-4 shadow-lg">
-            <h2 class="text-lg font-heading font-bold uppercase tracking-wider text-white mb-3 flex items-center gap-1.5">
-              <span class="text-amber-400">★</span> HALL OF HONOR LEGENDS
-            </h2>
-
-            <div class="space-y-2.5">
-              <div class="bg-panthers-black/50 border border-panthers-cardBorder p-2.5 rounded-lg flex justify-between items-center">
-                <div>
-                  <h3 class="font-heading font-bold text-white text-sm">Sam Mills</h3>
-                  <p class="text-[11px] text-panthers-silver">His 2003 "Keep Pounding" speech became the team's motto. Pro Football Hall of Fame (2022); #51 retired.</p>
-                </div>
-                <span class="bg-panthers-blue/20 text-panthers-blue border border-panthers-blue font-heading text-[10px] font-bold px-1.5 py-0.5 rounded">#51 LB</span>
+            <div class="flex items-center justify-between mb-2">
+              <button onclick="shiftHistoryDay(-1)" class="text-panthers-silver hover:text-white text-xs px-2 py-1 rounded border border-panthers-cardBorder hover:border-panthers-blue" aria-label="Previous day">◀</button>
+              <div class="text-center">
+                <p id="history-date" class="text-xs font-heading font-bold text-panthers-blue uppercase tracking-wider"></p>
+                <button id="history-today-btn" onclick="shiftHistoryDay(0)" class="text-[9px] text-panthers-silver hover:text-white underline">back to today</button>
               </div>
-
-              <div class="bg-panthers-black/50 border border-panthers-cardBorder p-2.5 rounded-lg flex justify-between items-center">
-                <div>
-                  <h3 class="font-heading font-bold text-white text-sm">Steve Smith Sr.</h3>
-                  <p class="text-[11px] text-panthers-silver">2005 receiving Triple Crown: 103 catches, 1,563 yards, 12 TDs.</p>
-                </div>
-                <span class="bg-panthers-blue/20 text-panthers-blue border border-panthers-blue font-heading text-[10px] font-bold px-1.5 py-0.5 rounded">#89 WR</span>
-              </div>
-
-              <div class="bg-panthers-black/50 border border-panthers-cardBorder p-2.5 rounded-lg flex justify-between items-center">
-                <div>
-                  <h3 class="font-heading font-bold text-white text-sm">Julius Peppers</h3>
-                  <p class="text-[11px] text-panthers-silver">Pro Football Hall of Fame (2024); Panthers' all-time sack leader with 97.</p>
-                </div>
-                <span class="bg-panthers-blue/20 text-panthers-blue border border-panthers-blue font-heading text-[10px] font-bold px-1.5 py-0.5 rounded">#90 DE</span>
-              </div>
-
-              <div class="bg-panthers-black/50 border border-panthers-cardBorder p-2.5 rounded-lg flex justify-between items-center">
-                <div>
-                  <h3 class="font-heading font-bold text-white text-sm">Jake Delhomme</h3>
-                  <p class="text-[11px] text-panthers-silver">Quarterback of the 2003 "Cardiac Cats" Super Bowl XXXVIII team.</p>
-                </div>
-                <span class="bg-panthers-blue/20 text-panthers-blue border border-panthers-blue font-heading text-[10px] font-bold px-1.5 py-0.5 rounded">#17 QB</span>
-              </div>
+              <button onclick="shiftHistoryDay(1)" class="text-panthers-silver hover:text-white text-xs px-2 py-1 rounded border border-panthers-cardBorder hover:border-panthers-blue" aria-label="Next day">▶</button>
             </div>
-          </div>
+            <div id="history-events" class="space-y-2" aria-live="polite"></div>
+          </section>
 
+          <section class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-4 shadow-lg">
+            <span class="text-[10px] font-heading font-bold uppercase tracking-widest text-panthers-blue block mb-3">Franchise Snapshot</span>
+            <div id="franchise-snapshot"></div>
+          </section>
+
+          <section class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-4 shadow-lg">
+            <h2 class="text-lg font-heading font-bold uppercase tracking-wider text-white mb-1 flex items-center gap-1.5"><span class="text-amber-400">★</span> Hall of Honor</h2>
+            <p class="text-[10px] text-panthers-silver mb-3">All eight members of the team's own Hall of Honor.</p>
+            <ul id="hall-of-honor" class="space-y-2 max-h-[420px] overflow-y-auto pr-1"></ul>
+          </section>
         </div>
-
       </div>
     </div>
 
@@ -831,6 +765,7 @@
   <script src="data/draft-prospects.js"></script>
   <script src="data/draft-order.js"></script>
   <script src="data/stadium.js"></script>
+  <script src="data/home.js"></script>
 
   <!-- Code (order matters: helpers first, main.js last) -->
   <script src="js/helpers.js"></script>

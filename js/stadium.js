@@ -489,6 +489,15 @@ function renderPlanner() {
     .map(t => `<li class="text-xs text-panthers-silver flex gap-1.5"><span class="text-panthers-blue">▸</span><span>${escapeHtml(t)}</span></li>`).join('');
 }
 
+// Jump from the Home tab straight to the planner for a given week
+function openStadiumPlanner(week) {
+  openTabByNav('stadium-tab');
+  showStadiumPanel('plan', document.querySelectorAll('.stadium-sub')[2]);
+  renderPlanner();
+  const idx = homeGames().findIndex(g => g.week === week);
+  if (idx >= 0) { document.getElementById('plan-game').value = String(idx); setPlanGame(idx); }
+}
+
 function setPlanGame(v) { stadiumUI.plan.game = parseInt(v, 10) || 0; renderPlanner(); }
 function setPlanTransport(id) { if (TRANSPORT_TIPS[id]) { stadiumUI.plan.transport = id; renderPlanner(); } }
 function setPlanGoal(id) { stadiumUI.plan.goal = id; renderPlanner(); }

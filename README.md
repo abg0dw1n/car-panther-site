@@ -6,7 +6,7 @@ A single-page fan portal for the Carolina Panthers, deployed on Vercel.
 
 ## Tabs
 
-- **Home:** kickoff countdown, live ESPN headlines, franchise milestones, Hall of Honor
+- **Home:** next-game banner (TV, opponent record, all-time series, countdown that switches to game-day/live), last-game recap with leaders, season at a glance, quick links, live ESPN headlines, this day in Panthers history, franchise snapshot and leaders, milestones, the full Hall of Honor
 - **Roster:** all 76 players (active, IR/PUP, practice squad) with ESPN headshots, 2026 stats and the coaching staff
 - **Stadium Tour:** clickable stadium map with a guided walkthrough, a 3D "view from your seat" simulator and section lookup, a game-day timeline planner, a clear-bag checker, rules/accessibility, and facts & history
 - **2026 Schedule:** results and upcoming games, with a "wins only" filter
@@ -30,6 +30,7 @@ data/             The content. Edit these when scores, rosters or prospects chan
   playoff.js        NFC South records and remaining divisional games
   draft-prospects.js  The 333 draft prospects in consensus order
   draft-order.js    The 257-pick order with trades, plus all 32 teams
+  home.js           Game leaders/recaps, opponent records & series, 119 history dates, Hall of Honor, franchise numbers
   stadium.js        Stadium map pins, seating zones, game-day timeline, rules (each item rated official / fan-guide / approximate)
 js/               The behavior, one file per area
   helpers.js        Safety helpers (escaping text, checking links)
@@ -58,6 +59,6 @@ Open `index.html` in a browser, or serve the folder with any static server, for 
 
 Everything that changes lives in `data/`. Each file notes its "as of" date at the top.
 
-- Each week: add the result in `schedule.js`, update `initialNfcSouth` and `NFC_SOUTH_AS_OF_WEEK` in `playoff.js`, and refresh stats and `ROSTER_AS_OF` in `roster.js`. The record, next-game banner, countdown and Playoff Machine games all derive from these.
+- Each week: add the result in `schedule.js`, add that game's leaders and recap to `GAME_LEADERS` and refresh `OPPONENTS` records in `home.js`, update `initialNfcSouth` and `NFC_SOUTH_AS_OF_WEEK` in `playoff.js`, and refresh stats and `ROSTER_AS_OF` in `roster.js`. The record, next-game banner, countdown and Playoff Machine games all derive from these.
 - Draft order and prospect rankings are projections (Tankathon) and shift all season.
 - Headshots load from ESPN by player id (`headshotUrl`) and fall back to a silhouette. The images belong to ESPN/the NFL.

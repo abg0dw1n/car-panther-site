@@ -2,6 +2,7 @@
 
 renderTeamRecord();
 renderNextGame();
+renderHome();
 startCountdown();
 renderRosterCards();
 renderSchedule();

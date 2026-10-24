@@ -92,6 +92,8 @@ eval(code + `
     simOnePick, simNextPick, simToMyPick, autoDraftRest, draftProspect, resetDraftSim, setDraftPos, setDraftQuery, showMoreProspects,
     gradePick, gradeClass, getDraftState: () => draftState, getDraftUI: () => draftUI, setRandom: fn => { draftRandom = fn; },
     renderTeamRecord, renderNextGame, startCountdown,
+    panthersTeamStats, GAME_LEADERS, OPPONENTS, PANTHERS_HISTORY, HALL_OF_HONOR, FRANCHISE, parseResult, seriesText, gamePhase, seasonSummary,
+    historyFor, shiftHistoryDay, renderHome, renderLastGame,
     STADIUM_PINS, STADIUM_TOUR, STADIUM_ZONES, STADIUM_LEVELS, MAP_LAYERS, GAMEDAY_STEPS, TRANSPORT_TIPS, SRC_LABELS, stadiumUI,
     selectPin, toggleMapLayer, toggleTour, tourStep, setSeatZone, setSeatLevel, seatCamera, buildSeatScene, lookupSection,
     homeGames, buildPlan, setPlanTransport, setPlanGoal, setPlanGame, evaluateBag, showStadiumPanel, fetchCharlotteWeather, fetchPanthersNews, createNewPost, upvotePost, WEATHER_ICONS };
@@ -298,6 +300,49 @@ check('29 more full drafts with different random seeds all finish cleanly', allC
 // Reset
 t.resetDraftSim();
 check('reset puts the draft back at pick 1 with everyone available', t.currentSlot().pick === 1 && t.availableProspects().length === 333 && t.getDraftState().picks.every(p => p.playerId == null));
+
+// ---------------------------------------------------------------------------------------------------
+section('Home page');
+// ---------------------------------------------------------------------------------------------------
+check('every played game has leaders and a recap', t.panthers2026Schedule.filter(g => t.parseResult(g.status)).every(g => t.GAME_LEADERS[g.week] && t.GAME_LEADERS[g.week].recap));
+const sumYds = Object.values(t.GAME_LEADERS).reduce((s, L) => s + (L.passer.name === 'Bryce Young' ? +L.passer.line.match(/, (\d+) yds/)[1] : 0), 0);
+check('game-by-game passing yards add up to the season total on the roster card (1,549)', sumYds === 1549, String(sumYds));
+const sumRush = Object.values(t.GAME_LEADERS).reduce((s, L) => s + (L.rusher.name === 'Chuba Hubbard' ? +L.rusher.line.match(/, (\d+) yds/)[1] : 0), 0);
+check('game-by-game rushing yards add up to Hubbard\'s 426', sumRush === 426, String(sumRush));
+check('last game card shows the Week 6 win at Philadelphia with photos of the leaders',
+  /25 <span[^>]*>–<\/span> 14/.test(els['last-game'].innerHTML) && els['last-game'].innerHTML.includes('at Philadelphia Eagles') && els['last-game'].innerHTML.includes('Chuba Hubbard') && els['last-game'].innerHTML.includes('a.espncdn.com'));
+const ss = t.seasonSummary();
+check('season numbers: 146 scored, 123 allowed, +23, W2 streak, 1st in NFC South',
+  ss.pf === 146 && ss.pa === 123 && ss.diff === 23 && ss.streak === 'W2' && ss.place === '1st', JSON.stringify(ss));
+check('season numbers match the team stats in roster.js', Math.abs(ss.ppg - t.panthersTeamStats.ppg) < 0.05 && Math.abs(ss.oppg - t.panthersTeamStats.oppPpg) < 0.05);
+check('week-by-week row has 18 dots', (els['season-glance'].innerHTML.match(/title="Week/g) || []).length === 18);
+check('series text reads naturally', t.seriesText('26-25') === 'Panthers lead 26-25' && t.seriesText('7-11') === 'Panthers trail 7-11' && t.seriesText('3-4-1') === 'Panthers trail 3-4-1' && t.seriesText('5-5') === 'Series tied 5-5');
+check('banner chips show TV, Bucs record, all-time series and last meeting',
+  ['FOX', 'Buccaneers 1-5 in 2026', 'Panthers lead 26-25', 'L 14-16'].every(x => els['next-game-chips'].innerHTML.includes(x)), els['next-game-chips'].innerHTML.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' '));
+check('home games get a "Plan your game day" button linked to that week', els['next-game-actions'].innerHTML.includes('openStadiumPlanner(7)'));
+check('every remaining opponent has records and series', t.panthers2026Schedule.filter(g => g.status === 'Upcoming').every(g => t.OPPONENTS[g.abbr] && t.OPPONENTS[g.abbr].series));
+const K = Date.parse('2026-10-25T13:00:00-04:00');
+check('game phases: day before = upcoming, morning of = game day, during = live, much later = final',
+  t.gamePhase(K, Date.parse('2026-10-24T20:00:00-04:00')) === 'upcoming' && t.gamePhase(K, Date.parse('2026-10-25T08:00:00-04:00')) === 'gameday' &&
+  t.gamePhase(K, Date.parse('2026-10-25T15:00:00-04:00')) === 'live' && t.gamePhase(K, Date.parse('2026-10-25T19:00:00-04:00')) === 'final');
+check('late-night ET kickoffs still count as game day in Charlotte (not UTC)',
+  t.gamePhase(Date.parse('2026-10-29T20:15:00-04:00'), Date.parse('2026-10-29T08:00:00-04:00')) === 'gameday');
+check('history list has 100+ dated events covering all 12 months',
+  t.PANTHERS_HISTORY.length >= 100 && new Set(t.PANTHERS_HISTORY.map(e => e.date.slice(5, 7))).size === 12 && t.PANTHERS_HISTORY.every(e => /^\d{4}-\d{2}-\d{2}$/.test(e.date) && e.title && e.text));
+check('Keep Pounding speech is dated Jan 2, 2004', t.PANTHERS_HISTORY.some(e => e.date === '2004-01-02' && /Keep Pounding/i.test(e.title)));
+const oct25 = t.historyFor('10-25');
+check('history: Oct 25 has an exact entry; a date with none points to the next one',
+  oct25.exact && oct25.events.length >= 1 && t.historyFor('10-24').exact === t.PANTHERS_HISTORY.some(e => e.date.endsWith('-10-24')));
+check('history wraps from late December to January', t.historyFor('12-31').events.length > 0);
+t.shiftHistoryDay(1);
+check('the "next day" arrow moves to October 25', /October 25/.test(els['history-date'].textContent));
+t.shiftHistoryDay(0);
+check('"back to today" returns to today', /Today · October 24/.test(els['history-date'].textContent));
+check('Hall of Honor lists all 8 members including McCormack, Gross, Muhammad',
+  t.HALL_OF_HONOR.length === 8 && ['Mike McCormack', 'Jordan Gross', 'Muhsin Muhammad', 'Wesley Walls'].every(n => els['hall-of-honor'].innerHTML.includes(n)));
+check('snapshot: 2 NFC titles, 7 division titles, 9 playoff trips, 227-273-1',
+  t.FRANCHISE.nfcTitles === 2 && t.FRANCHISE.divisionTitles === 7 && t.FRANCHISE.playoffTrips === 9 && els['franchise-snapshot'].innerHTML.includes('227-273-1'));
+check('milestones include the 2025 Wild Card loss to the Rams (34-31)', els['milestones'].innerHTML.includes('34-31'));
 
 // ---------------------------------------------------------------------------------------------------
 section('Stadium Tour');

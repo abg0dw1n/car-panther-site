@@ -103,7 +103,7 @@ const STADIUM_PINS = [
     details: ['Game-day hours: 9–10 a.m., then 11 a.m. until 30 minutes after the game, for ticket holders only.', 'Cashless with RFID checkout.', 'Smaller merchandise stands are on every level inside.'] },
   { id: 'samills', tag: 'Sam Mills', layer: 'fun', icon: '🗿', name: 'Sam Mills statue', x: 610, y: 305, src: 'official',
     summary: 'Along Mint Street, next to a fan autograph wall.',
-    details: ['Sam Mills’ 2003 “Keep Pounding” speech is the root of the team’s rallying cry.', 'An honorary guest hits the Keep Pounding drum before each home kickoff.'] },
+    details: ['Sam Mills’ January 2004 “Keep Pounding” speech is the root of the team’s rallying cry.', 'An honorary guest hits the Keep Pounding drum before each home kickoff.'] },
   { id: 'playyard', tag: 'Play Yard', layer: 'fun', icon: '🎪', name: 'Panthers Play Yard', x: 600, y: 395, src: 'official',
     summary: 'The free pregame fan zone on the South Lawn Village, on Mint Street.',
     details: ['Opens 2 hours before kickoff.', 'Play 60 kids’ activities, a DJ, games and food.', 'You do not need a ticket for the Play Yard.'] },
