@@ -386,55 +386,174 @@
       </div>
     </div>
 
-    <!-- TAB 3: STADIUM TOUR -->
+    <!-- TAB 3: STADIUM TOUR (interactive map, seat view, game-day planner; content in data/stadium.js) -->
     <div id="stadium-tab" class="tab-content hidden">
       <div class="bg-panthers-cardBg border border-panthers-cardBorder rounded-xl p-5 shadow-lg">
-        <h2 class="text-2xl font-heading font-bold uppercase tracking-wider text-white mb-1">
-          BANK OF AMERICA STADIUM FAN GUIDE
-        </h2>
-        <p class="text-panthers-silver text-xs mb-4">Essential game day details for Uptown Charlotte:</p>
 
-        <!-- Custom Field Pattern Graphic -->
-        <div class="relative overflow-hidden rounded-xl border border-panthers-blue p-6 text-center field-pattern shadow-inner mb-5">
-          <div class="relative z-10">
-            <h3 class="text-2xl font-heading font-bold text-white tracking-widest drop-shadow-md">
-              🏟️ BANK OF AMERICA STADIUM
-            </h3>
-            <p class="text-[11px] font-heading font-bold text-panthers-silver tracking-widest uppercase mt-0.5">
-              CHARLOTTE, NC • CAPACITY: 75,037
-            </p>
-            <div class="mt-3 inline-block bg-panthers-blue text-white font-heading font-bold px-4 py-1.5 rounded-full uppercase tracking-widest text-xs shadow-md">
-              KEEP POUNDING FIELD 🏈
+        <!-- Hero -->
+        <div class="relative overflow-hidden rounded-xl border border-panthers-blue p-5 field-pattern shadow-inner mb-4">
+          <div class="relative z-10 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+            <div>
+              <h2 class="text-2xl md:text-3xl font-heading font-bold text-white tracking-widest drop-shadow-md">🏟️ BANK OF AMERICA STADIUM</h2>
+              <p class="text-[11px] font-heading font-bold text-white/80 tracking-widest uppercase mt-0.5">800 S. Mint St · Uptown Charlotte · 75,037 seats</p>
+            </div>
+            <a href="https://www.google.com/maps/search/?api=1&query=Bank+of+America+Stadium+Charlotte" target="_blank" rel="noopener noreferrer"
+               class="self-start md:self-auto bg-panthers-black/80 hover:bg-panthers-black text-white text-[10px] font-heading font-bold px-3 py-1.5 rounded uppercase tracking-wider border border-white/20">📍 Open in Google Maps ↗</a>
+          </div>
+        </div>
+
+        <!-- Sub navigation -->
+        <div class="flex flex-wrap gap-1.5 mb-4" role="tablist" aria-label="Stadium tour sections">
+          <button onclick="showStadiumPanel('map', this)" class="stadium-sub bg-panthers-blue text-white text-[11px] font-heading font-bold uppercase tracking-wider px-3 py-1.5 rounded border border-panthers-cardBorder">🗺️ Interactive Map</button>
+          <button onclick="showStadiumPanel('seat', this)" class="stadium-sub text-panthers-silver text-[11px] font-heading font-bold uppercase tracking-wider px-3 py-1.5 rounded border border-panthers-cardBorder hover:text-white">👀 View From Your Seat</button>
+          <button onclick="showStadiumPanel('plan', this)" class="stadium-sub text-panthers-silver text-[11px] font-heading font-bold uppercase tracking-wider px-3 py-1.5 rounded border border-panthers-cardBorder hover:text-white">⏱️ Game Day Planner</button>
+          <button onclick="showStadiumPanel('rules', this)" class="stadium-sub text-panthers-silver text-[11px] font-heading font-bold uppercase tracking-wider px-3 py-1.5 rounded border border-panthers-cardBorder hover:text-white">🎒 Bags, Rules &amp; Access</button>
+          <button onclick="showStadiumPanel('facts', this)" class="stadium-sub text-panthers-silver text-[11px] font-heading font-bold uppercase tracking-wider px-3 py-1.5 rounded border border-panthers-cardBorder hover:text-white">📜 Facts &amp; History</button>
+        </div>
+
+        <!-- Panel: map -->
+        <div id="stadium-panel-map">
+          <div class="flex flex-wrap items-center gap-2 mb-3">
+            <div id="map-layer-chips" class="flex flex-wrap gap-1.5"></div>
+            <button id="tour-start-btn" onclick="toggleTour()" class="ml-auto bg-panthers-blue hover:bg-panthers-blueHover text-white text-[10px] font-heading font-bold px-3 py-1.5 rounded uppercase tracking-wider shadow-md"></button>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div class="lg:col-span-2">
+              <div id="stadium-map"></div>
+              <div id="tour-box" class="hidden mt-3 bg-panthers-black/70 border border-panthers-blue rounded-lg p-3">
+                <div class="flex items-center justify-between">
+                  <span id="tour-count" class="text-[10px] uppercase tracking-widest text-panthers-blue font-bold"></span>
+                  <button onclick="stopTour()" class="text-panthers-silver hover:text-white text-xs" aria-label="End walkthrough">✕</button>
+                </div>
+                <h3 id="tour-title" class="font-heading font-bold text-white text-base"></h3>
+                <p id="tour-text" class="text-xs text-panthers-silver mt-1" aria-live="polite"></p>
+                <div class="flex gap-2 mt-2">
+                  <button id="tour-prev" onclick="tourStep(-1)" class="bg-panthers-black border border-panthers-cardBorder hover:border-panthers-blue disabled:opacity-40 text-panthers-silver hover:text-white text-[10px] font-heading font-bold px-3 py-1 rounded uppercase tracking-wider">◀ Back</button>
+                  <button id="tour-next" onclick="tourStep(1)" class="bg-panthers-blue hover:bg-panthers-blueHover text-white text-[10px] font-heading font-bold px-3 py-1 rounded uppercase tracking-wider">Next ▶</button>
+                </div>
+              </div>
+            </div>
+            <div id="stadium-pin-detail" class="bg-panthers-black/60 border border-panthers-cardBorder rounded-lg p-4 self-start"></div>
+          </div>
+        </div>
+
+        <!-- Panel: seat view -->
+        <div id="stadium-panel-seat" class="hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div class="lg:col-span-2">
+              <canvas id="seat-canvas" width="720" height="380" class="w-full h-auto rounded-lg border border-panthers-cardBorder bg-[#0b1a2d]" role="img" aria-label="Simulated view of the field from the chosen seats"></canvas>
+              <p class="text-[10px] text-slate-500 mt-1">A simplified 3D drawing to give you a feel for the angle and height. It is not an exact photo of the view.</p>
+              <div id="seat-level-btns" class="flex flex-wrap gap-2 mt-3"></div>
+              <div id="seat-info" class="mt-3 bg-panthers-black/60 border border-panthers-cardBorder rounded-lg p-3"></div>
+            </div>
+            <div class="space-y-3">
+              <div class="bg-panthers-black/60 border border-panthers-cardBorder rounded-lg p-3">
+                <h3 class="font-heading font-bold text-white text-sm uppercase tracking-wider mb-2">Pick where you're sitting</h3>
+                <div id="bowl-map"></div>
+                <p class="text-[10px] text-slate-500 mt-2 text-center">North is up. Sides come from fan guides; the Panthers don't publish a sun chart.</p>
+              </div>
+              <div class="bg-panthers-black/60 border border-panthers-cardBorder rounded-lg p-3">
+                <h3 class="font-heading font-bold text-white text-sm uppercase tracking-wider mb-1">Look up your section</h3>
+                <input id="section-input" type="number" inputmode="numeric" min="100" max="599" placeholder="e.g. 128" oninput="onSectionInput(this.value)" aria-label="Section number"
+                       class="w-full bg-panthers-black border border-panthers-cardBorder px-3 py-1.5 rounded text-xs text-white focus:outline-none focus:border-panthers-blue">
+                <p id="section-result" class="text-xs mt-2 text-panthers-silver" aria-live="polite"></p>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-3 rounded-lg">
-            <h3 class="font-heading font-bold text-panthers-blue text-sm mb-0.5">🏟️ Location</h3>
-            <p class="text-panthers-silver text-xs">800 S Mint St, Charlotte, NC 28202. Uptown Charlotte.</p>
-          </div>
-
-          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-3 rounded-lg">
-            <h3 class="font-heading font-bold text-panthers-blue text-sm mb-0.5">🥁 Drum Tradition</h3>
-            <p class="text-panthers-silver text-xs">A guest drummer strikes the Keep Pounding drum just before kickoff of every home game, a tradition born from Sam Mills' 2003 "Keep Pounding" speech.</p>
-          </div>
-
-          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-3 rounded-lg">
-            <h3 class="font-heading font-bold text-panthers-blue text-sm mb-0.5">🍔 Tailgating</h3>
-            <p class="text-panthers-silver text-xs">Fans arrange and pre-pay their own parking (30,000+ spaces within a 10-15 minute walk). Keep grills 25 ft from buildings and 10 ft from vehicles, never leave them unattended, and note the Mint Street Lot doesn't allow alcohol or grilling.</p>
-          </div>
-
-          <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-panthers-blue p-3 rounded-lg">
-            <h3 class="font-heading font-bold text-panthers-blue text-sm mb-0.5">🎒 Clear Bag Policy</h3>
-            <p class="text-panthers-silver text-xs">NFL Clear Bag Policy enforced: clear bags up to 12" x 6" x 12", or a one-gallon clear freezer bag. A small clutch (up to 4.5" x 6.5") is also allowed.</p>
+        <!-- Panel: game day planner -->
+        <div id="stadium-panel-plan" class="hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div class="space-y-3">
+              <label class="block">
+                <span class="text-[10px] uppercase tracking-widest text-panthers-silver font-bold">Home game</span>
+                <select id="plan-game" onchange="setPlanGame(this.value)" class="mt-1 w-full bg-panthers-black border border-panthers-cardBorder px-2 py-1.5 rounded text-xs text-white focus:outline-none focus:border-panthers-blue"></select>
+              </label>
+              <div>
+                <span class="text-[10px] uppercase tracking-widest text-panthers-silver font-bold">How you're getting there</span>
+                <div id="plan-transport" class="flex flex-wrap gap-1.5 mt-1"></div>
+              </div>
+              <label class="block">
+                <span class="text-[10px] uppercase tracking-widest text-panthers-silver font-bold">Get to security</span>
+                <select id="plan-goal" onchange="setPlanGoal(this.value)" class="mt-1 w-full bg-panthers-black border border-panthers-cardBorder px-2 py-1.5 rounded text-xs text-white focus:outline-none focus:border-panthers-blue"></select>
+              </label>
+              <div class="bg-panthers-black/60 border border-panthers-cardBorder rounded-lg p-3">
+                <h3 class="font-heading font-bold text-white text-sm uppercase tracking-wider mb-2">Tips for your trip</h3>
+                <ul id="plan-tips" class="space-y-1.5"></ul>
+              </div>
+            </div>
+            <div class="lg:col-span-2 bg-panthers-black/60 border border-panthers-cardBorder rounded-lg p-4">
+              <h3 class="font-heading font-bold text-white text-lg uppercase tracking-wider">Your game day timeline</h3>
+              <p id="plan-heading" class="text-xs text-panthers-blue font-bold mb-3"></p>
+              <ol id="plan-timeline" class="space-y-2.5"></ol>
+              <p class="text-[10px] text-slate-500 mt-3">Times come from the Panthers' game-day guide and CATS. Times after kickoff assume a game of about 3 hours.</p>
+            </div>
           </div>
         </div>
 
-        <div class="mt-3 bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-amber-400 p-3 rounded-lg">
-          <h3 class="font-heading font-bold text-amber-400 text-sm mb-0.5">🏗️ Renovation Coming</h3>
-          <p class="text-panthers-silver text-xs">A $1.3 billion stadium renovation is planned. Only behind-the-scenes work happens during the 2026 season, fan-facing construction begins in 2027, and completion is targeted for 2030. The stadium stays open for games, and the final capacity hasn't been set.</p>
+        <!-- Panel: bags, rules & access -->
+        <div id="stadium-panel-rules" class="hidden">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="bg-panthers-black/60 border border-panthers-cardBorder border-t-4 border-t-panthers-blue rounded-lg p-4">
+              <h3 class="font-heading font-bold text-white text-sm uppercase tracking-wider mb-2">🎒 Will my bag get in?</h3>
+              <select id="bag-type" onchange="renderBagChecker()" aria-label="Bag type" class="w-full bg-panthers-black border border-panthers-cardBorder px-2 py-1.5 rounded text-xs text-white focus:outline-none focus:border-panthers-blue">
+                <option value="clear">Clear tote bag</option>
+                <option value="freezer">One-gallon clear freezer bag</option>
+                <option value="clutch">Small clutch / wallet purse</option>
+              </select>
+              <div id="bag-dims" class="grid grid-cols-3 gap-2 mt-2">
+                <label class="text-[10px] text-panthers-silver">Length (in)<input id="bag-l" type="number" min="0" step="0.5" oninput="checkBag()" class="mt-0.5 w-full bg-panthers-black border border-panthers-cardBorder px-2 py-1 rounded text-xs text-white"></label>
+                <label class="text-[10px] text-panthers-silver">Width (in)<input id="bag-w" type="number" min="0" step="0.5" oninput="checkBag()" class="mt-0.5 w-full bg-panthers-black border border-panthers-cardBorder px-2 py-1 rounded text-xs text-white"></label>
+                <label id="bag-h-wrap" class="text-[10px] text-panthers-silver">Depth (in)<input id="bag-h" type="number" min="0" step="0.5" oninput="checkBag()" class="mt-0.5 w-full bg-panthers-black border border-panthers-cardBorder px-2 py-1 rounded text-xs text-white"></label>
+              </div>
+              <label id="bag-clear-wrap" class="flex items-center gap-2 mt-2 text-xs text-panthers-silver"><input id="bag-clear" type="checkbox" checked onchange="checkBag()" class="accent-[#0085CA]"> It's see-through (plastic, vinyl or PVC)</label>
+              <p id="bag-result" class="text-xs mt-2 text-panthers-silver" aria-live="polite"></p>
+              <p class="text-[10px] text-slate-500 mt-2">Not allowed: <span id="banned-bags"></span>.</p>
+            </div>
+            <div class="bg-panthers-black/60 border border-panthers-cardBorder border-t-4 border-t-amber-400 rounded-lg p-4">
+              <h3 class="font-heading font-bold text-white text-sm uppercase tracking-wider mb-2">✅ Packing checklist</h3>
+              <ul id="packing-list" class="space-y-2"></ul>
+            </div>
+            <div class="space-y-4">
+              <div class="bg-panthers-black/60 border border-panthers-cardBorder border-t-4 border-t-emerald-500 rounded-lg p-4">
+                <h3 class="font-heading font-bold text-white text-sm uppercase tracking-wider mb-2">📋 Stadium rules</h3>
+                <ul id="rules-list" class="space-y-1.5"></ul>
+              </div>
+              <div class="bg-panthers-black/60 border border-panthers-cardBorder border-t-4 border-t-fuchsia-400 rounded-lg p-4">
+                <h3 class="font-heading font-bold text-white text-sm uppercase tracking-wider mb-2">♿ Accessibility</h3>
+                <ul id="access-list" class="space-y-1.5"></ul>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <!-- Panel: facts & history -->
+        <div id="stadium-panel-facts" class="hidden">
+          <div id="stadium-facts" class="grid grid-cols-2 lg:grid-cols-3 gap-3"></div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
+            <div class="bg-panthers-black/60 border border-panthers-cardBorder rounded-lg p-4">
+              <h3 class="font-heading font-bold text-white text-sm uppercase tracking-wider mb-3">Stadium timeline</h3>
+              <ol id="stadium-history" class="space-y-2.5"></ol>
+            </div>
+            <div class="space-y-4">
+              <div class="bg-panthers-black/60 border border-panthers-cardBorder border-l-4 border-l-amber-400 p-4 rounded-lg">
+                <h3 class="font-heading font-bold text-amber-400 text-sm mb-1">🏗️ The $1.3 billion renovation</h3>
+                <p class="text-panthers-silver text-xs">Only behind-the-scenes work happens during the 2026 season. Fan-facing construction starts in 2027 and is targeted to finish in 2030, and games continue at the stadium throughout. The final capacity hasn't been announced.</p>
+              </div>
+              <div class="bg-panthers-black/60 border border-panthers-cardBorder p-4 rounded-lg">
+                <h3 class="font-heading font-bold text-white text-sm mb-1">💎 Premium clubs</h3>
+                <p id="stadium-clubs" class="text-panthers-silver text-xs"></p>
+              </div>
+              <div class="bg-panthers-black/60 border border-panthers-cardBorder p-4 rounded-lg">
+                <h3 class="font-heading font-bold text-white text-sm mb-1">❓ What we couldn't confirm</h3>
+                <p id="stadium-gaps" class="text-panthers-silver text-xs"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p id="stadium-asof" class="text-[10px] text-slate-500 mt-4"></p>
       </div>
     </div>
 
@@ -711,6 +830,7 @@
   <script src="data/playoff.js"></script>
   <script src="data/draft-prospects.js"></script>
   <script src="data/draft-order.js"></script>
+  <script src="data/stadium.js"></script>
 
   <!-- Code (order matters: helpers first, main.js last) -->
   <script src="js/helpers.js"></script>
@@ -719,6 +839,7 @@
   <script src="js/schedule.js"></script>
   <script src="js/playoff.js"></script>
   <script src="js/draft.js"></script>
+  <script src="js/stadium.js"></script>
   <script src="js/forum.js"></script>
   <script src="js/home.js"></script>
   <script src="js/main.js"></script>

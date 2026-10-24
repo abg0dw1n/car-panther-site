@@ -8,7 +8,7 @@ A single-page fan portal for the Carolina Panthers, deployed on Vercel.
 
 - **Home:** kickoff countdown, live ESPN headlines, franchise milestones, Hall of Honor
 - **Roster:** all 76 players (active, IR/PUP, practice squad) with ESPN headshots, 2026 stats and the coaching staff
-- **Stadium Tour:** Bank of America Stadium fan guide
+- **Stadium Tour:** clickable stadium map with a guided walkthrough, a 3D "view from your seat" simulator and section lookup, a game-day timeline planner, a clear-bag checker, rules/accessibility, and facts & history
 - **2026 Schedule:** results and upcoming games, with a "wins only" filter
 - **Playoff Machine:** pick outcomes for the Panthers' remaining divisional games and see the NFC South standings update (all other results are held constant)
 - **Mock Draft:** full 7-round, 257-pick 2027 draft; you pick for the Panthers, the computer picks for the other 31 teams; 333 prospects, search and position filters, pick and class grades
@@ -30,6 +30,7 @@ data/             The content. Edit these when scores, rosters or prospects chan
   playoff.js        NFC South records and remaining divisional games
   draft-prospects.js  The 333 draft prospects in consensus order
   draft-order.js    The 257-pick order with trades, plus all 32 teams
+  stadium.js        Stadium map pins, seating zones, game-day timeline, rules (each item rated official / fan-guide / approximate)
 js/               The behavior, one file per area
   helpers.js        Safety helpers (escaping text, checking links)
   tabs.js           Switching tabs
@@ -37,6 +38,7 @@ js/               The behavior, one file per area
   schedule.js       Schedule table
   playoff.js        Playoff Machine
   draft.js          Mock Draft engine, board and grading
+  stadium.js        Stadium Tour: map, walkthrough, seat view, planner, bag checker
   forum.js          Fan Discussions
   home.js           Countdown, weather and news
   main.js           Starts everything when the page loads (keep this last)

@@ -9,5 +9,6 @@ renderPlayoffMachine();
 setupDraftControls();
 initDraft();
 renderDraft();
+renderStadium();
 fetchCharlotteWeather();
 fetchPanthersNews();

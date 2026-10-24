@@ -91,7 +91,10 @@ eval(code + `
     initDraft, renderDraft, currentSlot, isUserTurn, isDraftComplete, nextUserSlot, availableProspects, cpuChoose, makePick,
     simOnePick, simNextPick, simToMyPick, autoDraftRest, draftProspect, resetDraftSim, setDraftPos, setDraftQuery, showMoreProspects,
     gradePick, gradeClass, getDraftState: () => draftState, getDraftUI: () => draftUI, setRandom: fn => { draftRandom = fn; },
-    renderTeamRecord, renderNextGame, startCountdown, fetchCharlotteWeather, fetchPanthersNews, createNewPost, upvotePost, WEATHER_ICONS };
+    renderTeamRecord, renderNextGame, startCountdown,
+    STADIUM_PINS, STADIUM_TOUR, STADIUM_ZONES, STADIUM_LEVELS, MAP_LAYERS, GAMEDAY_STEPS, TRANSPORT_TIPS, SRC_LABELS, stadiumUI,
+    selectPin, toggleMapLayer, toggleTour, tourStep, setSeatZone, setSeatLevel, seatCamera, buildSeatScene, lookupSection,
+    homeGames, buildPlan, setPlanTransport, setPlanGoal, setPlanGame, evaluateBag, showStadiumPanel, fetchCharlotteWeather, fetchPanthersNews, createNewPost, upvotePost, WEATHER_ICONS };
 `);
 const t = global.__t;
 
@@ -295,6 +298,88 @@ check('29 more full drafts with different random seeds all finish cleanly', allC
 // Reset
 t.resetDraftSim();
 check('reset puts the draft back at pick 1 with everyone available', t.currentSlot().pick === 1 && t.availableProspects().length === 333 && t.getDraftState().picks.every(p => p.playerId == null));
+
+// ---------------------------------------------------------------------------------------------------
+section('Stadium Tour');
+// ---------------------------------------------------------------------------------------------------
+check('every map pin has a known layer, a source rating, a summary and details',
+  t.STADIUM_PINS.every(p => t.MAP_LAYERS.some(l => l.id === p.layer) && t.SRC_LABELS[p.src] && p.summary && p.details.length));
+check('map pins sit inside the map and have unique ids',
+  t.STADIUM_PINS.every(p => p.x > 0 && p.x < 780 && p.y > 0 && p.y < 500) && new Set(t.STADIUM_PINS.map(p => p.id)).size === t.STADIUM_PINS.length);
+check('the map draws one button per pin at start', (els['stadium-map'].innerHTML.match(/onclick="selectPin\('/g) || []).length === t.STADIUM_PINS.length);
+t.selectPin('store');
+check('clicking a pin shows its details', els['stadium-pin-detail'].innerHTML.includes('Panthers Team Store') && els['stadium-pin-detail'].innerHTML.includes('9–10 a.m.'));
+t.toggleMapLayer('fun');
+check('hiding a layer removes its pins and closes an open pin from it',
+  !els['stadium-map'].innerHTML.includes("selectPin('store')") && t.stadiumUI.pin === null);
+t.toggleMapLayer('fun');
+check('every walkthrough stop points at a real pin', t.STADIUM_TOUR.every(s => t.STADIUM_PINS.some(p => p.id === s.pin)));
+t.toggleMapLayer('gates');
+t.toggleTour();
+check('starting the walkthrough turns every layer back on and opens stop 1',
+  Object.values(t.stadiumUI.layers).every(Boolean) && els['tour-count'].textContent === `Stop 1 of ${t.STADIUM_TOUR.length}` && t.stadiumUI.pin === t.STADIUM_TOUR[0].pin);
+t.tourStep(-1);
+check('"Back" on the first stop does nothing', t.stadiumUI.tour === 0);
+for (let i = 1; i < t.STADIUM_TOUR.length; i++) t.tourStep(1);
+check('stepping reaches the last stop, which offers Finish', t.stadiumUI.tour === t.STADIUM_TOUR.length - 1 && /Finish/.test(els['tour-next'].textContent));
+t.tourStep(1);
+check('Finish ends the walkthrough', t.stadiumUI.tour === -1 && els['tour-box'].classList.contains('hidden'));
+
+const cam = t.seatCamera('home', '100');
+check('home-sideline lower-level seats sit on the Panthers (-z) side, low and close',
+  cam.x === 0 && cam.z < -26.65 && cam.z > -50 && cam.y < 10);
+const up = t.seatCamera('visitors', '500');
+check('upper-deck visitor seats are on the other side, higher and farther back', up.z > 0 && up.y > 40 && Math.abs(up.z) > Math.abs(cam.z));
+let sceneOk = true, sceneMsg = '';
+for (const z of t.STADIUM_ZONES) for (const l of t.STADIUM_LEVELS) {
+  const sc = t.buildSeatScene(z.id, l.id);
+  const allPts = [...sc.fieldShapes, ...sc.stands].flatMap(s => s.pts);
+  if (sc.fieldShapes.length < 10 || sc.stands.length < 20 || sc.posts.length < 4 || allPts.some(p => !Number.isFinite(p[0]) || !Number.isFinite(p[1]))) {
+    sceneOk = false; sceneMsg = `${z.id}/${l.id}`;
+  }
+  // the 50-yard line's middle should be in view, near the center of the picture
+  const mid = sc.lines.find(x => x.w === 2 && Math.abs(x.a[0] - x.b[0]) < 1e9);
+  if (!mid) { sceneOk = false; sceneMsg = `${z.id}/${l.id} no lines`; }
+}
+check(`seat view draws the field, stands and goalposts from all ${t.STADIUM_ZONES.length * t.STADIUM_LEVELS.length} zone/level combos`, sceneOk, sceneMsg);
+t.setSeatZone('north'); t.setSeatLevel('300');
+check('choosing seats updates the description', /North end zone · 300 Level/.test(els['seat-info'].innerHTML));
+t.setSeatZone('no-such-zone');
+check('an unknown zone falls back safely', t.stadiumUI.zone === 'home');
+
+check('section lookup: 128 is lower bowl and on the shaded side', /100 level/.test(t.lookupSection('128').text) && /Shaded/.test(t.lookupSection('128').text));
+check('section lookup: 512 is upper deck, sunny side', /500 level/.test(t.lookupSection('512').text) && /Sunny/.test(t.lookupSection('512').text));
+check('section lookup rejects nonsense', !t.lookupSection('42').ok && !t.lookupSection('abc').ok && !t.lookupSection('700').ok);
+
+const hg = t.homeGames();
+check('planner lists the 9 home games', hg.length === 9 && hg.map(g => g.week).join() === '1,4,7,9,11,14,15,17,18', hg.map(g => g.week).join());
+check('planner opens on the next home game (Week 7 vs. Tampa Bay)', /October 25/.test(els['plan-heading'].textContent) && /Tampa Bay/.test(els['plan-heading'].textContent), els['plan-heading'].textContent);
+const plan = t.buildPlan(hg[2], 'drive', 'early');
+const at = txt => (plan.find(s => s.text.includes(txt)) || {}).time;
+check('gates open at 11:00 AM for a 1:00 PM kickoff', at('Gates open') === '11:00 AM ET');
+check('kickoff is listed at 1:00 PM and the plan is in time order',
+  at('Kickoff') === '1:00 PM ET' && plan.every((s, i) => i === 0 || plan[i - 1].min <= s.min));
+check('bus times appear only when you pick the Game Day Express',
+  !plan.some(s => /Express buses|Return buses/.test(s.text)) && t.buildPlan(hg[2], 'express', 'early').filter(s => /buses/i.test(s.text)).length === 2);
+check('first express bus is 2½ hours before kickoff (10:30 AM)', t.buildPlan(hg[2], 'express', 'early')[0].time === '10:30 AM ET');
+check('arrival goal "30 minutes early" lands at 12:30 PM', t.buildPlan(hg[2], 'ride', 'justin').find(s => s.mine).time === '12:30 PM ET');
+const sunNight = hg.find(g => g.week === 9);
+check('times after Nov 1 use Eastern Standard Time correctly',
+  t.buildPlan(sunNight, 'drive', 'early').find(s => s.key).time === new Date(sunNight.kickoff).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' }) + ' ET');
+t.setPlanTransport('express');
+check('switching transport changes the tips', /Brevard/.test(els['plan-tips'].innerHTML));
+t.setPlanTransport('teleport');
+check('an unknown transport is ignored', t.stadiumUI.plan.transport === 'express');
+
+const bag = (...a) => t.evaluateBag(...a).ok;
+check('bag: 12×6×12 clear tote passes in any order', bag('clear', 12, 12, 6, true) && bag('clear', 6, 12, 12, true));
+check('bag: 13×6×12 is too big, and a non-clear tote fails', !bag('clear', 13, 6, 12, true) && !bag('clear', 10, 5, 10, false));
+check('bag: a 6×4 clutch passes even if not clear; 7×4 fails', bag('clutch', 6, 4, 0, false) && !bag('clutch', 7, 4, 0, false));
+check('bag: a freezer bag only needs to be clear', bag('freezer', 0, 0, 0, true) && !bag('freezer', 0, 0, 0, false));
+check('bag: missing sizes ask for input instead of passing', !t.evaluateBag('clear', '', 6, 12, true).ok && /Enter/.test(t.evaluateBag('clear', '', 6, 12, true).messages[0]));
+t.showStadiumPanel('plan', null);
+check('stadium sub-tabs show one panel at a time', !els['stadium-panel-plan'].classList.contains('hidden') && els['stadium-panel-map'].classList.contains('hidden'));
+check('facts panel lists capacity 75,037 and the 1996 opening', els['stadium-facts'].innerHTML.includes('75,037') && els['stadium-history'].innerHTML.includes('1996'));
 
 // ---------------------------------------------------------------------------------------------------
 section('Weather, news, forum and safety');

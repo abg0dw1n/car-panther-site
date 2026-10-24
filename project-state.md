@@ -1,14 +1,16 @@
 # Project State: car-panther-site
 
-- **Current Version:** v5.0 - Content audit, headshots, full 7-round mock draft
+- **Current Version:** v5.1 - Interactive Stadium Tour
 - **Goal:** Carolina Panthers fan portal (unofficial)
 - **Status:** Published on Vercel (https://my-first-site-mauve-iota.vercel.app/)
 
 ## Recent Actions
+- v5.1: rebuilt the Stadium Tour tab: schematic clickable map (gates, fan zones, transit/parking, services) with a 9-stop guided walkthrough; canvas 3D seat-view for 8 seating areas x 3 levels; section lookup; game-day planner driven by the schedule; clear-bag checker; rules, accessibility, facts and history. Content in data/stadium.js, rated official / fan-guide / approximate.
 - v5.0: audited all content and fixed errors (stadium capacity, unsupported claims, NFC South baseline, stats, wind units, fake weather/news fallbacks, "Official" label). Record, next game, countdown and playoff games now derive from the schedule data. Roster rebuilt (76 players) with ESPN headshots. Mock draft is now the full 257-pick, 7-round draft with 333 prospects. Added `tests/check.js`.
 - v4.0: split into data/, js/, css/.
 
 ## Known Gaps
+- Stadium: the map is schematic and pin positions are approximate; sun/shade and home/visitor sides come from fan guides; gate-to-section mapping, tunnel side and first-aid locations are unconfirmed.
 - Forum posts are not saved; they reset on refresh.
 - CPU draft teams ignore team needs; prospects beyond Tankathon's top 162 are ordered by estimate; the draft order and comp picks are projections.
 - Prospects have no photos. Headshots are hotlinked from ESPN.
