@@ -1,9 +1,9 @@
-// Panthers depth chart, from panthers.com/team/depth-chart (read Oct 24, 2026; the page shows no week).
+// Panthers depth chart, from panthers.com/team/depth-chart (rechecked Oct 26, 2026; the page shows no week).
 // Each row lists players in order: starter first, then 2nd string, 3rd, and so on.
 // Rows are in the order the roster page shows them. When the team updates its depth chart,
 // edit the player lists here; names must match data/roster.js exactly.
 
-const DEPTH_CHART_AS_OF = 'Oct 24, 2026';
+const DEPTH_CHART_AS_OF = 'Oct 26, 2026';
 
 const DEPTH_CHART = [
   // ---- Offense

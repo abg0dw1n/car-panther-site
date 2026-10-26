@@ -4,7 +4,7 @@
 const ARCADE_GAMES = {
   trivia: {
     name: 'Panthers Trivia', icon: '❓', tag: '4 modes · daily challenge', url: 'https://my-first-game-opal.vercel.app/', height: 'h-[820px] sm:h-[760px]',
-    about: '67 fact-checked questions on team history, legends, the 2026 squad and the stadium.',
+    about: '69 fact-checked questions on team history, legends, the 2026 squad and the stadium.',
     points: [['🏈', 'Classic', '10 questions, 15 seconds each, with 50/50 and Skip.'], ['⚡', 'Blitz', '60 seconds. Rack up as many as you can.'],
              ['💀', 'Sudden Death', 'Gets harder every round. One miss ends it.'], ['📅', 'Daily Challenge', 'Same 5 questions for every fan, once a day.']],
     scoring: 'Every right answer is worth 100, plus up to 50 for speed. Streaks add up to +50%. Ranks run from Practice Squad to Hall of Famer.'

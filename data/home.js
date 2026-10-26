@@ -115,6 +115,27 @@ const GAME_LEADERS = {
       "https://fantasydata.com/nfl/boxscore/19540-carolina-panthers-vs-philadelphia-eagles-week-6-2026",
       "https://www.panthers.com/news/rapid-reactions-panthers-grind-out-a-win-in-philadelphia-rocky-tommy-tremble-chuba-hubbard"
     ]
+  },
+  "7": {
+    "passer": {
+      "name": "Bryce Young",
+      "line": "14/27, 163 yds, 1 TD, 2 INT"
+    },
+    "rusher": {
+      "name": "Chuba Hubbard",
+      "line": "7 car, 33 yds, 0 TD"
+    },
+    "receiver": {
+      "name": "Darren Waller",
+      "line": "1 rec, 50 yds, 1 TD"
+    },
+    "defense": "Bobby Okereke: 10 tackles",
+    "recap": "Tampa Bay forced four turnovers (a muffed punt, a strip-sack returned for a TD and two interceptions) and ran for 258 yards. Darren Waller’s 50-yard TD and Tre Tyus’s first career score were the bright spots, but RT Taylor Moton left with a broken fibula.",
+    "sources": [
+      "https://www.panthers.com/news/rapid-reactions-panthers-fall-to-bucs-at-home-taylor-moton",
+      "https://surprisesports.com/scores/nfl/buccaneers-vs-panthers-401873018/",
+      "https://www.thescore.com/nfl/event/140676"
+    ]
   }
 };
 

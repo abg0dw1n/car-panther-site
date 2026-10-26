@@ -178,6 +178,9 @@ function playerCardHtml(p) {
   const badgeHtml = badge
     ? `<span title="${escapeHtml(badge.title)}" class="text-[9px] font-heading font-bold px-1.5 py-0.5 rounded border leading-none ${badge.cls}">${badge.text}</span>`
     : '';
+  const injuryHtml = p.injury && p.status === 'Active'
+    ? `<span title="${escapeHtml(p.injury)}" class="text-[9px] font-heading font-bold px-1.5 py-0.5 rounded border leading-none bg-amber-950/70 text-amber-300 border-amber-500/60">🩹 INJ</span>`
+    : '';
   const bio = [p.ht, p.wt ? `${p.wt} lb` : null, p.age != null ? `Age ${p.age}` : null, formatExp(p.exp)].filter(Boolean).join(' · ');
 
   return `
@@ -195,7 +198,7 @@ function playerCardHtml(p) {
           <div class="flex items-center gap-1.5 flex-wrap">
             <span class="text-[9px] font-heading font-bold text-panthers-blue uppercase tracking-wider bg-panthers-blue/20 px-1.5 py-0.5 rounded border border-panthers-blue/30 leading-none">${escapeHtml(p.pos)}</span>
             <span class="text-[10px] text-panthers-silver font-mono leading-none">${p.num ? '#' + escapeHtml(p.num) : 'No #'}</span>
-            ${badgeHtml}
+            ${badgeHtml}${injuryHtml}
           </div>
           <h3 class="font-heading font-bold text-white text-base mt-1 truncate" title="${escapeHtml(p.name)}">${escapeHtml(p.name)}</h3>
           ${depthBadgeHtml(p) ? `<div class="mt-0.5 mb-0.5">${depthBadgeHtml(p)}</div>` : ''}
@@ -273,6 +276,7 @@ function playerModalHtml(p) {
         </div>
         <h2 id="player-modal-title" class="font-heading font-bold text-white text-4xl uppercase tracking-wider mt-1 leading-none">${escapeHtml(p.name)}</h2>
         ${depthModalHtml(p)}
+        ${p.injury ? `<p class="mt-2 text-xs text-amber-300 bg-amber-950/40 border border-amber-500/40 rounded-lg px-3 py-2">🩹 <strong>Injury:</strong> ${escapeHtml(p.injury)}</p>` : ''}
         <dl class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-4">
           ${bio.map(([k, v]) => `<div class="bg-panthers-black/60 border border-panthers-cardBorder rounded-lg px-3 py-2"><dt class="text-[9px] uppercase tracking-widest text-panthers-silver font-bold">${k}</dt><dd class="text-white text-sm font-semibold truncate">${escapeHtml(String(v))}</dd></div>`).join('')}
         </dl>

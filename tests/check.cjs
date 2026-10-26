@@ -119,7 +119,7 @@ check('startup finished and drew the first screens',
 section('Roster data and headshots');
 // ---------------------------------------------------------------------------------------------------
 const R = t.panthersRoster;
-check('roster has 76 players (53 active, 10 IR/PUP, 13 practice squad)',
+check('roster has 76 players (53 active, 10 IR/PUP, 13 practice squad) after the Week 7 moves',
   R.length === 76 && R.filter(p => p.status === 'Active').length === 53 &&
   R.filter(p => p.status === 'IR' || p.status === 'PUP').length === 10 && R.filter(p => p.status === 'Practice Squad').length === 13,
   JSON.stringify(R.reduce((a, p) => (a[p.status] = (a[p.status] || 0) + 1, a), {})));
@@ -132,6 +132,8 @@ check('players ESPN lists on other teams were left out',
   !R.some(p => ['Ahmani Marshall', 'Ihmir Smith-Marsette', 'Marco Wilson'].includes(p.name)));
 const byName = n => R.find(p => p.name === n);
 check('Jaycee Horn is shown as injured reserve, not as a starter', byName('Jaycee Horn').status === 'IR');
+check('Week 7 moves: Incoom to IR, Martin-Scott activated; 53 active players', byName('Thomas Incoom').status === 'IR' && byName('Bam Martin-Scott').status === 'Active' && R.filter(p => p.status === 'Active').length === 53);
+check('injured active players (Taylor Moton) get an injury badge with the details', t.playerCardHtml(byName('Taylor Moton')).includes('🩹 INJ') && t.playerCardHtml(byName('Taylor Moton')).includes('Broken fibula') && !t.playerCardHtml(byName('Bryce Young')).includes('INJ'));
 
 const young = byName('Bryce Young');
 const cardHtml = t.playerCardHtml(young);
@@ -145,12 +147,12 @@ check('fallback swaps the broken image for the silhouette with the jersey number
 
 const cells = n => t.seasonStatCells(byName(n));
 const flat = n => (cells(n) || []).map(c => c.join(' ')).join(' | ');
-check('Bryce Young stats: 1,549 yds, 11 TD / 2 INT, 60.2%', flat('Bryce Young') === 'PASS YDS 1,549 | TD / INT 11 / 2 | COMP 60.2%', flat('Bryce Young'));
-check('Chuba Hubbard stats: 426 rush yds, 89 carries, 6 total TD', flat('Chuba Hubbard') === 'RUSH YDS 426 | CARRIES 89 | TOTAL TD 6', flat('Chuba Hubbard'));
-check('Tetairoa McMillan stats: 32 rec, 471 yds, 2 TD', flat('Tetairoa McMillan') === 'REC 32 | REC YDS 471 | TD 2', flat('Tetairoa McMillan'));
-check('Derrick Brown stats were corrected (13 tackles, no 22 / 1.5 sacks)', /TACKLES 13\b/.test(flat('Derrick Brown')), flat('Derrick Brown'));
+check('Bryce Young stats through Week 7: 1,712 yds, 12 TD / 4 INT, 59.2%', flat('Bryce Young') === 'PASS YDS 1,712 | TD / INT 12 / 4 | COMP 59.2%', flat('Bryce Young'));
+check('Chuba Hubbard stats: 459 rush yds, 96 carries, 6 total TD', flat('Chuba Hubbard') === 'RUSH YDS 459 | CARRIES 96 | TOTAL TD 6', flat('Chuba Hubbard'));
+check('Tetairoa McMillan stats: 36 rec, 511 yds, 2 TD', flat('Tetairoa McMillan') === 'REC 36 | REC YDS 511 | TD 2', flat('Tetairoa McMillan'));
+check('Derrick Brown stats: 18 tackles, 0 sacks, 5 passes defensed', flat('Derrick Brown') === 'TACKLES 18 | SACKS 0 | INT / PD 0 / 5', flat('Derrick Brown'));
 check('Ryan Fitzgerald is 11/11 on field goals', /FG 11\/11/.test(flat('Ryan Fitzgerald')), flat('Ryan Fitzgerald'));
-check('Sam Martin stats: 18 punts, 46.6 avg, 42.6 net', flat('Sam Martin') === 'PUNTS 18 | AVG 46.6 | NET 42.6', flat('Sam Martin'));
+check('Sam Martin stats: 20 punts, 46.3 avg, 42.7 net', flat('Sam Martin') === 'PUNTS 20 | AVG 46.3 | NET 42.7', flat('Sam Martin'));
 check('offensive linemen with no stats say so instead of inventing numbers',
   cells('Taylor Moton') === null && t.playerCardHtml(byName('Taylor Moton')).includes('No 2026 stats on record'));
 
@@ -166,7 +168,7 @@ check('"Practice squad" filter shows 13 players', (+els['count-offense'].textCon
 t.setRosterStatus('all');
 
 check('every depth-chart name matches a player on the roster', t.DEPTH_CHART.every(r => r.players.every(n => R.some(p => p.name === n))));
-check('every active player except one is on the depth chart', R.filter(p => p.status === 'Active' && !t.depthInfo(p).primary).map(p => p.name).join() === 'Anthony Tyus III');
+check('every active player except two is on the depth chart', R.filter(p => p.status === 'Active' && !t.depthInfo(p).primary).map(p => p.name).sort().join() === 'Anthony Tyus III,Bam Martin-Scott', R.filter(p => p.status === 'Active' && !t.depthInfo(p).primary).map(p => p.name).join());
 const offSorted = t.sortByDepth(R.filter(p => p.side === 'offense'));
 check('offense lists the 11 starters first, QB first', offSorted.slice(0, 11).every(p => t.depthTier(p) === 'starter') && offSorted[0].name === 'Bryce Young' && t.depthTier(offSorted[11]) !== 'starter');
 check('offense starters follow position order QB, RB, WR, WR, WR, TE, LT, LG, C, RG, RT',
@@ -191,7 +193,7 @@ check('every player card opens the big view when clicked or tapped', t.playerCar
 t.openPlayer(4685720);
 const pm = els['player-modal-body'].innerHTML;
 check('big card shows photo, bio and full passing + rushing stats',
-  !els['player-modal'].classList.contains('hidden') && pm.includes('4685720.png') && pm.includes('Alabama') && pm.includes('121/201') && pm.includes('60.2%') && pm.includes('98.5') && /Rushing/.test(pm));
+  !els['player-modal'].classList.contains('hidden') && pm.includes('4685720.png') && pm.includes('Alabama') && pm.includes('135/228') && pm.includes('59.2%') && pm.includes('92.9') && /Rushing/.test(pm));
 check('big card links to the ESPN profile', pm.includes('espn.com/nfl/player/_/id/4685720'));
 const offenseCount = R.filter(p => p.side === 'offense').length;
 check('arrows browse the same group as the open card', t.getPlayerModal().list.length === offenseCount && !els['player-next'].classList.contains('hidden'));
@@ -203,7 +205,7 @@ check('← goes back', t.getPlayerModal().index === startIdx);
 t.playerModalKeys({ key: 'Escape' });
 check('Esc closes the big card', els['player-modal'].classList.contains('hidden') && t.getPlayerModal().index === -1);
 const sam = t.fullStatGroups(byName('Sam Martin'));
-check('punter big card shows punting stats', sam.length === 1 && sam[0].title === 'Punting' && sam[0].cells.some(c => c[0] === 'NET' && c[1] === '42.6'));
+check('punter big card shows punting stats', sam.length === 1 && sam[0].title === 'Punting' && sam[0].cells.some(c => c[0] === 'NET' && c[1] === '42.7'));
 const ps = R.find(p => p.status === 'Practice Squad' && !p.stats);
 if (ps) { t.openPlayer(ps.id); check('players without stats say so on the big card', /No 2026 stats on record/.test(els['player-modal-body'].innerHTML)); t.closePlayer(); }
 t.setRosterStatus('squad');
@@ -365,11 +367,11 @@ section('Home page');
 // ---------------------------------------------------------------------------------------------------
 check('every played game has leaders and a recap', t.panthers2026Schedule.filter(g => t.parseResult(g.status)).every(g => t.GAME_LEADERS[g.week] && t.GAME_LEADERS[g.week].recap));
 const sumYds = Object.values(t.GAME_LEADERS).reduce((s, L) => s + (L.passer.name === 'Bryce Young' ? +L.passer.line.match(/, (\d+) yds/)[1] : 0), 0);
-check('game-by-game passing yards add up to the season total on the roster card (1,549)', sumYds === 1549, String(sumYds));
+check('game-by-game passing yards add up to the season total on the roster card (1,712)', sumYds === 1712, String(sumYds));
 const sumRush = Object.values(t.GAME_LEADERS).reduce((s, L) => s + (L.rusher.name === 'Chuba Hubbard' ? +L.rusher.line.match(/, (\d+) yds/)[1] : 0), 0);
-check('game-by-game rushing yards add up to Hubbard\'s 426', sumRush === 426, String(sumRush));
-check('last game card shows the Week 6 win at Philadelphia with photos of the leaders',
-  /25 <span[^>]*>–<\/span> 14/.test(els['last-game'].innerHTML) && els['last-game'].innerHTML.includes('at Philadelphia Eagles') && els['last-game'].innerHTML.includes('Chuba Hubbard') && els['last-game'].innerHTML.includes('a.espncdn.com'));
+check('game-by-game rushing yards add up to Hubbard\'s 459', sumRush === 459, String(sumRush));
+check('last game card shows the Week 7 loss to Tampa Bay with photos of the leaders',
+  /13 <span[^>]*>–<\/span> 43/.test(els['last-game'].innerHTML) && els['last-game'].innerHTML.includes('vs. Tampa Bay Buccaneers') && els['last-game'].innerHTML.includes('Darren Waller') && els['last-game'].innerHTML.includes('a.espncdn.com') && els['last-game'].innerHTML.includes('>L<'));
 const ss = t.seasonSummary();
 check('season numbers: 159 scored, 166 allowed, -7, L1 streak, 1st in NFC South',
   ss.pf === 159 && ss.pa === 166 && ss.diff === -7 && ss.streak === 'L1' && ss.place === '1st', JSON.stringify(ss));

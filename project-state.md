@@ -5,6 +5,7 @@
 - **Status:** Published on Vercel (https://my-first-site-mauve-iota.vercel.app/)
 
 ## Recent Actions
+- Oct 26 data refresh: Week 7 result (L 13-43 vs TB), standings, team records, draft order, player stats through Week 7, roster moves (Incoom to IR, Martin-Scott activated), injury badges (Moton, Phillips), Week 7 leaders/recap on Home, trivia stats.
 - v6.0: Fan Talk is now a real forum (Vercel Function + private Vercel Blob store): feed, categories, Hot/New/Top, thread view with nested replies, upvotes, reports with auto-hide, auto game/post-game threads, moderator tools. Roster sorted by depth chart with badges; clickable enlarged player cards.
 - v5.3: restyled for an 18-28 audience: glassy cards, blue glow, Bebas Neue headlines (theme layer at the bottom of css/style.css); rewrote headings and buttons across all tabs in a punchier voice (facts unchanged); data-driven hype headline on Home; Home rows rebalanced, Hall of Honor now a full-width grid.
 - v5.2: Home page rebuilt: smarter next-game banner with game-day/live states, last-game recap, season at a glance, quick links, this day in history (119 dates), full Hall of Honor (8), corrected franchise facts. Content in data/home.js.
