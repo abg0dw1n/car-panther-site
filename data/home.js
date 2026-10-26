@@ -4,7 +4,7 @@
 //   - refresh OPPONENTS (records) and OPPONENTS_AS_OF
 // Individual sack credits come from a single box-score source and may be revised.
 
-const HOME_AS_OF = 'Oct 24, 2026';
+const HOME_AS_OF = 'Oct 26, 2026';
 
 // Panthers leaders and a short recap for each played game, keyed by week
 const GAME_LEADERS = {
@@ -119,21 +119,19 @@ const GAME_LEADERS = {
 };
 
 // Upcoming opponents: 2026 record, all-time regular-season series (Panthers first), playoff series, last meeting
-const OPPONENTS_AS_OF = 'through Thursday of Week 7';
+const OPPONENTS_AS_OF = 'through Sunday of Week 7';
 const OPPONENTS = {
   "TB": {
-    "record": "1-5",
-    "streak": "L1",
-    "series": "26-25",
+    "record": "2-5",
+    "series": "26-26",
     "playoffs": "0-0",
     "last": {
-      "date": "2026-01-03",
-      "result": "L 14-16"
+      "date": "2026-10-25",
+      "result": "L 13-43"
     }
   },
   "GB": {
-    "record": "4-2",
-    "streak": "W3",
+    "record": "4-3",
     "series": "7-11",
     "playoffs": "0-1",
     "last": {
@@ -142,8 +140,7 @@ const OPPONENTS = {
     }
   },
   "DEN": {
-    "record": "4-2",
-    "streak": "W2",
+    "record": "5-2",
     "series": "2-6",
     "playoffs": "0-1",
     "last": {
@@ -152,8 +149,7 @@ const OPPONENTS = {
     }
   },
   "NO": {
-    "record": "2-4",
-    "streak": "W1",
+    "record": "2-5",
     "series": "29-33",
     "playoffs": "0-1",
     "last": {
@@ -162,8 +158,7 @@ const OPPONENTS = {
     }
   },
   "BAL": {
-    "record": "4-2",
-    "streak": "L1",
+    "record": "4-3",
     "series": "4-3",
     "playoffs": "0-0",
     "last": {
@@ -172,8 +167,7 @@ const OPPONENTS = {
     }
   },
   "MIN": {
-    "record": "5-0",
-    "streak": "W5",
+    "record": "6-0",
     "series": "6-11",
     "playoffs": "0-0",
     "last": {
@@ -182,8 +176,7 @@ const OPPONENTS = {
     }
   },
   "CIN": {
-    "record": "3-2",
-    "streak": "W1",
+    "record": "4-2",
     "series": "3-4-1",
     "playoffs": "0-0",
     "last": {
@@ -192,8 +185,7 @@ const OPPONENTS = {
     }
   },
   "PIT": {
-    "record": "4-2",
-    "streak": "W2",
+    "record": "5-2",
     "series": "1-7",
     "playoffs": "0-0",
     "last": {
@@ -202,8 +194,7 @@ const OPPONENTS = {
     }
   },
   "SEA": {
-    "record": "3-3",
-    "streak": "L2",
+    "record": "4-3",
     "series": "4-10",
     "playoffs": "1-2",
     "last": {
@@ -212,8 +203,7 @@ const OPPONENTS = {
     }
   },
   "ATL": {
-    "record": "2-4",
-    "streak": "L2",
+    "record": "3-4",
     "series": "26-37",
     "playoffs": "0-0",
     "last": {

@@ -329,10 +329,11 @@ function hypeLines() {
   const rec = formatRecord(getRecord());
   let headline, emoji = '';
   if (!s.played) headline = 'The season starts soon. Lock in.';
+  else if (s.place === '1st' && /^L/.test(s.streak)) headline = `${rec} and still on top of the South`;
   else if (s.place === '1st') headline = `We’re ${rec} and running the South`;
   else if (s.place === 'T-1st') headline = `We’re ${rec} and tied for the South lead`;
   else headline = `${rec}, ${s.place} in the South. Plenty of football left.`;
-  if (s.place === '1st' && s.played) emoji = '🔥';
+  if (s.place === '1st' && s.played && !/^L/.test(s.streak)) emoji = '🔥';
 
   const g = getNextGame();
   let sub = '';

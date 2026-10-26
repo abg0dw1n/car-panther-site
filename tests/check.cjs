@@ -87,7 +87,7 @@ global.fetch = (url, ...rest) => { fetchLog.push(String(url)); return fetchHandl
 let tickFn = null;
 global.setInterval = fn => { tickFn = fn; };
 const realNow = Date.now;
-Date.now = () => new Date('2026-10-24T13:07:00-04:00').getTime(); // Saturday before the Week 7 game
+Date.now = () => new Date('2026-10-26T13:07:00-04:00').getTime(); // Monday after Week 7, before the Week 8 Thursday game
 
 // Run every page script together, in order, then expose what the tests need
 eval(code + `
@@ -220,15 +220,15 @@ section('Schedule, record, next game and countdown');
 const S = t.panthers2026Schedule;
 check('18 weeks in the schedule, with the Week 5 bye', S.length === 18 && S[4].status === 'BYE' && S[4].kickoff === null);
 const rec = t.getRecord();
-check('record is 3-2 and comes from the results', rec.wins === 3 && rec.losses === 2 && t.formatRecord(rec) === '3-2');
+check('record is 3-3 and comes from the results', rec.wins === 3 && rec.losses === 3 && t.formatRecord(rec) === '3-3');
 t.renderTeamRecord();
-check('header and schedule tab show the record', els['team-record'].textContent === '3 - 2' && els['schedule-record'].textContent === '3–2', els['team-record'].textContent);
+check('header and schedule tab show the record', els['team-record'].textContent === '3 - 3' && els['schedule-record'].textContent === '3–3', els['team-record'].textContent);
 const next = t.getNextGame();
-check('next game is Week 7 vs. Tampa Bay on Oct 25 at 1:00 PM ET', next.week === 7 && next.abbr === 'TB' && next.home === true && next.kickoff === '2026-10-25T13:00:00-04:00' && next.tv === 'FOX');
+check('next game is Week 8 at Green Bay, Thursday Oct 29 at 8:15 PM ET on Prime Video', next.week === 8 && next.abbr === 'GB' && next.home === false && next.kickoff === '2026-10-29T20:15:00-04:00' && next.tv === 'Prime Video · TNF');
 t.renderNextGame();
 check('banner text is built from the schedule',
-  els['next-game-label'].textContent === 'UP NEXT • WEEK 7' && els['next-game-title'].textContent === 'CAROLINA PANTHERS VS. TAMPA BAY BUCCANEERS' &&
-  els['next-game-details'].textContent === '📍 Bank of America Stadium, Charlotte NC • Sunday, Oct 25 • 1:00 PM ET (FOX)', els['next-game-details'].textContent);
+  els['next-game-label'].textContent === 'UP NEXT • WEEK 8' && els['next-game-title'].textContent === 'CAROLINA PANTHERS AT GREEN BAY PACKERS' &&
+  els['next-game-details'].textContent === '📍 Away game • Thursday, Oct 29 • 8:15 PM ET (Prime Video · TNF)', els['next-game-details'].textContent);
 check('kickoff times use the right Eastern offset (EDT before Nov 1, EST after)',
   S.filter(g => g.kickoff).every(g => g.kickoff.endsWith(g.kickoff < '2026-11-01' ? '-04:00' : '-05:00')));
 check('Week 8 is Thursday night on Prime Video; Week 12 is Monday night on ESPN', S[7].tv === 'Prime Video · TNF' && S[11].tv === 'ESPN · MNF');
@@ -242,26 +242,26 @@ t.renderSchedule('win');
 check('"Wins only" filter shows 3 wins', (els['schedule-container'].innerHTML.match(/W \d+-\d+/g) || []).length === 3);
 
 t.startCountdown();
-check('countdown shows 23h 53m the day before kickoff, immediately',
-  els['cd-days'].textContent === '00' && els['cd-hours'].textContent === '23' && els['cd-mins'].textContent === '53', [els['cd-days'].textContent, els['cd-hours'].textContent, els['cd-mins'].textContent].join(':'));
-Date.now = () => new Date('2026-10-25T14:00:00-04:00').getTime();
+check('countdown shows 3d 7h 8m to Thursday night, immediately',
+  els['cd-days'].textContent === '03' && els['cd-hours'].textContent === '07' && els['cd-mins'].textContent === '08', [els['cd-days'].textContent, els['cd-hours'].textContent, els['cd-mins'].textContent].join(':'));
+Date.now = () => new Date('2026-10-29T21:00:00-04:00').getTime();
 tickFn();
 check('countdown stops at zero after kickoff', els['cd-hours'].textContent === '00' && els['cd-secs'].textContent === '00');
-Date.now = () => new Date('2026-10-24T13:07:00-04:00').getTime();
+Date.now = () => new Date('2026-10-26T13:07:00-04:00').getTime();
 
 // ---------------------------------------------------------------------------------------------------
 section('Playoff Machine');
 // ---------------------------------------------------------------------------------------------------
-check('NFC South baseline matches the standings research (CAR 3-2, ATL 2-4, NO 2-4, TB 1-5)',
-  t.initialNfcSouth.map(x => `${x.key} ${x.wins}-${x.losses}`).join() === 'CAR 3-2,TB 1-5,ATL 2-4,NO 2-4');
-check('simulated games come from the schedule: weeks 7, 10, 12, 14, 18', t.upcomingDivisionalGames.map(g => g.week).join() === 'Wk 7,Wk 10,Wk 12,Wk 14,Wk 18');
+check('NFC South baseline matches the standings after Week 7 (CAR 3-3, ATL 3-4, TB 2-5, NO 2-5)',
+  t.initialNfcSouth.map(x => `${x.key} ${x.wins}-${x.losses}`).join() === 'CAR 3-3,TB 2-5,ATL 3-4,NO 2-5');
+check('simulated games come from the schedule: weeks 10, 12, 14, 18', t.upcomingDivisionalGames.map(g => g.week).join() === 'Wk 10,Wk 12,Wk 14,Wk 18');
 t.renderPlayoffMachine();
 check('Panthers are the sole division leader at the start', /DIVISION LEADERS/.test(els['playoff-status-badge'].textContent) && /Division Leader/.test(els['sim-standings-body'].innerHTML), els['playoff-status-badge'].textContent);
 t.upcomingDivisionalGames.forEach(g => t.pickSimGame(g.id, 'OPP'));
 check('losing every division game drops them out of the lead', /IN THE HUNT/.test(els['playoff-status-badge'].textContent), els['playoff-status-badge'].textContent);
 t.resetPlayoffSim();
 const savedTb = { ...t.initialNfcSouth.find(x => x.key === 'TB') };
-Object.assign(t.initialNfcSouth.find(x => x.key === 'TB'), { wins: 3, losses: 2 });
+Object.assign(t.initialNfcSouth.find(x => x.key === 'TB'), { wins: 3, losses: 3 });
 t.updateStandings();
 check('a tie for first is shown as a tie', /TIED FOR DIVISION LEAD/.test(els['playoff-status-badge'].textContent) && /Tied for Lead/.test(els['sim-standings-body'].innerHTML));
 Object.assign(t.initialNfcSouth.find(x => x.key === 'TB'), savedTb);
@@ -281,8 +281,8 @@ check('every team has exactly 7 original regular picks (trades included)', (() =
   return Object.keys(own).length === 32 && Object.values(own).every(n => n === 7);
 })());
 check('every team in the order has a name and record', O.every(o => t.NFL_TEAMS[o.team] && (!o.via || t.NFL_TEAMS[o.via])));
-check('Panthers hold picks 20, 53, 84, 122, 131 (via MIN), 199, 240',
-  O.filter(o => o.team === 'CAR').map(o => o.pick).join() === '20,53,84,122,131,199,240' && O.find(o => o.pick === 131).via === 'MIN');
+check('Panthers hold picks 19, 51, 83, 120, 133 (via MIN), 197, 239',
+  O.filter(o => o.team === 'CAR').map(o => o.pick).join() === '19,51,83,120,133,197,239' && O.find(o => o.pick === 133).via === 'MIN');
 
 // ---------------------------------------------------------------------------------------------------
 section('Mock draft: playing it');
@@ -297,20 +297,21 @@ check('board lists every prospect at the start', els['draft-available-count'].te
 t.draftProspect(1);
 check('you cannot draft when you are not on the clock', t.getDraftState().next === 0);
 t.simToMyPick();
-check('"Sim to my pick" stops at the Panthers\' first pick (#20) with 19 picks made', t.currentSlot().pick === 20 && t.isUserTurn() && t.getDraftState().next === 19);
+const carPicks = O.filter(o => o.team === 'CAR').map(o => o.pick);
+check(`"Sim to my pick" stops at the Panthers' first pick (#${carPicks[0]})`, t.currentSlot().pick === carPicks[0] && t.isUserTurn() && t.getDraftState().next === carPicks[0] - 1);
 check('board shows DRAFT buttons only on your turn', els['prospects-board'].innerHTML.includes('draftProspect('));
 check('status says you are on the clock', /ON THE CLOCK/.test(els['draft-status'].innerHTML));
 const before = t.availableProspects().length;
 t.simNextPick();
-check('"Sim 1 pick" does nothing while you are on the clock', t.getDraftState().next === 19);
+check('"Sim 1 pick" does nothing while you are on the clock', t.getDraftState().next === carPicks[0] - 1);
 const pick1 = t.availableProspects()[0];
 t.draftProspect(pick1.id);
-check('drafting a player records the pick and moves on', t.getDraftState().picks[19].playerId === pick1.id && t.currentSlot().pick === 21 && t.availableProspects().length === before - 1);
+check('drafting a player records the pick and moves on', t.getDraftState().picks[carPicks[0] - 1].playerId === pick1.id && t.currentSlot().pick === carPicks[0] + 1 && t.availableProspects().length === before - 1);
 t.draftProspect(pick1.id);
-check('the same player can\'t be drafted twice', t.getDraftState().next === 20);
+check('the same player can\'t be drafted twice', t.getDraftState().next === carPicks[0]);
 check('your class panel shows the pick with a grade', els['user-draft-class'].innerHTML.includes(pick1.name) && /GRADE|font-mono/.test(els['user-draft-class'].innerHTML) && els['draft-class-grade'].textContent !== '--');
 t.simToMyPick();
-check('next stop is pick #53', t.currentSlot().pick === 53 && t.isUserTurn());
+check(`next stop is pick #${carPicks[1]}`, t.currentSlot().pick === carPicks[1] && t.isUserTurn());
 
 // Position filter and search
 t.setDraftPos('QB');
@@ -370,14 +371,14 @@ check('game-by-game rushing yards add up to Hubbard\'s 426', sumRush === 426, St
 check('last game card shows the Week 6 win at Philadelphia with photos of the leaders',
   /25 <span[^>]*>–<\/span> 14/.test(els['last-game'].innerHTML) && els['last-game'].innerHTML.includes('at Philadelphia Eagles') && els['last-game'].innerHTML.includes('Chuba Hubbard') && els['last-game'].innerHTML.includes('a.espncdn.com'));
 const ss = t.seasonSummary();
-check('season numbers: 146 scored, 123 allowed, +23, W2 streak, 1st in NFC South',
-  ss.pf === 146 && ss.pa === 123 && ss.diff === 23 && ss.streak === 'W2' && ss.place === '1st', JSON.stringify(ss));
+check('season numbers: 159 scored, 166 allowed, -7, L1 streak, 1st in NFC South',
+  ss.pf === 159 && ss.pa === 166 && ss.diff === -7 && ss.streak === 'L1' && ss.place === '1st', JSON.stringify(ss));
 check('season numbers match the team stats in roster.js', Math.abs(ss.ppg - t.panthersTeamStats.ppg) < 0.05 && Math.abs(ss.oppg - t.panthersTeamStats.oppPpg) < 0.05);
 check('week-by-week row has 18 dots', (els['season-glance'].innerHTML.match(/title="Week/g) || []).length === 18);
 check('series text reads naturally', t.seriesText('26-25') === 'Panthers lead 26-25' && t.seriesText('7-11') === 'Panthers trail 7-11' && t.seriesText('3-4-1') === 'Panthers trail 3-4-1' && t.seriesText('5-5') === 'Series tied 5-5');
-check('banner chips show TV, Bucs record, all-time series and last meeting',
-  ['FOX', 'Buccaneers 1-5 in 2026', 'Panthers lead 26-25', 'L 14-16'].every(x => els['next-game-chips'].innerHTML.includes(x)), els['next-game-chips'].innerHTML.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' '));
-check('home games get a "Plan your game day" button linked to that week', els['next-game-actions'].innerHTML.includes('openStadiumPlanner(7)'));
+check('banner chips show TV, Packers record, all-time series and last meeting',
+  ['Prime Video · TNF', 'Packers 4-3 in 2026', 'Panthers trail 7-11', 'W 16-13'].every(x => els['next-game-chips'].innerHTML.includes(x)), els['next-game-chips'].innerHTML.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' '));
+check('road games skip the stadium planner button but keep the schedule link', !els['next-game-actions'].innerHTML.includes('openStadiumPlanner') && els['next-game-actions'].innerHTML.includes('schedule-tab'));
 check('every remaining opponent has records and series', t.panthers2026Schedule.filter(g => g.status === 'Upcoming').every(g => t.OPPONENTS[g.abbr] && t.OPPONENTS[g.abbr].series));
 const K = Date.parse('2026-10-25T13:00:00-04:00');
 check('game phases: day before = upcoming, morning of = game day, during = live, much later = final',
@@ -393,14 +394,14 @@ check('history: Oct 25 has an exact entry; a date with none points to the next o
   oct25.exact && oct25.events.length >= 1 && t.historyFor('10-24').exact === t.PANTHERS_HISTORY.some(e => e.date.endsWith('-10-24')));
 check('history wraps from late December to January', t.historyFor('12-31').events.length > 0);
 t.shiftHistoryDay(1);
-check('the "next day" arrow moves to October 25', /October 25/.test(els['history-date'].textContent));
+check('the "next day" arrow moves to October 27', /October 27/.test(els['history-date'].textContent));
 t.shiftHistoryDay(0);
-check('"back to today" returns to today', /Today · October 24/.test(els['history-date'].textContent));
+check('"back to today" returns to today', /Today · October 26/.test(els['history-date'].textContent));
 check('Hall of Honor lists all 8 members including McCormack, Gross, Muhammad',
   t.HALL_OF_HONOR.length === 8 && ['Mike McCormack', 'Jordan Gross', 'Muhsin Muhammad', 'Wesley Walls'].every(n => els['hall-of-honor'].innerHTML.includes(n)));
 check('snapshot: 2 NFC titles, 7 division titles, 9 playoff trips, 227-273-1',
   t.FRANCHISE.nfcTitles === 2 && t.FRANCHISE.divisionTitles === 7 && t.FRANCHISE.playoffTrips === 9 && els['franchise-snapshot'].innerHTML.includes('227-273-1'));
-check('hype headline matches the real standings and next game', els['hype-headline'].innerHTML.includes('We’re 3-2 and running the South</span> 🔥') && els['hype-sub'].textContent === 'The Buccaneers come to the Bank Sunday. Don’t be late.', els['hype-headline'].innerHTML + ' | ' + els['hype-sub'].textContent);
+check('hype headline matches the real standings and next game', els['hype-headline'].innerHTML.includes('3-3 and still on top of the South</span>') && !els['hype-headline'].innerHTML.includes('🔥') && els['hype-sub'].textContent === 'Road game at the Packers Thursday. Catch it on Prime Video.', els['hype-headline'].innerHTML + ' | ' + els['hype-sub'].textContent);
 check('milestones include the 2025 Wild Card loss to the Rams (34-31)', els['milestones'].innerHTML.includes('34-31'));
 
 // ---------------------------------------------------------------------------------------------------
@@ -474,7 +475,7 @@ check('section lookup rejects nonsense', !t.lookupSection('42').ok && !t.lookupS
 
 const hg = t.homeGames();
 check('planner lists the 9 home games', hg.length === 9 && hg.map(g => g.week).join() === '1,4,7,9,11,14,15,17,18', hg.map(g => g.week).join());
-check('planner opens on the next home game (Week 7 vs. Tampa Bay)', /October 25/.test(els['plan-heading'].textContent) && /Tampa Bay/.test(els['plan-heading'].textContent), els['plan-heading'].textContent);
+check('planner opens on the next home game (Week 9 vs. Denver)', /November 8/.test(els['plan-heading'].textContent) && /Denver/.test(els['plan-heading'].textContent), els['plan-heading'].textContent);
 const plan = t.buildPlan(hg[2], 'drive', 'early');
 const at = txt => (plan.find(s => s.text.includes(txt)) || {}).time;
 check('gates open at 11:00 AM for a 1:00 PM kickoff', at('Gates open') === '11:00 AM ET');

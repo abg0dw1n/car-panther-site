@@ -16,7 +16,7 @@ function headshotUrl(espnId) {
 }
 
 // Team numbers shown on the head coach card (through ROSTER_STATS_THROUGH)
-const panthersTeamStats = { pointsFor: 146, pointsAgainst: 123, gamesPlayed: 5, ppg: 29.2, oppPpg: 24.6, ppgRank: 4 };
+const panthersTeamStats = { pointsFor: 159, pointsAgainst: 166, gamesPlayed: 6, ppg: 26.5, oppPpg: 27.7 };
 
 const panthersStaff = [
   { name: "Dave Canales", title: "Head Coach" },
